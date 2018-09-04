@@ -36,7 +36,6 @@ var buclePrincipal = {
         }
     },
     iterar: function(registroTemporal){
-        io.emit("msPing", Date.now());
         buclePrincipal.idEjecucion =  window.requestAnimationFrame(buclePrincipal.iterar);
         buclePrincipal.limpiar();
         buclePrincipal.actualizar(registroTemporal);
@@ -45,6 +44,7 @@ var buclePrincipal = {
             buclePrincipal.ultimoRegistro = registroTemporal;
             //console.log("APS: "+ buclePrincipal.aps + " | FPS: "+ buclePrincipal.fps);
             buclePrincipal.dibujarFps = "APS: "+ buclePrincipal.aps + " | FPS: "+ buclePrincipal.fps + " | PING: " + buclePrincipal.ping;
+            io.emit("msPing", Date.now());
             buclePrincipal.aps = 0;
             buclePrincipal.fps = 0;
         }
