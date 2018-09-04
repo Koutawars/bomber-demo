@@ -10,6 +10,29 @@ var buclePrincipal = {
     explosiones: [],                // vector de explociones
     myOwn: null,                    // objeto del jugador que controla
     dibujarFps:"APS: 0 | FPS: 0",
+    move:{
+        derecha: false,
+        izquierda: false,
+        arriba: false,
+        abajo: false
+    },mover: function(){
+        if(buclePrincipal.derecha){
+            buclePrincipal.myOwn.mover(7 , 0); // derecha
+            io.emit('actualizar', buclePrincipal.myOwn);
+        }
+        else if(buclePrincipal.izquierda){
+            buclePrincipal.myOwn.mover(-7 , 0); // izquierda
+            io.emit('actualizar', buclePrincipal.myOwn);
+        }
+        else if(buclePrincipal.arriba){
+            buclePrincipal.myOwn.mover(0 , -7); // arriba
+            io.emit('actualizar', buclePrincipal.myOwn);
+        }
+        else if(buclePrincipal.abajo){
+            buclePrincipal.myOwn.mover(0 , 7); // abajo
+            io.emit('actualizar', buclePrincipal.myOwn);
+        }
+    },
     iterar: function(registroTemporal){
         buclePrincipal.idEjecucion =  window.requestAnimationFrame(buclePrincipal.iterar);
         buclePrincipal.limpiar();
@@ -111,6 +134,7 @@ var buclePrincipal = {
     },
     actualizar: function(){
         if(buclePrincipal.myOwn != null){
+            buclePrincipal.mover();
             buclePrincipal.explosiones.forEach(explo => {
                 if(buclePrincipal.myOwn != null){
                     if(buclePrincipal.myOwn.hitbox.chocarCon(explo)){

@@ -45,27 +45,52 @@ document.addEventListener('DOMContentLoaded', function(){
     });
     iniciar.iniciarJuego();
     // movimientos
-    document.addEventListener('keydown', function (e) {
+    document.body.onkeydown = function(e){
         if(buclePrincipal.myOwn != null){
+            console.log(e.keyCode);
             if (e.keyCode === 87 && buclePrincipal.solido(0,-7, buclePrincipal.myOwn)) {
-                buclePrincipal.myOwn.mover(0 , -7); // arriba
-                io.emit('actualizar', buclePrincipal.myOwn);
+                buclePrincipal.arriba = true; // arriba
+                buclePrincipal.abajo = false; // abajo
+                buclePrincipal.izquierda = false; // izquierda
+                buclePrincipal.derecha = false; // derecha
             }
             else if (e.keyCode === 83 && buclePrincipal.solido(0,7, buclePrincipal.myOwn)) {
-                buclePrincipal.myOwn.mover(0 , 7); // abajo
-                io.emit('actualizar', buclePrincipal.myOwn);
+                buclePrincipal.arriba = false; // arriba
+                buclePrincipal.abajo = true; // abajo
+                buclePrincipal.izquierda = false; // izquierda
+                buclePrincipal.derecha = false; // derecha
             }
             else if (e.keyCode === 65 && buclePrincipal.solido(-7,0, buclePrincipal.myOwn)) {
-                buclePrincipal.myOwn.mover(-7 , 0); // izquierda
-                io.emit('actualizar', buclePrincipal.myOwn);
+                buclePrincipal.arriba = false; // arriba
+                buclePrincipal.abajo = false; // abajo
+                buclePrincipal.izquierda = true; // izquierda
+                buclePrincipal.derecha = false; // derecha
             } 
             else if (e.keyCode === 68 && buclePrincipal.solido(7,0, buclePrincipal.myOwn)) {
-                buclePrincipal.myOwn.mover(7 , 0); // derecha
-                io.emit('actualizar', buclePrincipal.myOwn);
+                buclePrincipal.arriba = false; // arriba
+                buclePrincipal.abajo = false; // abajo
+                buclePrincipal.izquierda = false; // izquierda
+                buclePrincipal.derecha = true; // derecha
             }
-            if(e.keyCode == 32 && buclePrincipal.myOwn.numBomb >= 1){
+            if(e.keyCode === 32 && buclePrincipal.myOwn.numBomb >= 1){
                 buclePrincipal.colocarBomba(buclePrincipal.myOwn);
                 io.emit('newBomba', buclePrincipal.myOwn);
+            }
+        }
+    };
+    document.addEventListener('keyup', function (e) {
+        if(buclePrincipal.myOwn != null){
+            if (e.keyCode == 87) {
+                buclePrincipal.arriba = false; // arriba
+            }
+            if(e.keyCode == 83 ){
+                buclePrincipal.abajo = false; // abajo
+            }
+            if(e.keyCode == 65){
+                buclePrincipal.izquierda = false; // izquierda
+            }
+            if( e.keyCode == 68){
+                buclePrincipal.derecha = false; // derecha
             }
         }
     }, true);
