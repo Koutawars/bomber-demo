@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function(){
     console.log("Se inicia el juego");
     buclePrincipal.ctx = canvas.getContext("2d");
-    buclePrincipal.myOwn = new player(0, 250,100, 'img/lion.png', 10, 45, 30, 20, 1, 3000, 1);
+    buclePrincipal.myOwn = new player(0, 250,100, 'img/lion.png', 10, 45, 30, 20, 3, 3000, 3);
     io.emit('nuevoJugador', buclePrincipal.myOwn);
     // le coloco una ID
     io.on('cambiarID', function(data){
