@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function(){
     // movimientos
     document.body.onkeydown = function(e){
         if(buclePrincipal.myOwn != null){
-            console.log(e.keyCode);
             if (e.keyCode === 87 && buclePrincipal.solido(0,-7, buclePrincipal.myOwn)) {
                 buclePrincipal.arriba = true; // arriba
                 buclePrincipal.abajo = false; // abajo
