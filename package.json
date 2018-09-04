@@ -1,0 +1,27 @@
+{
+  "name": "bomber-demo",
+  "version": "1.0.0",
+  "description": " Game make with Nodejs y phaser ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.heroku.com/bomber-demo.git"
+  },
+  "keywords": [
+    "Phaser",
+    "Multiplayer",
+    "game",
+    "Node.js",
+    "socket.io"
+  ],
+  "author": "Kouta",
+  "license": "Ko",
+  "dependencies": {
+    "express": "^4.15.2",
+    "socket.io": "^1.7.3"
+  }
+}
