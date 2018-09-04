@@ -40,7 +40,6 @@ class rectangulo{
         if (x >= izquierda && x <= derecha && y <= abajo && y >= arriba) {
            chocar = true;
         }
-        console.log("X"+x+" > " + izquierda+" && " +x+ "<" + derecha +  "&&" + y + " < " + abajo + " && " + y + " > " + arriba)
         return chocar;
     }
 }

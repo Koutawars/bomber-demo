@@ -49,13 +49,17 @@ io.on('connection',function(socket){
         socket.on('murio',function(){
             socket.broadcast.emit('remove',socket.player);
         });
+        
+        socket.on('msPing', function(data) {
+            socket.emit('msPong', data);
+        });
+        socket.on('casa', function() {
+            console.log("El servidor te saluda");
+        })
         // recibe señal del cliente que hay nueva bomba
         socket.on('newBomba', function(data){
             // se emite todos menos a el mismo que se coloco una bomba
             socket.broadcast.emit('colocoBomba',data);
-        });
-        socket.on('ping', function() {
-            socket.emit('pong');
         });
     });
 });
