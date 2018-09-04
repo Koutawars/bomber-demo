@@ -16,20 +16,20 @@ var buclePrincipal = {
         arriba: false,
         abajo: false
     },mover: function(){
-        if(buclePrincipal.derecha && buclePrincipal.solido(7 , 0, buclePrincipal.myOwn)){
-            buclePrincipal.myOwn.mover(7 , 0); // derecha
+        if(buclePrincipal.derecha && buclePrincipal.solido(buclePrincipal.myOwn.vel , 0, buclePrincipal.myOwn)){
+            buclePrincipal.myOwn.mover(buclePrincipal.myOwn.velTmp , 0); // derecha
             io.emit('actualizar', buclePrincipal.myOwn);
         }
-        else if(buclePrincipal.izquierda && buclePrincipal.solido(-7 , 0, buclePrincipal.myOwn)){
-            buclePrincipal.myOwn.mover(-7 , 0); // izquierda
+        else if(buclePrincipal.izquierda && buclePrincipal.solido(-buclePrincipal.myOwn.vel , 0, buclePrincipal.myOwn)){
+            buclePrincipal.myOwn.mover(-buclePrincipal.myOwn.velTmp , 0); // izquierda
             io.emit('actualizar', buclePrincipal.myOwn);
         }
-        else if(buclePrincipal.arriba && buclePrincipal.solido(0 , -7, buclePrincipal.myOwn)){
-            buclePrincipal.myOwn.mover(0 , -7); // arriba
+        else if(buclePrincipal.arriba && buclePrincipal.solido(0 , -buclePrincipal.myOwn.vel, buclePrincipal.myOwn)){
+            buclePrincipal.myOwn.mover(0 , -buclePrincipal.myOwn.velTmp); // arriba
             io.emit('actualizar', buclePrincipal.myOwn);
         }
-        else if(buclePrincipal.abajo && buclePrincipal.solido(0 , 7, buclePrincipal.myOwn)){
-            buclePrincipal.myOwn.mover(0 , 7); // abajo
+        else if(buclePrincipal.abajo && buclePrincipal.solido(0 , buclePrincipal.myOwn.vel, buclePrincipal.myOwn)){
+            buclePrincipal.myOwn.mover(0 , buclePrincipal.myOwn.velTmp); // abajo
             io.emit('actualizar', buclePrincipal.myOwn);
         }
     },
@@ -48,19 +48,34 @@ var buclePrincipal = {
     }, solido: function(x,y, player){
         var esSolido = false;
         var futX, futY;
-        // izquierda y arriba 
-        if(x <= 0 && y <= 0) {
+        // izquieda y abajo con la esquina inferior izquierda
+        if(x <= 0 && y >= 0) {
             futX = player.hitbox.x + x; 
-            futY = player.hitbox.y + y;
-        }
-        // derecha y abajo
-        if(x >= 0 && y >= 0){
-            futX = player.hitbox.x + x + player.hitbox.ancho; 
             futY = player.hitbox.y + y + player.hitbox.alto;
+        }
+        // Arriba y derecha con la esquina superior derecha
+        if(x >= 0 && y <= 0){
+            futX = player.hitbox.x + x + player.hitbox.ancho; 
+            futY = player.hitbox.y + y;
         }
         buclePrincipal.bombas.forEach(bomba => {
             esSolido = bomba.hitbox.puntoCon(futX, futY);
         });
+        // izquierda y arriba con la esquina superior izquierda
+        if(x <= 0 && y <= 0) {
+            futX = player.hitbox.x + x; 
+            futY = player.hitbox.y + y;
+        }
+        // derecha y abajo con la esquina inferior derecha
+        if(x >= 0 && y >= 0){
+            futX = player.hitbox.x + x + player.hitbox.ancho; 
+            futY = player.hitbox.y + y + player.hitbox.alto;
+        }
+        if(!esSolido){
+            buclePrincipal.bombas.forEach(bomba => {
+                esSolido = bomba.hitbox.puntoCon(futX, futY);
+            });
+        }
         return !esSolido;
     },
     colocarBomba:function(coloca){
@@ -73,7 +88,7 @@ var buclePrincipal = {
                 coloca = buclePrincipal.personajes[buclePrincipal.personajes.indexOf(element)];
             }
         });
-        var bomba = new bomb(coloca.x + 7,coloca.y + 25, coloca.timeBomb, coloca.largeBomb);
+        var bomba = new bomb(coloca.x ,coloca.y + 25, coloca.timeBomb, coloca.largeBomb);
         bomba.coloca = coloca;
         buclePrincipal.bombas.push(bomba);
         bomba.tmp = setTimeout(buclePrincipal.temporizador, coloca.timeBomb, bomba, coloca);
@@ -95,11 +110,12 @@ var buclePrincipal = {
                 explo = new rectangulo(bX, bY - bAlto*n, bAncho, bAlto);
                 buclePrincipal.explosiones.push(explo);
                 tpm = buclePrincipal.tocarBomb(explo);
+                setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
                 if(tpm.toco){
                     clearTimeout(tpm.bomba.tmp);
                     setTimeout(buclePrincipal.temporizador, 1, tpm.bomba, tpm.bomba.coloca);
+                    break;
                 }
-                setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
                 n++;
             }while(n < coloca.largeBomb + 1);
             n = 1;
@@ -108,11 +124,12 @@ var buclePrincipal = {
                 explo = new rectangulo(bX, bY + bAlto*n, bAncho, bAlto);
                 buclePrincipal.explosiones.push(explo);
                 tpm = buclePrincipal.tocarBomb(explo);
+                setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
                 if(tpm.toco){
                     clearTimeout(tpm.bomba.tmp);
                     setTimeout(buclePrincipal.temporizador, 1, tpm.bomba, tpm.bomba.coloca);
+                    break;
                 }
-                setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
                 n++;
             }while(n < coloca.largeBomb+ 1);
             n = 1;
@@ -121,24 +138,26 @@ var buclePrincipal = {
                 explo = new rectangulo(bX + bAlto*n, bY, bAncho, bAlto);
                 buclePrincipal.explosiones.push(explo);
                 tpm = buclePrincipal.tocarBomb(explo);
+                setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
                 if(tpm.toco){
                     clearTimeout(tpm.bomba.tmp);
                     setTimeout(buclePrincipal.temporizador, 1, tpm.bomba, tpm.bomba.coloca);
+                    break;
                 }
-                setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
                 n++;
-            }while(n < coloca.largeBomb+ 1);
+            }while(n < coloca.largeBomb + 1);
             n = 1;
             // Explsión a la izquierda
             do{
                 explo = new rectangulo(bX - bAlto*n, bY, bAncho, bAlto);
                 buclePrincipal.explosiones.push(explo);
                 tpm = buclePrincipal.tocarBomb(explo);
+                setTimeout(buclePrincipal.tiempoExplo, 500, explo);
                 if(tpm.toco){
                     clearTimeout(tpm.bomba.tmp);
                     setTimeout(buclePrincipal.temporizador, 1, tpm.bomba, tpm.bomba.coloca);
+                    break;
                 }
-                setTimeout(buclePrincipal.tiempoExplo, 500, explo);
                 n++;
             }while(n < coloca.largeBomb + 1);
             coloca.numBomb += 1;
@@ -155,7 +174,7 @@ var buclePrincipal = {
         return retornar;
     },
     copiar: function(data){
-        return new player(data.id, data.x, data.y, data.ruta, data.posHitX, data.posHitY, data.anchoHit, data.altoHit, data.numBomb, data.timeBomb, data.largeBomb);
+        return new player(data.id, data.x, data.y, data.vel, data.ruta, data.posHitX, data.posHitY, data.anchoHit, data.altoHit, data.numBomb, data.timeBomb, data.largeBomb);
     },
     tiempoExplo: function(explo){
         if(buclePrincipal.explosiones.indexOf(explo) != -1){

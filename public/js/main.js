@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function(){
     console.log("Se inicia el juego");
     buclePrincipal.ctx = canvas.getContext("2d");
-    buclePrincipal.myOwn = new player(0, 250,100, 'img/lion.png', 10, 45, 30, 20, 3, 3000, 3);
+    buclePrincipal.myOwn = new player(0, 250,100, 5, 'img/lion.png', 0, 45, 40, 20, 3, 3000, 3);
     io.emit('nuevoJugador', buclePrincipal.myOwn);
     // le coloco una ID
     io.on('cambiarID', function(data){
@@ -44,6 +44,25 @@ document.addEventListener('DOMContentLoaded', function(){
         buclePrincipal.colocarBomba(data);
     });
     iniciar.iniciarJuego();
+    // event handler function
+    function handler(e) {
+        e = e || window.event;
+
+        var pageX = e.pageX;
+        var pageY = e.pageY;
+
+        // IE 8
+        if (pageX === undefined) {
+            pageX = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            pageY = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+
+        console.log(pageX, pageY);
+    }
+
+    // attach handler to the click event of the document
+    if (document.attachEvent) document.attachEvent('onclick', handler);
+    else document.addEventListener('click', handler);
     // movimientos
     document.body.onkeydown = function(e){
         if(buclePrincipal.myOwn != null){

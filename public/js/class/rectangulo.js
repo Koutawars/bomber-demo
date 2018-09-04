@@ -36,10 +36,11 @@ class rectangulo{
         var arriba = this.y;
         var abajo = this.y + (this.alto);
 
-        var chocar = true;
-        if (x>izquierda && x<derecha && y > arriba && y < abajo) {
-           chocar = false;
+        var chocar = false;
+        if (x >= izquierda && x <= derecha && y <= abajo && y >= arriba) {
+           chocar = true;
         }
-        return !chocar;
+        console.log("X"+x+" > " + izquierda+" && " +x+ "<" + derecha +  "&&" + y + " < " + abajo + " && " + y + " > " + arriba)
+        return chocar;
     }
 }

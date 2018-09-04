@@ -1,10 +1,12 @@
 class player{
-    constructor(id, x, y, ruta, posHitX, posHitY, anchoHit, altoHit, numBomb, timeBomb, largeBomb){
+    constructor(id, x, y, vel, ruta, posHitX, posHitY, anchoHit, altoHit, numBomb, timeBomb, largeBomb){
         this.img = new Image();
         this.img.src = ruta;
         this.ruta = ruta;
         this.id = id;
         this.x = x;
+        this.vel = vel;
+        this.velTmp = vel;
         this.y = y;
         this.ancho = this.img.width;
         this.alto = this.img.height;
