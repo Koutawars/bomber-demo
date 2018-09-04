@@ -47,25 +47,25 @@ document.addEventListener('DOMContentLoaded', function(){
     // movimientos
     document.body.onkeydown = function(e){
         if(buclePrincipal.myOwn != null){
-            if (e.keyCode === 87 && buclePrincipal.solido(0,-7, buclePrincipal.myOwn)) {
+            if (e.keyCode === 87) {
                 buclePrincipal.arriba = true; // arriba
                 buclePrincipal.abajo = false; // abajo
                 buclePrincipal.izquierda = false; // izquierda
                 buclePrincipal.derecha = false; // derecha
             }
-            else if (e.keyCode === 83 && buclePrincipal.solido(0,7, buclePrincipal.myOwn)) {
+            else if (e.keyCode === 83) {
                 buclePrincipal.arriba = false; // arriba
                 buclePrincipal.abajo = true; // abajo
                 buclePrincipal.izquierda = false; // izquierda
                 buclePrincipal.derecha = false; // derecha
             }
-            else if (e.keyCode === 65 && buclePrincipal.solido(-7,0, buclePrincipal.myOwn)) {
+            else if (e.keyCode === 65) {
                 buclePrincipal.arriba = false; // arriba
                 buclePrincipal.abajo = false; // abajo
                 buclePrincipal.izquierda = true; // izquierda
                 buclePrincipal.derecha = false; // derecha
             } 
-            else if (e.keyCode === 68 && buclePrincipal.solido(7,0, buclePrincipal.myOwn)) {
+            else if (e.keyCode === 68) {
                 buclePrincipal.arriba = false; // arriba
                 buclePrincipal.abajo = false; // abajo
                 buclePrincipal.izquierda = false; // izquierda

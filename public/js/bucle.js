@@ -16,19 +16,19 @@ var buclePrincipal = {
         arriba: false,
         abajo: false
     },mover: function(){
-        if(buclePrincipal.derecha){
+        if(buclePrincipal.derecha && buclePrincipal.solido(7 , 0, buclePrincipal.myOwn)){
             buclePrincipal.myOwn.mover(7 , 0); // derecha
             io.emit('actualizar', buclePrincipal.myOwn);
         }
-        else if(buclePrincipal.izquierda){
+        else if(buclePrincipal.izquierda && buclePrincipal.solido(-7 , 0, buclePrincipal.myOwn)){
             buclePrincipal.myOwn.mover(-7 , 0); // izquierda
             io.emit('actualizar', buclePrincipal.myOwn);
         }
-        else if(buclePrincipal.arriba){
+        else if(buclePrincipal.arriba && buclePrincipal.solido(0 , -7, buclePrincipal.myOwn)){
             buclePrincipal.myOwn.mover(0 , -7); // arriba
             io.emit('actualizar', buclePrincipal.myOwn);
         }
-        else if(buclePrincipal.abajo){
+        else if(buclePrincipal.abajo && buclePrincipal.solido(0 , 7, buclePrincipal.myOwn)){
             buclePrincipal.myOwn.mover(0 , 7); // abajo
             io.emit('actualizar', buclePrincipal.myOwn);
         }
