@@ -41,6 +41,7 @@ var buclePrincipal = {
         return !esSolido;
     },
     colocarBomba:function(coloca){
+        console.log(" coloca una bomba");
         if(buclePrincipal.myOwn !=  null){
             if(coloca.id == buclePrincipal.myOwn.id) coloca = buclePrincipal.myOwn;
         }

@@ -52,7 +52,7 @@ io.on('connection',function(socket){
         // recibe señal del cliente que hay nueva bomba
         socket.on('newBomba', function(data){
             // se emite todos menos a el mismo que se coloco una bomba
-            io.emit('colocoBomba',data);
+            socket.broadcast.emit('colocoBomba',data);
         });
     });
 });
