@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', function(){
     io.on('colocoBomba',function(data){
         buclePrincipal.colocarBomba(data);
     });
+    
+    io.on('pong', function() {
+        buclePrincipal.ms = Date.now() - buclePrincipal.start;
+    });
     iniciar.iniciarJuego();
     // event handler function
     function handler(e) {
@@ -50,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
         var pageX = e.pageX;
         var pageY = e.pageY;
-
         // IE 8
         if (pageX === undefined) {
             pageX = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;

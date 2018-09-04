@@ -54,6 +54,9 @@ io.on('connection',function(socket){
             // se emite todos menos a el mismo que se coloco una bomba
             socket.broadcast.emit('colocoBomba',data);
         });
+        socket.on('ping', function() {
+            socket.emit('pong');
+        });
     });
 });
 

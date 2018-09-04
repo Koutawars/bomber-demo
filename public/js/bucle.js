@@ -4,6 +4,8 @@ var buclePrincipal = {
     ultimoRegistro: 0,
     aps: 0,                         // contador de actulizaciones
     fps: 0,                         // contador de fps
+    ms: 0,
+    start:0, 
     ctx: null,                      // el canvas del DOM 
     personajes:[],                  // vector de personajes
     bombas: [],                     // vector de bombas
@@ -34,6 +36,7 @@ var buclePrincipal = {
         }
     },
     iterar: function(registroTemporal){
+
         buclePrincipal.idEjecucion =  window.requestAnimationFrame(buclePrincipal.iterar);
         buclePrincipal.limpiar();
         buclePrincipal.actualizar(registroTemporal);
@@ -41,11 +44,14 @@ var buclePrincipal = {
         if(registroTemporal - buclePrincipal.ultimoRegistro > 999){
             buclePrincipal.ultimoRegistro = registroTemporal;
             //console.log("APS: "+ buclePrincipal.aps + " | FPS: "+ buclePrincipal.fps);
-            buclePrincipal.dibujarFps = "APS: "+ buclePrincipal.aps + " | FPS: "+ buclePrincipal.fps;
+            buclePrincipal.dibujarFps = "APS: "+ buclePrincipal.aps + " | FPS: "+ buclePrincipal.fps + " | PING: " + buclePrincipal.ms;
+            io.emit('ping');
+            buclePrincipal.start = Date.now();
             buclePrincipal.aps = 0;
             buclePrincipal.fps = 0;
         }
     }, solido: function(x,y, player){
+        startTime = Date.now();
         var esSolido = false;
         var futX, futY;
         // izquieda y abajo con la esquina inferior izquierda
