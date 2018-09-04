@@ -1,4 +1,5 @@
-canvas { margin: 0 auto; }
+canvas { margin: 0 auto; overflow:hidden; }
 body {
     margin: 0px;
+    overflow:hidden; 
 }

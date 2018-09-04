@@ -136,13 +136,14 @@ var buclePrincipal = {
             buclePrincipal.personajes[buclePrincipal.personajes.indexOf(element)].dibujar(buclePrincipal.ctx);
         });
         if(debug.info){
-            buclePrincipal.ctx.fillStyle = "black";
+            buclePrincipal.ctx.fillStyle = '#FFFFFF';
              if(buclePrincipal.myOwn != null) buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps + " | X: "+ buclePrincipal.myOwn.hitbox.x + " | Y: "+ buclePrincipal.myOwn.hitbox.y, 0, 20); 
              else buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps , 0, 20); 
         }
         buclePrincipal.fps++;
     },
     limpiar: function(){
-        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        buclePrincipal.ctx.fillStyle = "black";
+        buclePrincipal.ctx.fillRect(0,0, canvas.width,canvas.height);
     }
 };
