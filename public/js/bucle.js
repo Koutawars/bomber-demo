@@ -74,8 +74,9 @@ var buclePrincipal = {
             }
         });
         var bomba = new bomb(coloca.x + 7,coloca.y + 25, coloca.timeBomb, coloca.largeBomb);
+        bomba.coloca = coloca;
         buclePrincipal.bombas.push(bomba);
-        setTimeout(buclePrincipal.temporizador, coloca.timeBomb, bomba, coloca);
+        bomba.tmp = setTimeout(buclePrincipal.temporizador, coloca.timeBomb, bomba, coloca);
         coloca.numBomb -= 1;
     },
     temporizador: function(bomba, coloca){
@@ -83,15 +84,21 @@ var buclePrincipal = {
             delete buclePrincipal.bombas[buclePrincipal.bombas.indexOf(bomba)];
             // explosión del centro
             var bX = bomba.x,  bY = bomba.y, bAncho = bomba.hitbox.ancho, bAlto = bomba.hitbox.alto;
-            var Texplo = 500;
-            var explo = new rectangulo(bX, bY, bAncho, bAlto);
+            var Texplo = 500; // tiempo que dura las explosiones
+            var explo = new rectangulo(bX, bY, bAncho, bAlto); // se crea una explosión
             buclePrincipal.explosiones.push(explo);
             setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
+            var tpm;
             //explosión arriba
             var n = 1;
             do{
                 explo = new rectangulo(bX, bY - bAlto*n, bAncho, bAlto);
                 buclePrincipal.explosiones.push(explo);
+                tpm = buclePrincipal.tocarBomb(explo);
+                if(tpm.toco){
+                    clearTimeout(tpm.bomba.tmp);
+                    setTimeout(buclePrincipal.temporizador, 1, tpm.bomba, tpm.bomba.coloca);
+                }
                 setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
                 n++;
             }while(n < coloca.largeBomb + 1);
@@ -100,6 +107,11 @@ var buclePrincipal = {
             do{
                 explo = new rectangulo(bX, bY + bAlto*n, bAncho, bAlto);
                 buclePrincipal.explosiones.push(explo);
+                tpm = buclePrincipal.tocarBomb(explo);
+                if(tpm.toco){
+                    clearTimeout(tpm.bomba.tmp);
+                    setTimeout(buclePrincipal.temporizador, 1, tpm.bomba, tpm.bomba.coloca);
+                }
                 setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
                 n++;
             }while(n < coloca.largeBomb+ 1);
@@ -108,6 +120,11 @@ var buclePrincipal = {
             do{
                 explo = new rectangulo(bX + bAlto*n, bY, bAncho, bAlto);
                 buclePrincipal.explosiones.push(explo);
+                tpm = buclePrincipal.tocarBomb(explo);
+                if(tpm.toco){
+                    clearTimeout(tpm.bomba.tmp);
+                    setTimeout(buclePrincipal.temporizador, 1, tpm.bomba, tpm.bomba.coloca);
+                }
                 setTimeout(buclePrincipal.tiempoExplo, Texplo, explo);
                 n++;
             }while(n < coloca.largeBomb+ 1);
@@ -116,13 +133,26 @@ var buclePrincipal = {
             do{
                 explo = new rectangulo(bX - bAlto*n, bY, bAncho, bAlto);
                 buclePrincipal.explosiones.push(explo);
+                tpm = buclePrincipal.tocarBomb(explo);
+                if(tpm.toco){
+                    clearTimeout(tpm.bomba.tmp);
+                    setTimeout(buclePrincipal.temporizador, 1, tpm.bomba, tpm.bomba.coloca);
+                }
                 setTimeout(buclePrincipal.tiempoExplo, 500, explo);
                 n++;
             }while(n < coloca.largeBomb + 1);
             coloca.numBomb += 1;
         }
-        else
-            console.log("ERROR NO EXISTE LA BOMBA");
+    },
+    tocarBomb: function(hit){
+        var retornar = {toco:false, bomba:null};
+        buclePrincipal.bombas.forEach(element => {
+            if(element.hitbox.chocarCon(hit)){
+                retornar.toco = element.hitbox.chocarCon(hit);
+                retornar.bomba = element;
+            };
+        });
+        return retornar;
     },
     copiar: function(data){
         return new player(data.id, data.x, data.y, data.ruta, data.posHitX, data.posHitY, data.anchoHit, data.altoHit, data.numBomb, data.timeBomb, data.largeBomb);

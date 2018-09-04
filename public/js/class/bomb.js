@@ -8,6 +8,8 @@ class bomb {
         this.img.src = 'img/bomb.png';
         this.ancho = 38;
         this.alto = 41;
+        this.tmp = null;
+        this.coloca = null;
         this.hitbox = new rectangulo(this.x , this.y , this.ancho , this.alto);
     }
     dibujar(ctx){
