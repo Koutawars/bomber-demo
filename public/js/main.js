@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function(){
     console.log("Se inicia el juego");
     buclePrincipal.ctx = canvas.getContext("2d");
-    buclePrincipal.myOwn = new player(0, 250,100, 5, 'img/lion.png', 0, 45, 40, 20, 3, 3000, 3);
+    buclePrincipal.myOwn = new player(0, 250,100, 5, 'img/lion', 17,0, 45, 40, 20, 3, 3000, 3);
     io.emit('nuevoJugador', buclePrincipal.myOwn);
     // le coloco una ID
     io.on('cambiarID', function(data){
@@ -25,8 +25,16 @@ document.addEventListener('DOMContentLoaded', function(){
         buclePrincipal.personajes.forEach(element => {
             if(element.id == data.id){
                 var personaje = buclePrincipal.personajes[buclePrincipal.personajes.indexOf(element)];
+                if(personaje.x == data.x && personaje.y == data.y)
+                    personaje.animaciones.stop = true;
+                else
+                    personaje.animaciones.stop = data.animaciones.stop;
                 personaje.x = data.x;
                 personaje.y = data.y;
+                personaje.arriba = data.arriba;
+                personaje.abajo = data.abajo;
+                personaje.derecha = data.derecha;
+                personaje.izquierda = data.izquierda;
             }
         });
     });
@@ -51,28 +59,32 @@ document.addEventListener('DOMContentLoaded', function(){
     document.body.onkeydown = function(e){
         if(buclePrincipal.myOwn != null){
             if (e.keyCode === 87) {
-                buclePrincipal.arriba = true; // arriba
-                buclePrincipal.abajo = false; // abajo
-                buclePrincipal.izquierda = false; // izquierda
-                buclePrincipal.derecha = false; // derecha
+                buclePrincipal.myOwn.animaciones.stop = false;
+                buclePrincipal.myOwn.arriba = true; // arriba
+                buclePrincipal.myOwn.abajo = false; // abajo
+                buclePrincipal.myOwn.izquierda = false; // izquierda
+                buclePrincipal.myOwn.derecha = false; // derecha
             }
             else if (e.keyCode === 83) {
-                buclePrincipal.arriba = false; // arriba
-                buclePrincipal.abajo = true; // abajo
-                buclePrincipal.izquierda = false; // izquierda
-                buclePrincipal.derecha = false; // derecha
+                buclePrincipal.myOwn.animaciones.stop = false;
+                buclePrincipal.myOwn.arriba = false; // arriba
+                buclePrincipal.myOwn.abajo = true; // abajo
+                buclePrincipal.myOwn.izquierda = false; // izquierda
+                buclePrincipal.myOwn.derecha = false; // derecha
             }
             else if (e.keyCode === 65) {
-                buclePrincipal.arriba = false; // arriba
-                buclePrincipal.abajo = false; // abajo
-                buclePrincipal.izquierda = true; // izquierda
-                buclePrincipal.derecha = false; // derecha
+                buclePrincipal.myOwn.animaciones.stop = false;
+                buclePrincipal.myOwn.arriba = false; // arriba
+                buclePrincipal.myOwn.abajo = false; // abajo
+                buclePrincipal.myOwn.izquierda = true; // izquierda
+                buclePrincipal.myOwn.derecha = false; // derecha
             } 
             else if (e.keyCode === 68) {
-                buclePrincipal.arriba = false; // arriba
-                buclePrincipal.abajo = false; // abajo
-                buclePrincipal.izquierda = false; // izquierda
-                buclePrincipal.derecha = true; // derecha
+                buclePrincipal.myOwn.animaciones.stop = false;
+                buclePrincipal.myOwn.arriba = false; // arriba
+                buclePrincipal.myOwn.abajo = false; // abajo
+                buclePrincipal.myOwn.izquierda = false; // izquierda
+                buclePrincipal.myOwn.derecha = true; // derecha
             }
             if(e.keyCode === 32 && buclePrincipal.myOwn.numBomb >= 1){
                 buclePrincipal.colocarBomba(buclePrincipal.myOwn);
@@ -83,16 +95,36 @@ document.addEventListener('DOMContentLoaded', function(){
     document.addEventListener('keyup', function (e) {
         if(buclePrincipal.myOwn != null){
             if (e.keyCode == 87) {
-                buclePrincipal.arriba = false; // arriba
+                buclePrincipal.myOwn.arriba = false; // arriba
+                if(!buclePrincipal.myOwn.arriba && !buclePrincipal.myOwn.abajo && !buclePrincipal.myOwn.izquierda && !buclePrincipal.myOwn.derecha)
+                {
+                    buclePrincipal.myOwn.animaciones.stop = true;
+                    buclePrincipal.emitQuieto = true;
+                }
             }
             if(e.keyCode == 83 ){
-                buclePrincipal.abajo = false; // abajo
+                buclePrincipal.myOwn.abajo = false; // abajo
+                if(!buclePrincipal.myOwn.arriba && !buclePrincipal.myOwn.abajo && !buclePrincipal.myOwn.izquierda && !buclePrincipal.myOwn.derecha)
+                {
+                    buclePrincipal.myOwn.animaciones.stop = true;
+                    buclePrincipal.emitQuieto = true;
+                }
             }
             if(e.keyCode == 65){
-                buclePrincipal.izquierda = false; // izquierda
+                buclePrincipal.myOwn.izquierda = false; // izquierda
+                if(!buclePrincipal.myOwn.arriba && !buclePrincipal.myOwn.abajo && !buclePrincipal.myOwn.izquierda && !buclePrincipal.myOwn.derecha)
+                {
+                    buclePrincipal.myOwn.animaciones.stop = true;
+                    buclePrincipal.emitQuieto = true;
+                }
             }
             if( e.keyCode == 68){
-                buclePrincipal.derecha = false; // derecha
+                buclePrincipal.myOwn.derecha = false; // derecha
+                if(!buclePrincipal.myOwn.arriba && !buclePrincipal.myOwn.abajo && !buclePrincipal.myOwn.izquierda && !buclePrincipal.myOwn.derecha)
+                {
+                    buclePrincipal.myOwn.animaciones.stop = true;
+                    buclePrincipal.emitQuieto = true;
+                }
             }
         }
     }, true);

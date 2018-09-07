@@ -9,6 +9,7 @@ class bomb {
         this.ancho = 38;
         this.alto = 41;
         this.tmp = null;
+        this.recienColocada = true;
         this.coloca = null;
         this.hitbox = new rectangulo(this.x , this.y , this.ancho , this.alto);
     }

@@ -3,7 +3,8 @@ var buclePrincipal = {
     idEjecucion: null,
     ultimoRegistro: 0,
     aps: 0,                         // contador de actulizaciones
-    fps: 0,                         // contador de fps
+    fps: 0,
+    maxFps: 0,                         // contador de fps
     ping: 0, 
     ctx: null,                      // el canvas del DOM 
     personajes:[],                  // vector de personajes
@@ -16,23 +17,30 @@ var buclePrincipal = {
         izquierda: false,
         arriba: false,
         abajo: false
-    },mover: function(){
+    },
+    emitQuieto:true
+    ,
+    mover: function(){
         
-        if(buclePrincipal.derecha && buclePrincipal.solido(buclePrincipal.myOwn.vel , 0, buclePrincipal.myOwn)){
+        if(buclePrincipal.myOwn.derecha && buclePrincipal.solido(buclePrincipal.myOwn.vel , 0, buclePrincipal.myOwn)){
             buclePrincipal.myOwn.mover(buclePrincipal.myOwn.velTmp , 0); // derecha
             io.emit('actualizar', buclePrincipal.myOwn);
         }
-        else if(buclePrincipal.izquierda && buclePrincipal.solido(-buclePrincipal.myOwn.vel , 0, buclePrincipal.myOwn)){
+        else if(buclePrincipal.myOwn.izquierda && buclePrincipal.solido(-buclePrincipal.myOwn.vel , 0, buclePrincipal.myOwn)){
             buclePrincipal.myOwn.mover(-buclePrincipal.myOwn.velTmp , 0); // izquierda
             io.emit('actualizar', buclePrincipal.myOwn);
         }
-        else if(buclePrincipal.arriba && buclePrincipal.solido(0 , -buclePrincipal.myOwn.vel, buclePrincipal.myOwn)){
+        else if(buclePrincipal.myOwn.arriba && buclePrincipal.solido(0 , -buclePrincipal.myOwn.vel, buclePrincipal.myOwn)){
             buclePrincipal.myOwn.mover(0 , -buclePrincipal.myOwn.velTmp); // arriba
             io.emit('actualizar', buclePrincipal.myOwn);
         }
-        else if(buclePrincipal.abajo && buclePrincipal.solido(0 , buclePrincipal.myOwn.vel, buclePrincipal.myOwn)){
+        else if(buclePrincipal.myOwn.abajo && buclePrincipal.solido(0 , buclePrincipal.myOwn.vel, buclePrincipal.myOwn)){
             buclePrincipal.myOwn.mover(0 , buclePrincipal.myOwn.velTmp); // abajo
             io.emit('actualizar', buclePrincipal.myOwn);
+        }
+        if(buclePrincipal.myOwn.animaciones.stop && buclePrincipal.emitQuieto){
+            io.emit('actualizar', buclePrincipal.myOwn);
+            buclePrincipal.emitQuieto = false;
         }
     },
     iterar: function(registroTemporal){
@@ -46,11 +54,11 @@ var buclePrincipal = {
             buclePrincipal.dibujarFps = "APS: "+ buclePrincipal.aps + " | FPS: "+ buclePrincipal.fps + " | PING: " + buclePrincipal.ping;
             io.emit("msPing", Date.now());
             buclePrincipal.aps = 0;
+            buclePrincipal.maxFps = buclePrincipal.fps;
             buclePrincipal.fps = 0;
         }
     }, solido: function(x,y, player){
         var esSolido = false;
-        var futX, futY;
         // izquieda y abajo con la esquina inferior izquierda
         if(x <= 0 && y >= 0) {
             futX = player.hitbox.x + x; 
@@ -61,8 +69,14 @@ var buclePrincipal = {
             futX = player.hitbox.x + x + player.hitbox.ancho; 
             futY = player.hitbox.y + y;
         }
+        temporal = player.hitbox.copiar();
+        temporal.x += x;
+        temporal.y += y;
         buclePrincipal.bombas.forEach(bomba => {
-            esSolido = bomba.hitbox.puntoCon(futX, futY);
+            if(!bomba.recienColocada)
+                esSolido = bomba.hitbox.chocarCon(temporal);
+            else if(!bomba.hitbox.chocarCon(temporal))
+                bomba.recienColocada = false;
         });
         // izquierda y arriba con la esquina superior izquierda
         if(x <= 0 && y <= 0) {
@@ -76,9 +90,13 @@ var buclePrincipal = {
         }
         if(!esSolido){
             buclePrincipal.bombas.forEach(bomba => {
-                esSolido = bomba.hitbox.puntoCon(futX, futY);
+                if(!bomba.recienColocada)
+                    esSolido = bomba.hitbox.chocarCon(temporal);
+                else if(!bomba.hitbox.chocarCon(temporal))
+                    bomba.recienColocada = false;
             });
         }
+        delete temporal;
         return !esSolido;
     },
     colocarBomba:function(coloca){
@@ -177,7 +195,9 @@ var buclePrincipal = {
         return retornar;
     },
     copiar: function(data){
-        return new player(data.id, data.x, data.y, data.vel, data.ruta, data.posHitX, data.posHitY, data.anchoHit, data.altoHit, data.numBomb, data.timeBomb, data.largeBomb);
+        var copia = new player(data.id, data.x, data.y, data.vel, data.ruta, data.numImages, data.posHitX, data.posHitY, data.anchoHit, data.altoHit, data.numBomb, data.timeBomb, data.largeBomb);
+
+        return copia;
     },
     tiempoExplo: function(explo){
         if(buclePrincipal.explosiones.indexOf(explo) != -1){

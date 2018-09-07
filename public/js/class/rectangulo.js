@@ -11,6 +11,9 @@ class rectangulo{
         ctx.fillStyle = 'rgba(250, 0, 0, 0.3)';
         ctx.fillRect(this.x,this.y,this.ancho, this.alto);
     }
+    copiar(){
+        return new rectangulo(this.x, this.y, this.ancho, this.alto);
+    }
     chocarCon(otherobj) {
         var izquierda = this.x;
         var derecha = this.x + (this.ancho);
