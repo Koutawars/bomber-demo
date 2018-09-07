@@ -110,6 +110,7 @@ var buclePrincipal = {
             }
         });
         var bomba = new bomb(coloca.x ,coloca.y + 25, coloca.timeBomb, coloca.largeBomb);
+        bomba.recienColocada = false;
         bomba.coloca = coloca;
         buclePrincipal.bombas.push(bomba);
         bomba.tmp = setTimeout(buclePrincipal.temporizador, coloca.timeBomb, bomba, coloca);
