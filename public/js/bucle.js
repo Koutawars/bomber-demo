@@ -113,6 +113,7 @@ var buclePrincipal = {
         if(buclePrincipal.myOwn !=  null){
             if(coloca.id != buclePrincipal.myOwn.id) bomba.recienColocada = false;
         }
+        bomba.coloca = coloca;
         buclePrincipal.bombas.push(bomba);
         bomba.tmp = setTimeout(buclePrincipal.temporizador, coloca.timeBomb, bomba, coloca);
         coloca.numBomb -= 1;
