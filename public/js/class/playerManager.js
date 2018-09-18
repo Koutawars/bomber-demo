@@ -90,6 +90,8 @@ io.on('allplayers', function(data){
 io.on('actualizar', function(data){
     if(playerManager.personajes[data.id] != null){
         playerManager.personajes[data.id].igualar(data);
+        if(playerManager.personajes[data.id].morir)
+            delete playerManager.personajes[data.id];
     }else{
         console.log("No existe el jugador que se mueve");
     }

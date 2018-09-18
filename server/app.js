@@ -67,9 +67,10 @@ io.on('connection',function(socket){
     socket.on('msPing', function(data) {
         socket.emit('msPong', data);
     });
-    socket.on('murio', function(){
-        socket.player.morir = true;
-        io.emit('murio', socket.player);
+    socket.on('murio', function(id){
+        var player = getPlayerID(id);
+        player.morir = true;
+        io.emit('murio', player);
     });
     socket.on('disconnect', function(){
         socket.player.morir = true;
@@ -84,6 +85,17 @@ function getAllPlayer(id){
         if(player && socketID != id) players.push(player);
     });
     return players;
+}
+function getPlayerID(id){
+    let player;
+    var returnPlayer;
+    Object.keys(io.sockets.connected).forEach(function(socketID){
+        player = io.sockets.connected[socketID].player;
+        if(player && player.id == id){
+            returnPlayer = player;
+        } 
+    });
+    return returnPlayer;
 }
 function mov(data ,velX, velY){
     data.x+= velX;

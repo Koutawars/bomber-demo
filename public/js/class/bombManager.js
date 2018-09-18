@@ -14,13 +14,14 @@ bombManager.Draw = function(ctx){
 };
 
 bombManager.Update = function(){
-    if(playerManager.personajes[playerManager.id] != null){
-        this.explosions.forEach(explo => {
-            if(playerManager.personajes[playerManager.id].hitbox.chocarCon(explo)){
-                io.emit("murio");
+    playerManager.personajes.forEach(player => {
+        bombManager.explosions.forEach(explo => {
+            if(player.hitbox.chocarCon(explo)){
+                io.emit("murio", player.id);
             }
         });
-    }
+    });
+
     if(keys[32] && playerManager.personajes[playerManager.id]!= null){
         if(!bombManager.tocarBomb(playerManager.personajes[playerManager.id].hitbox).toco)
             io.emit('newBomb');
