@@ -21,51 +21,63 @@ server.lastPlayderID = 0; // se inicializa las id de los personajes
 server.listen(process.env.PORT || 5000,function(){
     console.log('escuchando en '+server.address().port);
 });
+const dir = {
+    ARRIBA: "arriba",
+    ABAJO: "abajo",
+    DERECHA: "derecha",
+    IZQUIERDA: "izquierda"
+};
 
-// Funcion que se llama si se conecta el socket
+server.bombas = [];
 io.on('connection',function(socket){
-    console.log("Ha entrado un nuevo jugador/socket");
-    // funcion que recibe del cliente para crear nuevo jugador
-    socket.on('nuevoJugador',function(data){
-        // nuevo jugador
+    socket.emit("nuevoID", server.lastPlayderID++);
+    socket.on("nuevoJugador", function(data){
         socket.player = data;
-        // se emite al socket la posiciones de todos los jugadores menos el propio
-        socket.emit('allplayers',getAllPlayers(socket.id));
-        // colocarle una ID
-        socket.player.id = server.lastPlayderID++;
-        socket.emit('cambiarID', socket.player);
-        // se emite a los demas jugadores que hay un jugador (no incluyendose)
-        socket.broadcast.emit('nuevoJugador',socket.player);
-
-        // funcion para actualizar obtiendo la informacion del servidor
-        socket.on('actualizar',function(data){
-            socket.player = data; // toma los datos del jugador que va actualizar
-            socket.broadcast.emit('mover', socket.player); // se emite al cliente "mover" y se manda al jugador
-        });
-        // cada vez que un jugador se desconecta se emite remove
-        socket.on('disconnect',function(){
-            socket.broadcast.emit('remove',socket.player);
-        });
-        socket.on('murio',function(){
-            socket.broadcast.emit('remove',socket.player);
-        });
-        
-        socket.on('msPing', function(data) {
-            socket.emit('msPong', data);
-        });
-        socket.on('casa', function() {
-            console.log("El servidor te saluda");
-        })
-        // recibe señal del cliente que hay nueva bomba
-        socket.on('newBomba', function(data){
-            // se emite todos menos a el mismo que se coloco una bomba
-            socket.broadcast.emit('colocoBomba',data);
-        });
+        socket.emit("allplayers", getAllPlayer(socket.id));
+        socket.broadcast.emit("nuevoJugador", data);
+    });
+    socket.on("mover", function(direccion, stop){
+        let player = socket.player;
+        if(direccion == dir.DERECHA){
+            player = mov(player, player.vel, 0);
+        }
+        else if(direccion == dir.IZQUIERDA){
+            player = mov(player, -player.vel, 0);
+        }
+        else if(direccion == dir.ARRIBA){
+            player = mov(player, 0, -player.vel);
+        }
+        else if(direccion == dir.ABAJO){
+            player = mov(player, 0, player.vel);
+        }
+        player.animaciones.stop = stop;
+        player.dir = direccion;
+        io.emit("actualizar", player);
+    });
+    socket.on('newBomb',function(){
+        if(socket.player.numBomb > 0){
+            io.emit('newBomb', socket.player);
+            socket.player.numBomb-=1;
+        }
+    });
+    socket.on('explosion', function(){
+        if(socket.player.numBomb <= socket.player.numMaxBomb)
+            socket.player.numBomb += 1;
+    });
+    socket.on('msPing', function(data) {
+        socket.emit('msPong', data);
+    });
+    socket.on('murio', function(){
+        socket.player.morir = true;
+        io.emit('murio', socket.player);
+    });
+    socket.on('disconnect', function(){
+        socket.player.morir = true;
+        socket.broadcast.emit('murio', socket.player);
+        delete socket.player;
     });
 });
-
-// funcion para conseguir todos los jugadores
-function getAllPlayers(id){
+function getAllPlayer(id){
     var players = [];
     Object.keys(io.sockets.connected).forEach(function(socketID){
         var player = io.sockets.connected[socketID].player;
@@ -73,8 +85,10 @@ function getAllPlayers(id){
     });
     return players;
 }
-
-// numero random entero
-function randomInt (low, high) {
-    return Math.floor(Math.random() * (high - low) + low);
+function mov(data ,velX, velY){
+    data.x+= velX;
+    data.y+= velY;
+    data.hitbox.x = data.x + data.posHitX;
+    data.hitbox.y = data.y + data.posHitY;
+    return data;
 }

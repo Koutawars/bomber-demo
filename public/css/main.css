@@ -1,5 +1,14 @@
-canvas { margin: 0 auto; overflow:hidden; }
+canvas { 
+    margin: auto;
+    display: block;
+    overflow:hidden; 
+}
 body {
     margin: 0px;
     overflow:hidden; 
+}
+@media screen and (max-width:640px) {
+    canvas {
+        width: 100%;
+    }
 }

@@ -5,7 +5,7 @@ class rectangulo{
         this.ancho = ancho;
         this.alto = alto;
     }
-    dibujar(ctx){
+    Draw(ctx){
         ctx.strokeStyle="rgb(250, 0, 0)"; // color de los trazos
         ctx.strokeRect(this.x,this.y, this.ancho, this.alto);
         ctx.fillStyle = 'rgba(250, 0, 0, 0.3)';

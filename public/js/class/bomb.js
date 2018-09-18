@@ -13,8 +13,8 @@ class bomb {
         this.coloca = null;
         this.hitbox = new rectangulo(this.x , this.y , this.ancho , this.alto);
     }
-    dibujar(ctx){
+    Draw(ctx){
         ctx.drawImage(this.img, this.x, this.y);
-        if(debug.hit) this.hitbox.dibujar(ctx);
+        if(debug.hit) this.hitbox.Draw(ctx);
     }
 }
