@@ -23,7 +23,8 @@ bombManager.Update = function(){
     });
 
     if(keys[32] && playerManager.personajes[playerManager.id]!= null){
-        if(!bombManager.tocarBomb(playerManager.personajes[playerManager.id].hitbox).toco)
+        var cosa = bombManager.tocarBomb(playerManager.personajes[playerManager.id].hitbox);
+        if(!cosa.toco)
             io.emit('newBomb');
     }
 };
@@ -66,7 +67,8 @@ bombManager.temporizador =  function(bomba, coloca){
         // Explosión abajo
         do{
             explo = new rectangulo(bX, bY + bAlto*n, bAncho, bAlto);
-            bombManager.explosions.push(explo);            tpm = bombManager.tocarBomb(explo);
+            bombManager.explosions.push(explo);
+            tpm = bombManager.tocarBomb(explo);
             setTimeout(bombManager.tiempoExplo, Texplo, explo);
             if(tpm.toco){
                 clearTimeout(tpm.bomba.tmp);
@@ -79,7 +81,8 @@ bombManager.temporizador =  function(bomba, coloca){
         // Explosión a la derecha
         do{
             explo = new rectangulo(bX + bAlto*n, bY, bAncho, bAlto);
-            bombManager.explosions.push(explo);            tpm = bombManager.tocarBomb(explo);
+            bombManager.explosions.push(explo);
+            tpm = bombManager.tocarBomb(explo);
             setTimeout(bombManager.tiempoExplo, Texplo, explo);
             if(tpm.toco){
                 clearTimeout(tpm.bomba.tmp);
@@ -92,7 +95,8 @@ bombManager.temporizador =  function(bomba, coloca){
         // Explsión a la izquierda
         do{
             explo = new rectangulo(bX - bAlto*n, bY, bAncho, bAlto);
-            bombManager.explosions.push(explo);            tpm = bombManager.tocarBomb(explo);
+            bombManager.explosions.push(explo);            
+            tpm = bombManager.tocarBomb(explo);
             setTimeout(bombManager.tiempoExplo, Texplo, explo);
             if(tpm.toco){
                 clearTimeout(tpm.bomba.tmp);
