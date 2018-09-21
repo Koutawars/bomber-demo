@@ -23,7 +23,7 @@ bombManager.Update = function(){
         });
     });
     if(keys[32] && playerManager.personajes[playerManager.id]!= null){
-        if(!this.tocarBomb(playerManager.personajes[playerManager.id].hitbox).toco && playerManager.personajes[playerManager.id].numBomb > 0)
+        if(!this.tocarBomb(playerManager.personajes[playerManager.id].hitbox).toco && playerManager.personajes[playerManager.id].numBomb > 0 && !this.puesta)
         {
             playerManager.personajes[playerManager.id].numBomb -= 1;
             this.puesta = true; 
@@ -134,6 +134,6 @@ bombManager.tiempoExplo =  function(explo){
 }
 
 io.on('newBomb', function(player){
-    if(player.id == playerManager.id)this.puesta = false; 
+    if(player.id == playerManager.id)bombManager.puesta = false; 
     bombManager.colocarBomba(player);
 });
