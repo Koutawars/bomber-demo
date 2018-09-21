@@ -25,7 +25,8 @@ bombManager.Update = function(){
         if(!this.tocarBomb(playerManager.personajes[playerManager.id].hitbox).toco && playerManager.personajes[playerManager.id].numBomb > 0)
         {
             this.colocarBomba(playerManager.personajes[playerManager.id]);
-            io.emit('newBomb');  
+            playerManager.personajes[playerManager.id].numBomb -= 1;
+            io.emit('newBomb');
         }
     }
 };
@@ -108,7 +109,10 @@ bombManager.temporizador =  function(bomba, coloca){
         }while(n < coloca.largeBomb + 1);
         if(playerManager.personajes[playerManager.id])
             if(playerManager.personajes[playerManager.id].numBomb < playerManager.personajes[playerManager.id].numMaxBomb)
-                if(coloca.id == playerManager.id) io.emit("sumBomb");
+                if(coloca.id == playerManager.id){
+                    io.emit("sumBomb");
+                    playerManager.personajes[playerManager.id].numBomb +=1;
+                }
     }
 };
 bombManager.tocarBomb = function(hit){

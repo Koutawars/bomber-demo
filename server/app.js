@@ -65,14 +65,15 @@ io.on('connection',function(socket){
             player.hitbox.y = data.hitbox.y;
             player.animaciones.stop = data.animaciones.stop;
             player.dir = data.dir;
-            io.emit("actualizar", player);
+            socket.broadcast.emit("actualizar", player);
         }else{
+            player = {id: p.id};
             io.emit('murio', player);
         }
     });
     socket.on('newBomb',function(){
         socket.player.numBomb -= 1;
-        socket.broadcast.emit('newBomb', socket.player);
+        io.emit('newBomb', socket.player);
     });
     socket.on('msPing', function(data) {
         socket.emit('msPong', data);
