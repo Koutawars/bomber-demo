@@ -37,7 +37,27 @@ io.on('connection',function(socket){
         socket.broadcast.emit("nuevoJugador", data);
     });
     socket.on("mover", function(data){
-        let player = socket.player
+        let p = socket.player;
+        let player = {
+            id: p.id,
+            morir : p.morir,
+            animaciones:{stop:p.animaciones.stop},
+            x : p.x,
+            y : p.y,
+            posHitX: p.posHitX,
+            posHitY: p.posHitY,
+            hitbox:{
+                    x: p.hitbox.x,
+                    y: p.hitbox.y 
+                    },
+            dir : p.dir,
+            vel : p.vel,
+            personaje : p.personaje,
+            numBomb : p.numBomb,
+            numMaxBomb : p.numMaxBomb,
+            timeBomb : p.timeBomb,
+            largeBomb : p.largeBomb
+        };
         if(player){
             player.x = data.x;
             player.y = data.y;
