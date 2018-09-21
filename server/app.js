@@ -59,12 +59,13 @@ io.on('connection',function(socket){
             largeBomb : p.largeBomb
         };
         if(player){
-            p.x = data.x;
-            p.y = data.y;
-            p.hitbox.x = data.hitbox.x;
-            p.hitbox.y = data.hitbox.y;
-            p.animaciones.stop = data.animaciones.stop;
-            p.dir = data.dir;
+            player.x = data.x;
+            player.y = data.y;
+            player.hitbox.x = data.hitbox.x;
+            player.hitbox.y = data.hitbox.y;
+            player.animaciones.stop = data.animaciones.stop;
+            player.dir = data.dir;
+            p = player;
             socket.broadcast.emit("actualizar", player);
         }else{
             player = {id: p.id};
