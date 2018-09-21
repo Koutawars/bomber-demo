@@ -36,46 +36,46 @@ io.on('connection',function(socket){
         socket.emit("allplayers", getAllPlayer(socket.id));
         socket.broadcast.emit("nuevoJugador", data);
     });
-    socket.on("mover", function(direccion, stop){
-        let player = socket.player;
-        if(direccion == dir.DERECHA){
-            player = mov(player, player.vel, 0);
+    socket.on("mover", function(data){
+        let player = socket.player
+        if(player){
+            player.x = data.x;
+            player.y = data.y;
+            player.hitbox.x = data.hitbox.x;
+            player.hitbox.y = data.hitbox.y;
+            player.animaciones.stop = data.animaciones.stop;
+            player.dir = data.dir;
+            io.emit("actualizar", player);
+        }else{
+            io.emit('murio', player);
         }
-        else if(direccion == dir.IZQUIERDA){
-            player = mov(player, -player.vel, 0);
-        }
-        else if(direccion == dir.ARRIBA){
-            player = mov(player, 0, -player.vel);
-        }
-        else if(direccion == dir.ABAJO){
-            player = mov(player, 0, player.vel);
-        }
-        player.animaciones.stop = stop;
-        player.dir = direccion;
-        io.emit("actualizar", player);
     });
     socket.on('newBomb',function(){
-        if(socket.player.numBomb > 0){
-            io.emit('newBomb', socket.player);
-            socket.player.numBomb-=1;
-        }
-    });
-    socket.on('explosion', function(){
-        if(socket.player.numBomb <= socket.player.numMaxBomb)
-            socket.player.numBomb += 1;
+        socket.player.numBomb -= 1;
+        socket.broadcast.emit('newBomb', socket.player);
     });
     socket.on('msPing', function(data) {
         socket.emit('msPong', data);
     });
+    socket.on('sumBomb',function(){
+        socket.player.numBomb += 1;
+    });
     socket.on('murio', function(id){
         var player = getPlayerID(id);
-        player.morir = true;
-        io.emit('murio', player);
+        if(player){
+            player.morir = true;
+            io.emit('murio', player);
+        }
+    });
+    socket.on('delete', function(){
+        delete socket.player;
     });
     socket.on('disconnect', function(){
-        socket.player.morir = true;
-        socket.broadcast.emit('murio', socket.player);
-        delete socket.player;
+        if(socket.player){
+            socket.player.morir = true;
+            socket.broadcast.emit('murio', socket.player);
+            delete socket.player;
+        }
     });
 });
 function getAllPlayer(id){
@@ -96,11 +96,4 @@ function getPlayerID(id){
         } 
     });
     return returnPlayer;
-}
-function mov(data ,velX, velY){
-    data.x+= velX;
-    data.y+= velY;
-    data.hitbox.x = data.x + data.posHitX;
-    data.hitbox.y = data.y + data.posHitY;
-    return data;
 }

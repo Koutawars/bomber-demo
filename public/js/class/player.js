@@ -58,6 +58,13 @@ class player{
             console.log(this);
         }
     }
+    mov(velX, velY)
+    {
+        this.x+= velX;
+        this.y+= velY;
+        this.hitbox.x = this.x + this.posHitX;
+        this.hitbox.y = this.y + this.posHitY;
+    }
     igualar(data){
         this.morir = data.morir;
         this.animaciones.stop = data.animaciones.stop;

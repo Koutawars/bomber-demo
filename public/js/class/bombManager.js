@@ -1,7 +1,6 @@
 var bombManager = {
     bombs:[],
-    explosions:[],
-    coloca:true
+    explosions:[]
 };
 bombManager.Draw = function(ctx){
     this.bombs.forEach(element => {
@@ -23,10 +22,10 @@ bombManager.Update = function(){
         });
     });
     if(keys[32] && playerManager.personajes[playerManager.id]!= null){
-        var cosa = bombManager.tocarBomb(playerManager.personajes[playerManager.id].hitbox);
-        if(!cosa.toco && bombManager.coloca){
-            io.emit('newBomb');   
-            bombManager.coloca = false;
+        if(!this.tocarBomb(playerManager.personajes[playerManager.id].hitbox).toco && playerManager.personajes[playerManager.id].numBomb > 0)
+        {
+            this.colocarBomba(playerManager.personajes[playerManager.id]);
+            io.emit('newBomb');  
         }
     }
 };
@@ -43,7 +42,6 @@ bombManager.colocarBomba = function(player){
 
 bombManager.temporizador =  function(bomba, coloca){
     if(bombManager.bombs.indexOf(bomba) != -1){
-        bombManager.coloca = true;
         delete bombManager.bombs[bombManager.bombs.indexOf(bomba)];
         // explosión del centro
         var bX = bomba.x,  bY = bomba.y, bAncho = bomba.hitbox.ancho, bAlto = bomba.hitbox.alto;
@@ -108,7 +106,9 @@ bombManager.temporizador =  function(bomba, coloca){
             }
             n++;
         }while(n < coloca.largeBomb + 1);
-        io.emit('explosion');
+        if(playerManager.personajes[playerManager.id])
+            if(playerManager.personajes[playerManager.id].numBomb < playerManager.personajes[playerManager.id].numMaxBomb)
+                if(coloca.id == playerManager.id) io.emit("sumBomb");
     }
 };
 bombManager.tocarBomb = function(hit){
@@ -129,6 +129,5 @@ bombManager.tiempoExplo =  function(explo){
 }
 
 io.on('newBomb', function(player){
-    bombManager.coloca = true;
     bombManager.colocarBomba(player);
 });
