@@ -63,10 +63,12 @@ io.on('connection',function(socket){
             player.y = data.y;
             player.hitbox.x = data.hitbox.x;
             player.hitbox.y = data.hitbox.y;
+            player.altoHit = data.altoHit;
+            player.anchoHit = data.anchoHit;
             player.animaciones.stop = data.animaciones.stop;
             player.dir = data.dir;
-            p = player;
             socket.broadcast.emit("actualizar", player);
+            socket.player = player;
         }else{
             player = {id: p.id};
             io.emit('murio', player);

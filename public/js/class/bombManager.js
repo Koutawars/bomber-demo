@@ -1,6 +1,7 @@
 var bombManager = {
     bombs:[],
-    explosions:[]
+    explosions:[],
+    puesta:false
 };
 bombManager.Draw = function(ctx){
     this.bombs.forEach(element => {
@@ -25,6 +26,7 @@ bombManager.Update = function(){
         if(!this.tocarBomb(playerManager.personajes[playerManager.id].hitbox).toco && playerManager.personajes[playerManager.id].numBomb > 0)
         {
             playerManager.personajes[playerManager.id].numBomb -= 1;
+            this.puesta = true; 
             io.emit('newBomb');
         }
     }
@@ -132,5 +134,6 @@ bombManager.tiempoExplo =  function(explo){
 }
 
 io.on('newBomb', function(player){
+    if(player.id == playerManager.id)this.puesta = false; 
     bombManager.colocarBomba(player);
 });
