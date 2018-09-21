@@ -24,7 +24,6 @@ bombManager.Update = function(){
     if(keys[32] && playerManager.personajes[playerManager.id]!= null){
         if(!this.tocarBomb(playerManager.personajes[playerManager.id].hitbox).toco && playerManager.personajes[playerManager.id].numBomb > 0)
         {
-            this.colocarBomba(playerManager.personajes[playerManager.id]);
             playerManager.personajes[playerManager.id].numBomb -= 1;
             io.emit('newBomb');
         }
