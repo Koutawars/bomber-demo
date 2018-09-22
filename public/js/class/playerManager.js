@@ -1,15 +1,18 @@
 var playerManager = {
     personajes:[],
     id:0,
-    emitStop:true
+    emitStop:true,
+    pack:null
 };
 playerManager.Draw = function(ctx){
     this.personajes.forEach(element => {
         this.personajes[element.id].Draw(ctx);
     });
+    camera.Draw(ctx);
 }
 playerManager.Update = function(){
     this.mover();
+    camera.Update();
     this.personajes.forEach(element => {
         this.personajes[element.id].Update();
     });
@@ -38,7 +41,13 @@ playerManager.mover = function(){
                 this.personajes[this.id].dir = dir.DERECHA;
                 this.personajes[this.id].animaciones.stop = false;
                 this.personajes[this.id].mov(this.personajes[this.id].vel , 0);
-                io.emit('mover', this.personajes[this.id]);
+                this.pack = {
+                    x: this.personajes[this.id].x,
+                    y: this.personajes[this.id].y,
+                    animaciones:{stop: this.personajes[this.id].animaciones.stop},
+                    dir: this.personajes[this.id].dir
+                };
+                io.emit('mover', this.pack);
                 this.emitStop = true;
             }
         }
@@ -49,7 +58,13 @@ playerManager.mover = function(){
                 this.personajes[this.id].dir = dir.IZQUIERDA;
                 this.personajes[this.id].animaciones.stop = false;
                 this.personajes[this.id].mov(-this.personajes[this.id].vel , 0);
-                io.emit('mover', this.personajes[this.id]);
+                this.pack = {
+                    x: this.personajes[this.id].x,
+                    y: this.personajes[this.id].y,
+                    animaciones:{stop: this.personajes[this.id].animaciones.stop},
+                    dir: this.personajes[this.id].dir
+                };
+                io.emit('mover', this.pack);
                 this.emitStop = true;
             }
         }
@@ -60,7 +75,13 @@ playerManager.mover = function(){
                 this.personajes[this.id].dir = dir.ARRIBA;
                 this.personajes[this.id].animaciones.stop = false;
                 this.personajes[this.id].mov(0 , -this.personajes[this.id].vel);
-                io.emit('mover', this.personajes[this.id]);
+                this.pack = {
+                    x: this.personajes[this.id].x,
+                    y: this.personajes[this.id].y,
+                    animaciones:{stop: this.personajes[this.id].animaciones.stop},
+                    dir: this.personajes[this.id].dir
+                };
+                io.emit('mover', this.pack);
                 this.emitStop = true;
             }
         }
@@ -71,13 +92,25 @@ playerManager.mover = function(){
                 this.personajes[this.id].dir = dir.ABAJO;
                 this.personajes[this.id].animaciones.stop = false;
                 this.personajes[this.id].mov(0 , this.personajes[this.id].vel);
-                io.emit('mover', this.personajes[this.id]);
+                this.pack = {
+                    x: this.personajes[this.id].x,
+                    y: this.personajes[this.id].y,
+                    animaciones:{stop: this.personajes[this.id].animaciones.stop},
+                    dir: this.personajes[this.id].dir
+                };
+                io.emit('mover', this.pack);
                 this.emitStop = true;
             }
         }else{
             this.personajes[this.id].animaciones.stop = true;
             if(this.emitStop){
-                io.emit('mover', this.personajes[this.id]);
+                this.pack = {
+                    x: this.personajes[this.id].x,
+                    y: this.personajes[this.id].y,
+                    animaciones:{stop: this.personajes[this.id].animaciones.stop},
+                    dir: this.personajes[this.id].dir
+                };
+                io.emit('mover', this.pack);
                 this.emitStop = false;
             }
         }
@@ -92,6 +125,7 @@ playerManager.copiar = function(data){
 io.on('nuevoID', function(data){
     playerManager.id = data;
     playerManager.personajes[playerManager.id] = new player(playerManager.id, 250,100, 5, "lion",0, 45, 40, 20, 3, 3000, 3);
+    camera.follow(playerManager.personajes[playerManager.id]);
     io.emit("nuevoJugador", playerManager.personajes[playerManager.id]);
 });
 // por si entra otro jugador
@@ -109,9 +143,15 @@ io.on('allplayers', function(data){
     });
 });
 // recibe quien se mueve
-io.on('actualizar', function(data){
+io.on('mover', function(data){
     if(playerManager.personajes[data.id] != null){
-        playerManager.personajes[data.id].igualar(data);
+        playerManager.personajes[data.id].x = data.x;
+        playerManager.personajes[data.id].y = data.y;
+        playerManager.personajes[data.id].hitbox.x = data.x + playerManager.personajes[data.id].posHitX;
+        playerManager.personajes[data.id].hitbox.y = data.y + playerManager.personajes[data.id].posHitY;
+        playerManager.personajes[data.id].morir = data.morir;
+        playerManager.personajes[data.id].animaciones.stop = data.animaciones.stop;
+        playerManager.personajes[data.id].dir = data.dir;
         if(playerManager.personajes[data.id].morir)
             delete playerManager.personajes[data.id];
     }else{
@@ -119,6 +159,6 @@ io.on('actualizar', function(data){
     }
 });
 io.on('murio', function(data){
-    if(data.id == playerManager.id) io.emit('delete');
-    delete playerManager.personajes[data.id];
+    if(data == playerManager.id) io.emit('delete');
+    delete playerManager.personajes[data];
 });

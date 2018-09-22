@@ -21,12 +21,6 @@ server.lastPlayderID = 0; // se inicializa las id de los personajes
 server.listen(process.env.PORT || 5000,function(){
     console.log('escuchando en '+server.address().port);
 });
-const dir = {
-    ARRIBA: "arriba",
-    ABAJO: "abajo",
-    DERECHA: "derecha",
-    IZQUIERDA: "izquierda"
-};
 
 server.bombas = [];
 io.on('connection',function(socket){
@@ -38,45 +32,30 @@ io.on('connection',function(socket){
     });
     socket.on("mover", function(data){
         let p = socket.player;
-        let player = {
-            id: p.id,
-            morir : p.morir,
-            animaciones:{stop:p.animaciones.stop},
-            x : p.x,
-            y : p.y,
-            posHitX: p.posHitX,
-            posHitY: p.posHitY,
-            hitbox:{
-                    x: p.hitbox.x,
-                    y: p.hitbox.y 
-                    },
-            dir : p.dir,
-            vel : p.vel,
-            personaje : p.personaje,
-            numBomb : p.numBomb,
-            numMaxBomb : p.numMaxBomb,
-            timeBomb : p.timeBomb,
-            largeBomb : p.largeBomb
-        };
-        if(player){
-            player.x = data.x;
-            player.y = data.y;
-            player.hitbox.x = data.hitbox.x;
-            player.hitbox.y = data.hitbox.y;
-            player.altoHit = data.altoHit;
-            player.anchoHit = data.anchoHit;
-            player.animaciones.stop = data.animaciones.stop;
-            player.dir = data.dir;
-            socket.broadcast.emit("actualizar", player);
-            socket.player = player;
+        if(p){
+            p.x = data.x;
+            p.y = data.y;
+            p.hitbox.x = data.x + p.posHitX;
+            p.hitbox.y = data.y + p.posHitY;
+            p.animaciones.stop = data.animaciones.stop;
+            p.dir = data.dir;
+            let pack = {
+                id: p.id,
+                x: p.x,
+                y: p.y,
+                morir: p.morir,
+                dir: p.dir,
+                animaciones: {stop: data.animaciones.stop}
+            };
+            socket.broadcast.emit("mover", pack);
         }else{
-            player = {id: p.id};
-            io.emit('murio', player);
+            io.emit('murio', p.id);
         }
     });
-    socket.on('newBomb',function(){
+    socket.on('newBomb',function(data){
         socket.player.numBomb -= 1;
-        io.emit('newBomb', socket.player);
+        let pack = {id: socket.player.id, x: data.x, y:data.y}
+        io.emit('newBomb', pack);
     });
     socket.on('msPing', function(data) {
         socket.emit('msPong', data);
@@ -88,7 +67,7 @@ io.on('connection',function(socket){
         var player = getPlayerID(id);
         if(player){
             player.morir = true;
-            io.emit('murio', player);
+            io.emit('murio', player.id);
         }
     });
     socket.on('delete', function(){
@@ -97,7 +76,7 @@ io.on('connection',function(socket){
     socket.on('disconnect', function(){
         if(socket.player){
             socket.player.morir = true;
-            socket.broadcast.emit('murio', socket.player);
+            socket.broadcast.emit('murio', socket.player.id);
             delete socket.player;
         }
     });

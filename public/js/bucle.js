@@ -7,8 +7,6 @@ var buclePrincipal = {
     maxFps: 0,                         // contador de fps
     ping: 0, 
     ctx: null,                      // el canvas del DOM                  // vector de personajes
-    bombas: [],                     // vector de bombas
-    explosiones: [],                // vector de explociones
     dibujarFps:"APS: 0 | FPS: 0 | MS: 0",
     screen: "inGame",
     iterar: function(registroTemporal){
@@ -31,12 +29,12 @@ var buclePrincipal = {
         buclePrincipal.aps++;
     },
     Draw: function(){
+        screenManager.Draw(buclePrincipal.ctx, this.screen);
         if(debug.info){
             buclePrincipal.ctx.fillStyle = '#FFFFFF';
              if(playerManager.personajes[playerManager.id] != null) buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps + " | X: "+ playerManager.personajes[playerManager.id].hitbox.x + " | Y: "+ playerManager.personajes[playerManager.id].hitbox.y, 0, 20); 
              else buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps , 0, 20); 
         }
-        screenManager.Draw(buclePrincipal.ctx, this.screen);
         buclePrincipal.fps++;
     },
     limpiar: function(){

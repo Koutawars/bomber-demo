@@ -5,11 +5,11 @@ var bombManager = {
 };
 bombManager.Draw = function(ctx){
     this.bombs.forEach(element => {
-        element.Draw(buclePrincipal.ctx);
+        element.Draw(ctx);
     });
     if(debug.hit){
         this.explosions.forEach(element => {
-            element.Draw(buclePrincipal.ctx);
+            element.Draw(ctx);
         });
     }
 };
@@ -27,13 +27,13 @@ bombManager.Update = function(){
         {
             playerManager.personajes[playerManager.id].numBomb -= 1;
             this.puesta = true; 
-            io.emit('newBomb');
+            io.emit('newBomb', {x: playerManager.personajes[playerManager.id].x, y: playerManager.personajes[playerManager.id].y + 25});
         }
     }
 };
-bombManager.colocarBomba = function(player){
-    player = playerManager.personajes[player.id];
-    var bomba = new bomb(player.x ,player.y + 25, player.timeBomb, player.largeBomb);
+bombManager.colocarBomba = function(data){
+    var player = playerManager.personajes[data.id];
+    var bomba = new bomb(data.x ,data.y, player.timeBomb, player.largeBomb);
     if(playerManager.personajes[playerManager.id] !=  null){
         if(player.id != playerManager.id) bomba.recienColocada = false;
     }
@@ -133,7 +133,7 @@ bombManager.tiempoExplo =  function(explo){
     }
 }
 
-io.on('newBomb', function(player){
-    if(player.id == playerManager.id)bombManager.puesta = false; 
-    bombManager.colocarBomba(player);
+io.on('newBomb', function(data){
+    if(data.id == playerManager.id)bombManager.puesta = false; 
+    bombManager.colocarBomba(data);
 });
