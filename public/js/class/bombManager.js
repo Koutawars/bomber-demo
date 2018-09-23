@@ -27,8 +27,11 @@ bombManager.Update = function(){
         if(!tocar && !this.puesta && playerManager.personajes[playerManager.id].numBomb > 0)
         {
             playerManager.personajes[playerManager.id].numBomb -= 1;
-            this.puesta = true; 
-            io.emit('newBomb', {x: playerManager.personajes[playerManager.id].hitbox.x, y: playerManager.personajes[playerManager.id].hitbox.y});
+            this.puesta = true;
+            let x, y;
+            x = Math.floor(playerManager.personajes[playerManager.id].hitbox.x/32) * 32;
+            y = Math.floor(playerManager.personajes[playerManager.id].hitbox.y/32) * 32;
+            io.emit('newBomb', {x:x , y: y});
         }
     }
 };

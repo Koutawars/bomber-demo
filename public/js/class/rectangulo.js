@@ -14,13 +14,22 @@ class rectangulo{
     copiar(){
         return new rectangulo(this.x, this.y, this.ancho, this.alto);
     }
-    valueInRange(value, min, max)
-    { return (value >= min) && (value <= max); }
     chocarCon(otherobj) {
-        var xOverlap = this.valueInRange(this.x, otherobj.x, otherobj.x + otherobj.ancho) ||
-                        this.valueInRange(otherobj.x, this.x, this.x + this.ancho);
-        var yOverlap = this.valueInRange(this.y, otherobj.y, otherobj.y + otherobj.alto) ||
-                        this.valueInRange(otherobj.y, this.y, this.y + this.alto);
-        return xOverlap && yOverlap;
+       var izquierda = this.x;
+       var derecha = this.x + (this.ancho);
+       var arriba = this.y;
+       var abajo = this.y + (this.alto);
+       var otraizquierda = otherobj.x;
+       var otraDerecha = otherobj.x + (otherobj.ancho);
+       var otraArriba = otherobj.y;
+       var otraAbajo = otherobj.y + (otherobj.alto);
+       var chocar = true;
+       if ((abajo <= otraArriba) ||
+              (arriba >= otraAbajo) ||
+              (derecha <= otraizquierda) ||
+              (izquierda >= otraDerecha)) {
+          chocar = false;
+       }
+       return chocar;
     }
 }

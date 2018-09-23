@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', function(){
     document.body.addEventListener("keyup", function (e) {
         keys[e.keyCode] = false;
     });
+    canvas.addEventListener("mousedown", function(e){
+        var x = e.x;
+        var y = e.y;
+        x -= canvas.offsetLeft;
+        y -= canvas.offsetTop;
+        console.log("x:" + x + " y:" + y);
+    }, false);
 }, false);
 
 var iniciar = {
