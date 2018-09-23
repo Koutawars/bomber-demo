@@ -25,7 +25,7 @@ var buclePrincipal = {
         }
     },
     Update: function(){
-        screenManager.Update(this.screen);
+        screenManager.Update(this.screen, this.loadScreen);
         buclePrincipal.aps++;
     },
     Draw: function(){
@@ -43,7 +43,7 @@ var buclePrincipal = {
     }
 };
 buclePrincipal.LoadContent = function(){
-    screenManager.LoadContent(this.screen, this.loadScreen);
+    screenManager.LoadContent(this.screen);
 };
 buclePrincipal.loadScreen = function(screen){
     buclePrincipal.screen = screen;

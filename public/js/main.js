@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 var iniciar = {
     iniciarJuego: function(){
-        console.log("¡Cargado!");
         buclePrincipal.iterar();
     },
     LoadContent: function(){

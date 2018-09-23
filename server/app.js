@@ -3,9 +3,10 @@ var app = express(); // se crea un objeto de la libreria
 var server = require('http').Server(app); // se llama la libreria http y se manda express
 var io = require('socket.io').listen(server); // se escucha del servidor con la libreria de sockets
 var path = require('path'); // Se llama la libreria Path para path's
-
+var fs = require('fs');
 
 var public = '/../public'; // Paths donde esta la parte publica
+var map = '/mapJSON/';
 
 app.use('/css',express.static(path.resolve(__dirname + public + '/css'))); // direccion del css
 app.use('/js',express.static(path.resolve(__dirname + public + '/js'))); // direccion del javascript
@@ -16,15 +17,22 @@ app.get('/',function(req,res){
 });
 
 server.lastPlayderID = 0; // se inicializa las id de los personajes
+var blocks;
+fs.readFile(path.resolve(__dirname + map + 'prueba.json'), 'utf8', function (err, data) {
+  if (err) throw err;
+  blocks = JSON.parse(data);
+});
 
 // funcion para escuchar el servidor y abrirlo
 server.listen(process.env.PORT || 5000,function(){
     console.log('escuchando en '+server.address().port);
 });
 
+
 server.bombas = [];
 io.on('connection',function(socket){
     socket.emit("nuevoID", server.lastPlayderID++);
+    socket.emit('block', blocks);
     socket.on("nuevoJugador", function(data){
         socket.player = data;
         socket.emit("allplayers", getAllPlayer(socket.id));

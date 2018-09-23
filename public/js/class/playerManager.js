@@ -23,11 +23,15 @@ playerManager.solido = function(x, y, player){
     temporal.x += x;
     temporal.y += y;
     bombManager.bombs.forEach(bomba => {
-    if(!bomba.recienColocada){
-        esSolido = bomba.hitbox.chocarCon(temporal);
-    }
-    else if(!bomba.hitbox.chocarCon(temporal))
-        bomba.recienColocada = false;
+        if(!bomba.recienColocada){
+            esSolido = bomba.hitbox.chocarCon(temporal);
+        }
+        else if(!bomba.hitbox.chocarCon(temporal))
+            bomba.recienColocada = false;
+    });
+    blockManager.blocks.forEach(block => {
+        if(block.chocarCon(temporal))
+            esSolido = true;
     });
     return esSolido;
 };
@@ -124,7 +128,7 @@ playerManager.copiar = function(data){
 
 io.on('nuevoID', function(data){
     playerManager.id = data;
-    playerManager.personajes[playerManager.id] = new player(playerManager.id, 250,100, 5, "lion",0, 45, 40, 20, 3, 3000, 3);
+    playerManager.personajes[playerManager.id] = new player(playerManager.id, 250,100, 2, "lion", 15, 45, 20, 20, 3, 3000, 3);
     camera.follow(playerManager.personajes[playerManager.id]);
     io.emit("nuevoJugador", playerManager.personajes[playerManager.id]);
 });

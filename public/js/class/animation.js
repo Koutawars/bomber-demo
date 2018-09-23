@@ -9,7 +9,7 @@ class animation{
     }
     Update(comienzo, final){
         if(!this.stop)this.frames += this.speed;
-        if(this.frames > final || this.frames < comienzo)
+        if(this.frames >= final+1 || this.frames < comienzo)
         {
             this.frames = comienzo;
         }

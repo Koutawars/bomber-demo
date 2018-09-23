@@ -6,8 +6,8 @@ class bomb {
         this.large = large;
         this.img = new Image();
         this.img.src = 'img/bomb.png';
-        this.ancho = 38;
-        this.alto = 41;
+        this.ancho = 32;
+        this.alto = 32;
         this.tmp = null;
         this.recienColocada = true;
         this.coloca = null;

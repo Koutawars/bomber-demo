@@ -15,7 +15,7 @@ class player{
         this.numMaxBomb = numBomb;
         this.timeBomb = timeBomb;
         this.largeBomb = largeBomb;
-        this.speedImage = (0.09*this.vel)/5;
+        this.speedImage = (0.09*this.vel)/3;
         this.animaciones = new animation(this.imagenes, this.speedImage);
         this.dir = dir.QUIETO;
         this.morir = false;
@@ -49,8 +49,8 @@ class player{
             }
             else if(this.dir == dir.DERECHA){
                 this.animaciones.Draw(ctx, this.x, this.y);
-            }else if(this.animaciones != null){
-                this.animaciones.Draw(ctx, this.x, this.y);    
+            }else if(this.animaciones.img != null){
+                ctx.drawImage(this.animaciones.img[0], this.x, this.y);
             }
             if(debug.hit) this.hitbox.Draw(ctx);
         }else{

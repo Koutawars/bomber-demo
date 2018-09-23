@@ -15,7 +15,9 @@ camera.Update = function (){
     }
 }
 camera.Draw = function(c){
-    c.beginPath();
-    c.rect(this.x, this.y, this.w, this.h);
-    c.stroke();
+    if(debug.hit){
+        c.beginPath();
+        c.rect(this.x, this.y, this.w, this.h);
+        c.stroke();
+    }
 }

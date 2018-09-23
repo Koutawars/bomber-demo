@@ -23,11 +23,12 @@ bombManager.Update = function(){
         });
     });
     if(keys[32] && playerManager.personajes[playerManager.id]!= null){
-        if(!this.tocarBomb(playerManager.personajes[playerManager.id].hitbox).toco && playerManager.personajes[playerManager.id].numBomb > 0 && !this.puesta)
+        let tocar = bombManager.SobreBomb(playerManager.personajes[playerManager.id].hitbox);
+        if(!tocar && !this.puesta && playerManager.personajes[playerManager.id].numBomb > 0)
         {
             playerManager.personajes[playerManager.id].numBomb -= 1;
             this.puesta = true; 
-            io.emit('newBomb', {x: playerManager.personajes[playerManager.id].x, y: playerManager.personajes[playerManager.id].y + 25});
+            io.emit('newBomb', {x: playerManager.personajes[playerManager.id].hitbox.x, y: playerManager.personajes[playerManager.id].hitbox.y});
         }
     }
 };
@@ -90,7 +91,7 @@ bombManager.temporizador =  function(bomba, coloca){
         n = 1;
         // Explosión a la derecha
         do{
-            explo = new rectangulo(bX + bAlto*n, bY, bAncho, bAlto);
+            explo = new rectangulo(bX + bAlto*n + n, bY, bAncho, bAlto);
             tpm = bombManager.tocarBomb(explo);
             if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
@@ -107,7 +108,7 @@ bombManager.temporizador =  function(bomba, coloca){
         n = 1;
         // Explsión a la izquierda
         do{
-            explo = new rectangulo(bX - bAlto*n, bY, bAncho, bAlto);
+            explo = new rectangulo(bX - bAlto*n - n, bY, bAncho, bAlto);
             tpm = bombManager.tocarBomb(explo);
             if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
@@ -150,6 +151,15 @@ bombManager.tocarBomb = function(hit){
     });
     return retornar;
 };
+bombManager.SobreBomb = function(hit){
+    var retornar = false;
+    bombManager.bombs.forEach(element => {
+        if(hit.chocarCon(element.hitbox)){
+            retornar = true;
+        };
+    });
+    return retornar;
+}
 
 bombManager.tiempoExplo =  function(explo){
     if(bombManager.explosions.indexOf(explo) != -1){

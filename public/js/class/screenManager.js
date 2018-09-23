@@ -3,16 +3,23 @@ var screenManager = {
         GAME: "inGame",
         LOADING: "loading",
         MENU: "menu"
+    },
+    check:{
+        img: false,
+        block: false
     }
 };
 
-screenManager.LoadContent = function(screen, callback){
+screenManager.LoadContent = function(screen){
     switch(screen){
         case screenManager.screen.GAME:
-            blockManager.LoadContent();
             break;
         case screenManager.screen.LOADING:
-            animationManager.LoadContent(callback);
+            blockManager.LoadContent();
+            animationManager.LoadContent(
+                function(){
+                    screenManager.check.img = true;
+                });
             break;
     }
 };
@@ -27,12 +34,23 @@ screenManager.Draw = function(ctx, screen){
             break;
     }
 };
-screenManager.Update = function(screen){
+screenManager.Update = function(screen, callback){
     switch(screen){
-        case "menu":
-        case screenManager.screen.GAME:
+        case screenManager.screen.LOADING:
+            if(screenManager.cheking()){
+                callback(screenManager.screen.GAME);
+                console.log("¡Cargado!");
+            }
+            break;
+        case screenManager.screen.MENU:
+            break;
+        case this.screen.GAME:
             blockManager.Update();
             playerManager.Update();
             bombManager.Update();
+            break;
     }
 };
+screenManager.cheking = function(){
+    return this.check.img && this.check.block;
+}

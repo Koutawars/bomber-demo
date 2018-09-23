@@ -35,7 +35,7 @@ animationManager.createImages = function(srcs, fn) {
             img.onload = function() {
                 --remaining;
                 if (remaining == 0 && n >= srcs[element].length) {
-                    fn(screenManager.screen.GAME);
+                    fn();
                 }
             };
             img.src = srcs[element][0][i];
