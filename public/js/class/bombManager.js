@@ -135,23 +135,29 @@ bombManager.temporizador =  function(bomba, coloca){
 };
 bombManager.tocarBomb = function(hit){
     var retornar = {toco:false, bomba:null};
+    var eliminado = true;
     bombManager.bombs.forEach(element => {
         if(element.hitbox.chocarCon(hit)){
             retornar.toco = true;
             retornar.bomba = element;
         };
     });
-    this.explosions.forEach(explo => {
-        if(explo.chocarCon(hit)){
-            retornar.toco = true;
-        };
-    });
-    blockManager.blocks.forEach(block => {
-        if(hit.chocarCon(block)){
-            retornar.toco = true;
-            delete blockManager.blocks[blockManager.blocks.indexOf(block)];
-        }
-    });
+    if(!retornar.toco){
+        this.explosions.forEach(explo => {
+            if(explo.chocarCon(hit)){
+                retornar.toco = true;
+            };
+        });
+    }
+    if(!retornar.toco){
+        blockManager.blocks.forEach(block => {
+            if(hit.chocarCon(block) && eliminado){
+                retornar.toco = true;
+                delete blockManager.blocks[blockManager.blocks.indexOf(block)];
+                eliminado = false;
+            }
+        });
+    }
     return retornar;
 };
 bombManager.SobreBomb = function(hit){

@@ -22,7 +22,7 @@ io.on('block', function(data){
             blockManager.blocks.push(new rectangulo(posX,posY, blockManager.w, blockManager.h));
         }
         posX += 32;
-        if((i+1)%25 == 0){
+        if((i+1)%data["width"] == 0){
             posY += 32;
             posX = 0;
         } 
