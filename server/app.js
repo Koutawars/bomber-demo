@@ -18,9 +18,9 @@ app.get('/',function(req,res){
 
 server.lastPlayderID = 0; // se inicializa las id de los personajes
 var blocks;
-fs.readFile(path.resolve(__dirname + map + 'prueba.json'), 'utf8', function (err, data) {
+fs.readFile(path.resolve(__dirname + map + 'mapa.json'), 'utf8', function (err, data) {
   if (err) throw err;
-  blocks = JSON.parse(data);
+  blocks = JSON.parse(data)["layers"][0];
 });
 
 // funcion para escuchar el servidor y abrirlo

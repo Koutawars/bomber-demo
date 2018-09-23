@@ -14,17 +14,18 @@ blockManager.Draw = function(ctx){
 
 blockManager.Update = function(){};
 io.on('block', function(data){
+    let vector = data["data"];
     let posX = 0;
     let posY = 0;
-    for(let i = 0; i < data.length; i++){
-        for(let j = 0; j < data[i].length; j++){
-            if(data[i][j] == 1){
-                blockManager.blocks.push(new rectangulo(posX,posY, blockManager.w, blockManager.h));
-            }
-            posX += 32;
+    for(let i = 0; i < vector.length; i++){
+        if(vector[i] == 1){
+            blockManager.blocks.push(new rectangulo(posX,posY, blockManager.w, blockManager.h));
         }
-        posX = 0;
-        posY += 32;
+        posX += 32;
+        if((i+1)%25 == 0){
+            posY += 32;
+            posX = 0;
+        } 
     }
     screenManager.check.block = true;
 });
