@@ -5,12 +5,17 @@ var animationManager = {
 animationManager.LoadContent = function(callback){
     let ruta = [];
     // Carga leon
+    console.log("Cargando...");
     this.imagenes["lion"] = [];
     ruta["lion"] = [];
     for(let n = 0;n <= 17;n++){
         ruta["lion"].push("img/lion_"+ n + ".png");
     }
-    console.log("Cargando...");
+    this.imagenes["block"] = [];
+    ruta["block"] = [];
+    for(let n = 0;n <= 0;n++){
+        ruta["block"].push("img/block_"+ n + ".png");
+    }
     // final para cargar todas las rutas
     Object.keys(this.imagenes).forEach(element => {
         this.personajes[element] = [];
@@ -30,7 +35,7 @@ animationManager.createImages = function(srcs, fn) {
             img.onload = function() {
                 --remaining;
                 if (remaining == 0 && n >= srcs[element].length) {
-                    fn();
+                    fn(screenManager.screen.GAME);
                 }
             };
             img.src = srcs[element][0][i];

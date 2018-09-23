@@ -56,27 +56,34 @@ bombManager.temporizador =  function(bomba, coloca){
         //explosión arriba
         var n = 1;
         do{
-            explo = new rectangulo(bX, bY - bAlto*n, bAncho, bAlto);
-            bombManager.explosions.push(explo);            tpm = bombManager.tocarBomb(explo);
-            setTimeout(bombManager.tiempoExplo, Texplo, explo);
-            if(tpm.toco){
+            explo = new rectangulo(bX, bY - bAlto*n -n, bAncho, bAlto);
+            tpm = bombManager.tocarBomb(explo);
+            if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
                 bombManager.temporizador(tpm.bomba, tpm.bomba.coloca);
                 break;
+            }else if(tpm.toco){
+                break;
+            }else{
+                bombManager.explosions.push(explo);
+                setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
         }while(n < coloca.largeBomb + 1);
         n = 1;
         // Explosión abajo
         do{
-            explo = new rectangulo(bX, bY + bAlto*n, bAncho, bAlto);
-            bombManager.explosions.push(explo);
+            explo = new rectangulo(bX, bY + bAlto*n + n, bAncho, bAlto);
             tpm = bombManager.tocarBomb(explo);
-            setTimeout(bombManager.tiempoExplo, Texplo, explo);
-            if(tpm.toco){
+            if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
                 bombManager.temporizador(tpm.bomba, tpm.bomba.coloca);
                 break;
+            }else if(tpm.toco){
+                break;
+            }else{
+                bombManager.explosions.push(explo);
+                setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
         }while(n < coloca.largeBomb+ 1);
@@ -84,13 +91,16 @@ bombManager.temporizador =  function(bomba, coloca){
         // Explosión a la derecha
         do{
             explo = new rectangulo(bX + bAlto*n, bY, bAncho, bAlto);
-            bombManager.explosions.push(explo);
             tpm = bombManager.tocarBomb(explo);
-            setTimeout(bombManager.tiempoExplo, Texplo, explo);
-            if(tpm.toco){
+            if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
                 bombManager.temporizador(tpm.bomba, tpm.bomba.coloca);
                 break;
+            }else if(tpm.toco){
+                break;
+            }else{
+                bombManager.explosions.push(explo);
+                setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
         }while(n < coloca.largeBomb + 1);
@@ -98,13 +108,16 @@ bombManager.temporizador =  function(bomba, coloca){
         // Explsión a la izquierda
         do{
             explo = new rectangulo(bX - bAlto*n, bY, bAncho, bAlto);
-            bombManager.explosions.push(explo);            
             tpm = bombManager.tocarBomb(explo);
-            setTimeout(bombManager.tiempoExplo, Texplo, explo);
-            if(tpm.toco){
+            if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
                 bombManager.temporizador(tpm.bomba, tpm.bomba.coloca);
                 break;
+            }else if(tpm.toco){
+                break;
+            }else{
+                bombManager.explosions.push(explo);
+                setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
         }while(n < coloca.largeBomb + 1);
@@ -120,9 +133,20 @@ bombManager.tocarBomb = function(hit){
     var retornar = {toco:false, bomba:null};
     bombManager.bombs.forEach(element => {
         if(element.hitbox.chocarCon(hit)){
-            retornar.toco = element.hitbox.chocarCon(hit);
+            retornar.toco = true;
             retornar.bomba = element;
         };
+    });
+    this.explosions.forEach(explo => {
+        if(explo.chocarCon(hit)){
+            retornar.toco = true;
+        };
+    });
+    blockManager.blocks.forEach(block => {
+        if(hit.chocarCon(block)){
+            retornar.toco = true;
+            delete blockManager.blocks[blockManager.blocks.indexOf(block)];
+        }
     });
     return retornar;
 };

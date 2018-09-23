@@ -8,7 +8,7 @@ var buclePrincipal = {
     ping: 0, 
     ctx: null,                      // el canvas del DOM                  // vector de personajes
     dibujarFps:"APS: 0 | FPS: 0 | MS: 0",
-    screen: "inGame",
+    screen: screenManager.screen.LOADING,
     iterar: function(registroTemporal){
         buclePrincipal.idEjecucion =  window.requestAnimationFrame(buclePrincipal.iterar);
         buclePrincipal.limpiar();
@@ -42,6 +42,10 @@ var buclePrincipal = {
         buclePrincipal.ctx.fillRect(0,0, canvas.width,canvas.height);
     }
 };
-buclePrincipal.LoadContent = function(callback){
-    screenManager.LoadContent("inGame", callback);
-}
+buclePrincipal.LoadContent = function(){
+    screenManager.LoadContent(this.screen, this.loadScreen);
+};
+buclePrincipal.loadScreen = function(screen){
+    buclePrincipal.screen = screen;
+    buclePrincipal.LoadContent();
+};

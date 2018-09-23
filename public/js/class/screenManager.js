@@ -1,32 +1,37 @@
 var screenManager = {
+    screen:{
+        GAME: "inGame",
+        LOADING: "loading",
+        MENU: "menu"
+    }
 };
-
-function screenManagerLoadContentInGame(callback){
-    animationManager.LoadContent(callback);
-}
 
 screenManager.LoadContent = function(screen, callback){
     switch(screen){
-        case "inGame":
-            screenManagerLoadContentInGame(callback);
+        case screenManager.screen.GAME:
+            blockManager.LoadContent();
+            break;
+        case screenManager.screen.LOADING:
+            animationManager.LoadContent(callback);
             break;
     }
 };
 screenManager.Draw = function(ctx, screen){
     switch(screen){
-        case "menu":
+        case screenManager.screen.MENU:
             break;
-        case "inGame":
+        case screenManager.screen.GAME:
+            blockManager.Draw(ctx);
             playerManager.Draw(ctx);
             bombManager.Draw(ctx);
             break;
-
     }
 };
 screenManager.Update = function(screen){
     switch(screen){
         case "menu":
-        case "inGame":
+        case screenManager.screen.GAME:
+            blockManager.Update();
             playerManager.Update();
             bombManager.Update();
     }
