@@ -38,7 +38,7 @@ playerManager.solido = function(x, y, player){
 playerManager.mover = function(){
     if(animationManager.imagenes != null && this.personajes[this.id]!= null){
         let solido = false;
-        if(keys[68]){
+        if(keys[68] && this.personajes[this.id].mov){
             solido = !playerManager.solido(this.personajes[this.id].vel , 0, this.personajes[this.id]);
             if(solido)
             {
@@ -55,7 +55,7 @@ playerManager.mover = function(){
                 this.emitStop = true;
             }
         }
-        else if(keys[65]){
+        else if(keys[65] && this.personajes[this.id].mov){
             solido = !playerManager.solido(-this.personajes[this.id].vel , 0, this.personajes[this.id]);
             if(solido)
             {
@@ -72,7 +72,7 @@ playerManager.mover = function(){
                 this.emitStop = true;
             }
         }
-        else if(keys[87]){
+        else if(keys[87] && this.personajes[this.id].mov){
             solido = !playerManager.solido(0 , -this.personajes[this.id].vel, this.personajes[this.id]);
             if(solido)
             {
@@ -89,7 +89,7 @@ playerManager.mover = function(){
                 this.emitStop = true;
             }
         }
-        else if(keys[83]){
+        else if(keys[83] && this.personajes[this.id].mov){
             solido = !playerManager.solido(0 , this.personajes[this.id].vel, this.personajes[this.id]);
             if(solido)
             {
@@ -164,5 +164,14 @@ io.on('mover', function(data){
 });
 io.on('murio', function(data){
     if(data == playerManager.id) io.emit('delete');
-    delete playerManager.personajes[data];
+    playerManager.personajes[data].animaciones.countReset = 0;
+    playerManager.personajes[data].animaciones.frames = 11;
+    playerManager.personajes[data].Update = function(){
+        playerManager.personajes[data].animaciones.stop = false;
+        playerManager.personajes[data].animaciones.Update(11, 13);
+        if(playerManager.personajes[data].animaciones.countReset == 1){
+            delete playerManager.personajes[data];
+        }
+    }
+    playerManager.personajes[data].mov = null;
 });

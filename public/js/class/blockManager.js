@@ -29,7 +29,7 @@ io.on('block', function(data){
         if((i+1)%data["width"] == 0){
             posY += 32;
             posX = 0;
-        } 
+        }
     }
     screenManager.check.block = true;
 });
