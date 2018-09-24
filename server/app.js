@@ -17,10 +17,9 @@ app.get('/',function(req,res){
 });
 
 server.lastPlayderID = 0; // se inicializa las id de los personajes
-var blocks;
 fs.readFile(path.resolve(__dirname + map + 'mapa.json'), 'utf8', function (err, data) {
   if (err) throw err;
-  blocks = JSON.parse(data)["layers"][0];
+  server.blocks = JSON.parse(data)["layers"][0];
 });
 
 // funcion para escuchar el servidor y abrirlo
@@ -32,7 +31,7 @@ server.listen(process.env.PORT || 5000,function(){
 server.bombas = [];
 io.on('connection',function(socket){
     socket.emit("nuevoID", server.lastPlayderID++);
-    socket.emit('block', blocks);
+    socket.emit('block', server.blocks);
     socket.on("nuevoJugador", function(data){
         socket.player = data;
         socket.emit("allplayers", getAllPlayer(socket.id));
@@ -70,6 +69,10 @@ io.on('connection',function(socket){
     });
     socket.on('sumBomb',function(){
         socket.player.numBomb += 1;
+    });
+    socket.on('destroyBlock', function(data){
+        server.blocks['data'][data] = 0;
+        socket.broadcast.emit('destroyBlock', data);
     });
     socket.on('murio', function(id){
         var player = getPlayerID(id);

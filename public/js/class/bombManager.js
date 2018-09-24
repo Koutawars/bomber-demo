@@ -152,7 +152,9 @@ bombManager.tocarBomb = function(hit){
         blockManager.blocks.forEach(block => {
             if(hit.chocarCon(block)){
                 retornar.toco = true;
-                delete blockManager.blocks[blockManager.blocks.indexOf(block)];
+                let index = blockManager.blocks.indexOf(block);
+                io.emit('destroyBlock', index);
+                delete blockManager.blocks[index];
             }
         });
     }
