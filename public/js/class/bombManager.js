@@ -60,7 +60,7 @@ bombManager.temporizador =  function(bomba, coloca){
         //explosión arriba
         var n = 1;
         do{
-            explo = new rectangulo(bX, bY - bAlto*n -n, bAncho, bAlto);
+            explo = new rectangulo(bX, bY - bAlto*n, bAncho, bAlto);
             tpm = bombManager.tocarBomb(explo);
             if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
@@ -77,7 +77,7 @@ bombManager.temporizador =  function(bomba, coloca){
         n = 1;
         // Explosión abajo
         do{
-            explo = new rectangulo(bX, bY + bAlto*n + n, bAncho, bAlto);
+            explo = new rectangulo(bX, bY + bAlto*n, bAncho, bAlto);
             tpm = bombManager.tocarBomb(explo);
             if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
@@ -94,7 +94,7 @@ bombManager.temporizador =  function(bomba, coloca){
         n = 1;
         // Explosión a la derecha
         do{
-            explo = new rectangulo(bX + bAlto*n + n, bY, bAncho, bAlto);
+            explo = new rectangulo(bX + bAlto*n, bY, bAncho, bAlto);
             tpm = bombManager.tocarBomb(explo);
             if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
@@ -111,7 +111,7 @@ bombManager.temporizador =  function(bomba, coloca){
         n = 1;
         // Explsión a la izquierda
         do{
-            explo = new rectangulo(bX - bAlto*n - n, bY, bAncho, bAlto);
+            explo = new rectangulo(bX - bAlto*n, bY, bAncho, bAlto);
             tpm = bombManager.tocarBomb(explo);
             if(tpm.toco && tpm.bomba){
                 clearTimeout(tpm.bomba.tmp);
@@ -135,7 +135,6 @@ bombManager.temporizador =  function(bomba, coloca){
 };
 bombManager.tocarBomb = function(hit){
     var retornar = {toco:false, bomba:null};
-    var eliminado = true;
     bombManager.bombs.forEach(element => {
         if(element.hitbox.chocarCon(hit)){
             retornar.toco = true;
@@ -151,10 +150,9 @@ bombManager.tocarBomb = function(hit){
     }
     if(!retornar.toco){
         blockManager.blocks.forEach(block => {
-            if(hit.chocarCon(block) && eliminado){
+            if(hit.chocarCon(block)){
                 retornar.toco = true;
                 delete blockManager.blocks[blockManager.blocks.indexOf(block)];
-                eliminado = false;
             }
         });
     }

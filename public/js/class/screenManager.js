@@ -28,9 +28,12 @@ screenManager.Draw = function(ctx, screen){
         case screenManager.screen.MENU:
             break;
         case screenManager.screen.GAME:
+            ctx.save();
+            ctx.transform(1,0,0,1,-camera.x,-camera.y);
             blockManager.Draw(ctx);
             playerManager.Draw(ctx);
             bombManager.Draw(ctx);
+            ctx.restore();
             break;
     }
 };

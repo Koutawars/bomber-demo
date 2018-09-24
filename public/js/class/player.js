@@ -37,25 +37,28 @@ class player{
         }
     }
     Draw(ctx){
-        if(this.animaciones.img[0] != null){
-            if(this.dir == dir.ABAJO){
-                this.animaciones.Draw(ctx, this.x, this.y);
+        if(camera.x - 32 < this.x && camera.x + camera.w > this.x &&
+            camera.y - 32 < this.y && camera.y + camera.h > this.y){
+            if(this.animaciones.img[0] != null){
+                if(this.dir == dir.ABAJO){
+                    this.animaciones.Draw(ctx, this.x, this.y);
+                }
+                else if(this.dir == dir.ARRIBA){
+                    this.animaciones.Draw(ctx, this.x, this.y);
+                }
+                else if(this.dir == dir.IZQUIERDA){
+                    this.animaciones.Draw(ctx, this.x, this.y);
+                }
+                else if(this.dir == dir.DERECHA){
+                    this.animaciones.Draw(ctx, this.x, this.y);
+                }else if(this.animaciones.img != null){
+                    ctx.drawImage(this.animaciones.img[0], this.x, this.y);
+                }
+                if(debug.hit) this.hitbox.Draw(ctx);
+            }else{
+                console.log("Error, no se ha cargado las imagenes al objeto: ");
+                console.log(this);
             }
-            else if(this.dir == dir.ARRIBA){
-                this.animaciones.Draw(ctx, this.x, this.y);
-            }
-            else if(this.dir == dir.IZQUIERDA){
-                this.animaciones.Draw(ctx, this.x, this.y);
-            }
-            else if(this.dir == dir.DERECHA){
-                this.animaciones.Draw(ctx, this.x, this.y);
-            }else if(this.animaciones.img != null){
-                ctx.drawImage(this.animaciones.img[0], this.x, this.y);
-            }
-            if(debug.hit) this.hitbox.Draw(ctx);
-        }else{
-            console.log("Error, no se ha cargado las imagenes al objeto: ");
-            console.log(this);
         }
     }
     mov(velX, velY)

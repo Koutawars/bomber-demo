@@ -6,10 +6,13 @@ class rectangulo{
         this.alto = alto;
     }
     Draw(ctx){
-        ctx.strokeStyle="rgb(250, 0, 0)"; // color de los trazos
-        ctx.strokeRect(this.x,this.y, this.ancho, this.alto);
-        ctx.fillStyle = 'rgba(250, 0, 0, 0.3)';
-        ctx.fillRect(this.x,this.y,this.ancho, this.alto);
+        if(camera.x - 32 < this.x && camera.x + camera.w > this.x &&
+            camera.y - 32 < this.y && camera.y + camera.h > this.y){
+            ctx.strokeStyle="rgb(250, 0, 0)"; // color de los trazos
+            ctx.strokeRect(this.x,this.y, this.ancho, this.alto);
+            ctx.fillStyle = 'rgba(250, 0, 0, 0.3)';
+            ctx.fillRect(this.x,this.y,this.ancho, this.alto);
+        }
     }
     copiar(){
         return new rectangulo(this.x, this.y, this.ancho, this.alto);

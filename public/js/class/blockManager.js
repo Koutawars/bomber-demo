@@ -2,19 +2,28 @@ var blockManager = {
     blocks:[],
     w:32,
     h:32,
+    mapaH: 0,
+    mapaW: 0,
     callback:null
 };
 blockManager.LoadContent = function(){};
 blockManager.Draw = function(ctx){
     this.blocks.forEach(block => {
-        ctx.drawImage(animationManager.imagenes["block"][0], block.x, block.y);
-        if(debug.hit)block.Draw(ctx);
+        if(camera.x - 32 < block.x && camera.x + camera.w > block.x &&
+            camera.y - 32 < block.y && camera.y + camera.h > block.y){
+            ctx.drawImage(animationManager.imagenes["block"][0], block.x, block.y);
+            if(debug.hit)block.Draw(ctx);
+        }
     });
 };
+blockManager.Update = function(){
 
-blockManager.Update = function(){};
+};
 io.on('block', function(data){
     let vector = data["data"];
+    console.log(data);
+    this.mapaH = data["height"] * 32;
+    this.mapaW = data["width"] * 32;
     let posX = 0;
     let posY = 0;
     for(let i = 0; i < vector.length; i++){

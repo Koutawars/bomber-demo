@@ -14,7 +14,10 @@ class bomb {
         this.hitbox = new rectangulo(this.x , this.y , this.ancho , this.alto);
     }
     Draw(ctx){
-        ctx.drawImage(this.img, this.x, this.y);
-        if(debug.hit) this.hitbox.Draw(ctx);
+        if(camera.x - 32 < this.x && camera.x + camera.w > this.x &&
+            camera.y - 32 < this.y && camera.y + camera.h > this.y){
+            ctx.drawImage(this.img, this.x, this.y);
+            if(debug.hit) this.hitbox.Draw(ctx);
+        }
     }
 }
