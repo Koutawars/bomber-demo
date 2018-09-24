@@ -18,6 +18,6 @@ class animation{
         this.index = Math.floor(this.frames)%this.img.length;
     }
     Draw(ctx, x, y){
-        ctx.drawImage(this.img[this.index], x, y);
+        if(this.img[this.index])ctx.drawImage(this.img[this.index], x, y);
     }
 }
