@@ -1,17 +1,31 @@
 var bombManager = {
     bombs:[],
     explosions:[],
-    puesta:false
+    typeExplo:[],
+    puesta:false,
+    type: {
+        CENTER:0,
+        TOPMID:1,
+        TOP:2,
+        BOTMID:3,
+        BOT:4,
+        RIGHTMID: 5,
+        RIGHT: 6,
+        LEFT: 7,
+        LEFTMID: 8
+    }
 };
 bombManager.Draw = function(ctx){
     this.bombs.forEach(element => {
         element.Draw(ctx);
     });
-    if(debug.hit){
-        this.explosions.forEach(element => {
+    this.explosions.forEach(element => {
+        //let index = this.explosions.indexOf(element);
+        if(debug.hit){
             element.Draw(ctx);
-        });
-    }
+        }
+        //console.log(this.typeExplo[index]);
+    });
 };
 
 bombManager.Update = function(){
@@ -53,8 +67,9 @@ bombManager.temporizador =  function(bomba, coloca){
         var bX = bomba.x,  bY = bomba.y, bAncho = bomba.hitbox.ancho, bAlto = bomba.hitbox.alto;
         var Texplo = 500; // tiempo que dura las explosiones
         var explo = new rectangulo(bX, bY, bAncho, bAlto); // se crea una explosión
-        bombManager.explosions.push(explo);
-
+        var index;
+        index = bombManager.explosions.push(explo) - 1;
+        bombManager.typeExplo[index] = bombManager.type.CENTER;
         setTimeout(bombManager.tiempoExplo, Texplo, explo);
         var tpm;
         //explosión arriba
@@ -69,7 +84,11 @@ bombManager.temporizador =  function(bomba, coloca){
             }else if(tpm.toco){
                 break;
             }else{
-                bombManager.explosions.push(explo);
+                index = bombManager.explosions.push(explo) - 1;
+                if(coloca.largeBomb == n)
+                    bombManager.typeExplo[index] = bombManager.type.TOP;
+                else
+                    bombManager.typeExplo[index] = bombManager.type.TOPMID;
                 setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
@@ -86,7 +105,11 @@ bombManager.temporizador =  function(bomba, coloca){
             }else if(tpm.toco){
                 break;
             }else{
-                bombManager.explosions.push(explo);
+                index = bombManager.explosions.push(explo) - 1;
+                if(coloca.largeBomb == n)
+                    bombManager.typeExplo[index] = bombManager.type.BOT;
+                else
+                    bombManager.typeExplo[index] = bombManager.type.BOTMID;
                 setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
@@ -103,7 +126,11 @@ bombManager.temporizador =  function(bomba, coloca){
             }else if(tpm.toco){
                 break;
             }else{
-                bombManager.explosions.push(explo);
+                index = bombManager.explosions.push(explo) - 1;
+                if(coloca.largeBomb == n)
+                    bombManager.typeExplo[index] = bombManager.type.RIGHT;
+                else
+                    bombManager.typeExplo[index] = bombManager.type.RIGHTMID;
                 setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
@@ -120,7 +147,11 @@ bombManager.temporizador =  function(bomba, coloca){
             }else if(tpm.toco){
                 break;
             }else{
-                bombManager.explosions.push(explo);
+                index = bombManager.explosions.push(explo) - 1;
+                if(coloca.largeBomb == n)
+                    bombManager.typeExplo[index] = bombManager.type.LEFT;
+                else
+                    bombManager.typeExplo[index] = bombManager.type.LEFTMID;
                 setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
@@ -171,8 +202,10 @@ bombManager.SobreBomb = function(hit){
 }
 
 bombManager.tiempoExplo =  function(explo){
-    if(bombManager.explosions.indexOf(explo) != -1){
-        delete bombManager.explosions[bombManager.explosions.indexOf(explo)];
+    let index = bombManager.explosions.indexOf(explo);
+    if(index != -1){
+        delete bombManager.typeExplo[index];
+        delete bombManager.explosions[index];
     }
 }
 

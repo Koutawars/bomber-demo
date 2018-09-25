@@ -56,7 +56,7 @@ io.on('connection',function(socket){
             };
             socket.broadcast.emit("mover", pack);
         }else{
-            io.emit('murio', p.id);
+            if(p.id) io.emit('murio', p.id);
         }
     });
     socket.on('newBomb',function(data){
