@@ -14,6 +14,9 @@ playerManager.Update = function(){
     this.mover();
     camera.Update();
     this.personajes.forEach(element => {
+        if(camera.player == null){
+            camera.follow(this.personajes[element.id]);
+        }
         this.personajes[element.id].Update();
     });
 }
@@ -171,6 +174,10 @@ io.on('murio', function(data){
         playerManager.personajes[data].animaciones.Update(11, 13);
         if(playerManager.personajes[data].animaciones.countReset == 1){
             delete playerManager.personajes[data];
+            if(camera.player.id == data){
+                delete camera.player;
+                console.log("Entra");
+            } 
         }
     }
     playerManager.personajes[data].mov = null;

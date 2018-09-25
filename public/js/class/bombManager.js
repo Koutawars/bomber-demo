@@ -29,6 +29,9 @@ bombManager.Draw = function(ctx){
 };
 
 bombManager.Update = function(){
+    this.bombs.forEach(element => {
+        element.Update();
+    });
     playerManager.personajes.forEach(player => {
         bombManager.explosions.forEach(explo => {
             if(player.hitbox.chocarCon(explo)){
@@ -166,6 +169,7 @@ bombManager.temporizador =  function(bomba, coloca){
 };
 bombManager.tocarBomb = function(hit){
     var retornar = {toco:false, bomba:null};
+    var encontro = true;
     bombManager.bombs.forEach(element => {
         if(element.hitbox.chocarCon(hit)){
             retornar.toco = true;
@@ -181,11 +185,12 @@ bombManager.tocarBomb = function(hit){
     }
     if(!retornar.toco){
         blockManager.blocks.forEach(block => {
-            if(hit.chocarCon(block)){
+            if(hit.chocarCon(block) && encontro){
                 retornar.toco = true;
                 let index = blockManager.blocks.indexOf(block);
                 io.emit('destroyBlock', index);
                 delete blockManager.blocks[index];
+                encontro = false;
             }
         });
     }

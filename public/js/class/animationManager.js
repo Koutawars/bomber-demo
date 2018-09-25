@@ -4,13 +4,20 @@ var animationManager = {
 };
 animationManager.LoadContent = function(callback){
     let ruta = [];
-    // Carga leon
     console.log("Cargando...");
+    // Carga leon
     this.imagenes["lion"] = [];
     ruta["lion"] = [];
     for(let n = 0;n <= 17;n++){
         ruta["lion"].push("img/lion_"+ n + ".png");
     }
+    // cargar bomba
+    this.imagenes["bomb"] = [];
+    ruta["bomb"] = [];
+    for(let n = 0;n <= 3;n++){
+        ruta["bomb"].push("img/bomb_"+ n + ".png");
+    }
+    // cargar bloques 
     this.imagenes["block"] = [];
     ruta["block"] = [];
     for(let n = 0;n <= 0;n++){
