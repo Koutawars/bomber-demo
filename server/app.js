@@ -55,8 +55,6 @@ io.on('connection',function(socket){
                 animaciones: {stop: data.animaciones.stop}
             };
             socket.broadcast.emit("mover", pack);
-        }else{
-            if(p.id) io.emit('murio', p.id);
         }
     });
     socket.on('newBomb',function(data){
