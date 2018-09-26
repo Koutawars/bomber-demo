@@ -20,13 +20,13 @@ animationManager.LoadContent = function(callback){
     // cargar bloques 
     this.imagenes["block"] = [];
     ruta["block"] = [];
-    for(let n = 0;n <= 0;n++){
+    for(let n = 0;n <= 6;n++){
         ruta["block"].push("img/block_"+ n + ".png");
     }
     // cargar explo 
     this.imagenes["explo"] = [];
     ruta["explo"] = [];
-    for(let n = 0;n <= 2;n++){
+    for(let n = 0;n <= 27;n++){
         ruta["explo"].push("img/explo_"+ n + ".png");
     }
     // final para cargar todas las rutas

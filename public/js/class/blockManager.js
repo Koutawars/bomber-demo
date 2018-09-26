@@ -1,5 +1,6 @@
 var blockManager = {
     blocks:[],
+    animationBlocks:[],
     w:32,
     h:32,
     callback:null
@@ -9,13 +10,23 @@ blockManager.Draw = function(ctx){
     this.blocks.forEach(block => {
         if(camera.x - 32 < block.x && camera.x + camera.w > block.x &&
             camera.y - 32 < block.y && camera.y + camera.h > block.y){
-            ctx.drawImage(animationManager.imagenes["block"][0], block.x, block.y);
+            let index = this.blocks.indexOf(block);
+            this.animationBlocks[index].Draw(ctx, block.x, block.y);
             if(debug.hit)block.Draw(ctx);
         }
     });
 };
 blockManager.Update = function(){
-
+    this.blocks.forEach(block => {
+        let index = this.blocks.indexOf(block);
+        if(!block.dead)this.animationBlocks[index].index = 0;
+        else{
+            this.animationBlocks[index].Update(0,6);
+            if(this.animationBlocks[index].countReset >= 1){
+                delete this.blocks[index];
+            }
+        }
+    });
 };
 io.on('block', function(data){
     let vector = data["data"];
@@ -23,7 +34,10 @@ io.on('block', function(data){
     let posY = 0;
     for(let i = 0; i < vector.length; i++){
         if(vector[i] == 1){
+            blockManager.animationBlocks[i] = new animation(animationManager.imagenes["block"], 0.25);
+            blockManager.animationBlocks[i].stop = true;
             blockManager.blocks[i] = new rectangulo( posX, posY, blockManager.w, blockManager.h);
+            blockManager.blocks[i].dead = false;
         }
         posX += 32;
         if((i+1)%data["width"] == 0){
@@ -34,5 +48,6 @@ io.on('block', function(data){
     screenManager.check.block = true;
 });
 io.on('destroyBlock', function(data){
-    delete blockManager.blocks[data];
+    blockManager.blocks[data].dead = true;
+    blockManager.animationBlocks[data].stop = false;
 });
