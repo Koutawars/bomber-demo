@@ -13,20 +13,34 @@ var bombManager = {
         RIGHT: 6,
         LEFT: 7,
         LEFTMID: 8
-    }
+    },
+    animationExplo: []
 };
 bombManager.Draw = function(ctx){
     this.bombs.forEach(element => {
         element.Draw(ctx);
     });
     this.explosions.forEach(element => {
-        //let index = this.explosions.indexOf(element);
+        let index = this.explosions.indexOf(element);
         if(debug.hit){
             element.Draw(ctx);
         }
-        //console.log(this.typeExplo[index]);
+        this.UpdateDrawExploAnimation(ctx, index);
     });
 };
+bombManager.UpdateDrawExploAnimation = function(ctx, index){
+    switch(this.typeExplo[index]){
+        case this.type.CENTER:
+            bombManager.animationExplo[index].Update(0,2);
+            bombManager.animationExplo[index].Draw(ctx, bombManager.explosions[index].x, bombManager.explosions[index].y);
+        break;
+    }
+    if(bombManager.animationExplo[index]){
+        if(bombManager.animationExplo[index].countReset > 1){
+            bombManager.animationExplo[index].stop = true;
+        }
+    }
+}
 
 bombManager.Update = function(){
     this.bombs.forEach(element => {
@@ -73,6 +87,8 @@ bombManager.temporizador =  function(bomba, coloca){
         var index;
         index = bombManager.explosions.push(explo) - 1;
         bombManager.typeExplo[index] = bombManager.type.CENTER;
+        bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], 0.1);
+        bombManager.animationExplo[index].stop = false;
         setTimeout(bombManager.tiempoExplo, Texplo, explo);
         var tpm;
         //explosión arriba
@@ -92,6 +108,8 @@ bombManager.temporizador =  function(bomba, coloca){
                     bombManager.typeExplo[index] = bombManager.type.TOP;
                 else
                     bombManager.typeExplo[index] = bombManager.type.TOPMID;
+                bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], 0.1);
+                bombManager.animationExplo[index].stop = false;
                 setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
@@ -113,6 +131,8 @@ bombManager.temporizador =  function(bomba, coloca){
                     bombManager.typeExplo[index] = bombManager.type.BOT;
                 else
                     bombManager.typeExplo[index] = bombManager.type.BOTMID;
+                    bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], 0.1);
+                    bombManager.animationExplo[index].stop = false;
                 setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
@@ -134,6 +154,8 @@ bombManager.temporizador =  function(bomba, coloca){
                     bombManager.typeExplo[index] = bombManager.type.RIGHT;
                 else
                     bombManager.typeExplo[index] = bombManager.type.RIGHTMID;
+                    bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], 0.1);
+                    bombManager.animationExplo[index].stop = false;
                 setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;
@@ -155,6 +177,8 @@ bombManager.temporizador =  function(bomba, coloca){
                     bombManager.typeExplo[index] = bombManager.type.LEFT;
                 else
                     bombManager.typeExplo[index] = bombManager.type.LEFTMID;
+                    bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], 0.1);
+                    bombManager.animationExplo[index].stop = false;
                 setTimeout(bombManager.tiempoExplo, Texplo, explo);
             }
             n++;

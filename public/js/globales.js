@@ -1,6 +1,6 @@
 // variables globales
 var debug = {
-    hit:false,
+    hit:true,
     info:true
 };
 var io = io.connect(),

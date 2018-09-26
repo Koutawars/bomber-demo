@@ -23,6 +23,12 @@ animationManager.LoadContent = function(callback){
     for(let n = 0;n <= 0;n++){
         ruta["block"].push("img/block_"+ n + ".png");
     }
+    // cargar explo 
+    this.imagenes["explo"] = [];
+    ruta["explo"] = [];
+    for(let n = 0;n <= 2;n++){
+        ruta["explo"].push("img/explo_"+ n + ".png");
+    }
     // final para cargar todas las rutas
     Object.keys(this.imagenes).forEach(element => {
         this.personajes[element] = [];
