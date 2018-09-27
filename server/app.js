@@ -3,6 +3,7 @@ var app = express(); // se crea un objeto de la libreria
 var server = require('http').Server(app); // se llama la libreria http y se manda express
 var io = require('socket.io').listen(server); // se escucha del servidor con la libreria de sockets
 var path = require('path'); // Se llama la libreria Path para path's
+var fs = require('fs');
 var public = '/../public'; // Paths donde esta la parte publica
 var map = '/mapJSON/';
 
