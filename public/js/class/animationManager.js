@@ -44,7 +44,7 @@ animationManager.createImages = function(srcs, fn) {
     var n = 0, images = [];
     Object.keys(srcs).forEach(element => {
         var  img;
-        var remaining = srcs[element].length;
+        var remaining = srcs[element][0].length;
         images[element] = new Array();
         for (var i = 0; i < srcs[element][0].length; i++) {
             img = new Image();
@@ -53,7 +53,7 @@ animationManager.createImages = function(srcs, fn) {
                 --remaining;
                 if (remaining == 0 && n >= srcs[element].length) {
                     fn();
-                }
+                };
             };
             img.src = srcs[element][0][i];
         }
