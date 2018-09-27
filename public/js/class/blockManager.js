@@ -1,5 +1,6 @@
 var blockManager = {
     blocks:[],
+    paredes:[],
     animationBlocks:[],
     w:32,
     h:32,
@@ -15,6 +16,13 @@ blockManager.Draw = function(ctx){
             if(debug.hit)block.Draw(ctx);
         }
     });
+    this.paredes.forEach(pared => {
+        if(camera.x - 32 < pared.x && camera.x + camera.w > pared.x &&
+            camera.y - 32 < pared.y && camera.y + camera.h > pared.y){
+            ctx.drawImage(animationManager.imagenes['pared'][0], pared.x, pared.y);
+            if(debug.hit)pared.Draw(ctx);
+        }
+    });
 };
 blockManager.Update = function(){
     this.blocks.forEach(block => {
@@ -28,7 +36,7 @@ blockManager.Update = function(){
         }
     });
 };
-io.on('block', function(data){
+io.on('mapa', function(data){
     let vector = data["data"];
     let posX = 0;
     let posY = 0;
@@ -38,6 +46,9 @@ io.on('block', function(data){
             blockManager.animationBlocks[i].stop = true;
             blockManager.blocks[i] = new rectangulo( posX, posY, blockManager.w, blockManager.h);
             blockManager.blocks[i].dead = false;
+        }
+        if(vector[i] == 2){
+            blockManager.paredes[i] = new rectangulo( posX, posY, blockManager.w, blockManager.h);
         }
         posX += 32;
         if((i+1)%data["width"] == 0){

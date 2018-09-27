@@ -29,6 +29,10 @@ animationManager.LoadContent = function(callback){
     for(let n = 0;n <= 27;n++){
         ruta["explo"].push("img/explo_"+ n + ".png");
     }
+    // cargar pared
+    this.imagenes["pared"] = [];
+    ruta["pared"] = [];
+    ruta["pared"].push("img/pared.png");
     // final para cargar todas las rutas
     Object.keys(this.imagenes).forEach(element => {
         this.personajes[element] = [];

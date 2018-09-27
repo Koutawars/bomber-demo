@@ -31,8 +31,8 @@ screenManager.Draw = function(ctx, screen){
             ctx.save();
             ctx.transform(1,0,0,1,-camera.x,-camera.y);
             blockManager.Draw(ctx);
-            playerManager.Draw(ctx);
             bombManager.Draw(ctx);
+            playerManager.Draw(ctx);
             ctx.restore();
             break;
     }

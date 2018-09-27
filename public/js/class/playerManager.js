@@ -36,6 +36,10 @@ playerManager.solido = function(x, y, player){
         if(block.chocarCon(temporal))
             esSolido = true;
     });
+    blockManager.paredes.forEach(block => {
+        if(block.chocarCon(temporal))
+            esSolido = true;
+    });
     return esSolido;
 };
 playerManager.mover = function(){

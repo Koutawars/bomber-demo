@@ -4,7 +4,12 @@ var server = require('http').Server(app); // se llama la libreria http y se mand
 var io = require('socket.io').listen(server); // se escucha del servidor con la libreria de sockets
 var path = require('path'); // Se llama la libreria Path para path's
 var fs = require('fs');
-
+var rn = require('random-number');
+var options = {
+    min:  0,
+    max:  5, 
+    integer: true
+}
 var public = '/../public'; // Paths donde esta la parte publica
 var map = '/mapJSON/';
 
@@ -15,11 +20,19 @@ app.use('/img',express.static(path.resolve(__dirname + public + '/img'))); // di
 app.get('/',function(req,res){
     res.sendFile(path.resolve(__dirname + public + '/index.html')); // si se pide / llama al index
 });
-
 server.lastPlayderID = 0; // se inicializa las id de los personajes
 fs.readFile(path.resolve(__dirname + map + 'mapa.json'), 'utf8', function (err, data) {
   if (err) throw err;
-  server.blocks = JSON.parse(data)["layers"][0];
+  server.mapa = JSON.parse(data)["layers"][0];
+  let n = 0;
+  server.mapa['data'].forEach(layer =>{
+      if(layer == 1){
+        if(Math.random()*8 > 3){
+            server.mapa['data'][n] = 0;
+        }
+      }
+      n+=1;
+  });
 });
 
 // funcion para escuchar el servidor y abrirlo
@@ -31,7 +44,7 @@ server.listen(process.env.PORT || 5000,function(){
 server.bombas = [];
 io.on('connection',function(socket){
     socket.emit("nuevoID", server.lastPlayderID++);
-    socket.emit('block', server.blocks);
+    socket.emit('mapa', server.mapa);
     socket.on("nuevoJugador", function(data){
         socket.player = data;
         socket.emit("allplayers", getAllPlayer(socket.id));
@@ -69,7 +82,7 @@ io.on('connection',function(socket){
         socket.player.numBomb += 1;
     });
     socket.on('destroyBlock', function(data){
-        server.blocks['data'][data] = 0;
+        server.mapa['data'][data] = 0;
         socket.broadcast.emit('destroyBlock', data);
     });
     socket.on('murio', function(id){

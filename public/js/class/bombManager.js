@@ -245,6 +245,13 @@ bombManager.tocarBomb = function(hit){
             }
         });
     }
+    if(!retornar.toco){
+        blockManager.paredes.forEach(pared => {
+            if(hit.chocarCon(pared)){
+                retornar.toco = true;
+            }
+        });
+    }
     return retornar;
 };
 bombManager.SobreBomb = function(hit){
