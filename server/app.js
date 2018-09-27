@@ -20,8 +20,8 @@ fs.readFile(path.resolve(__dirname + map + 'mapa.json'), 'utf8', function (err, 
   server.mapa = JSON.parse(data)["layers"][0];
   let n = 0;
   server.mapa['data'].forEach(layer =>{
-      if(layer == 1){
-        if(Math.random()*8 > 3){
+      if(layer == 2){
+        if(Math.random()*8 > 6){
             server.mapa['data'][n] = 0;
         }
       }

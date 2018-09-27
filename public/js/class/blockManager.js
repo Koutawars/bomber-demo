@@ -41,13 +41,13 @@ io.on('mapa', function(data){
     let posX = 0;
     let posY = 0;
     for(let i = 0; i < vector.length; i++){
-        if(vector[i] == 1){
+        if(vector[i] == 2){
             blockManager.animationBlocks[i] = new animation(animationManager.imagenes["block"], 0.25);
             blockManager.animationBlocks[i].stop = true;
             blockManager.blocks[i] = new rectangulo( posX, posY, blockManager.w, blockManager.h);
             blockManager.blocks[i].dead = false;
         }
-        if(vector[i] == 2){
+        if(vector[i] == 1){
             blockManager.paredes[i] = new rectangulo( posX, posY, blockManager.w, blockManager.h);
         }
         posX += 32;
