@@ -180,7 +180,6 @@ io.on('murio', function(data){
             delete playerManager.personajes[data];
             if(camera.player.id == data){
                 delete camera.player;
-                console.log("Entra");
             } 
         }
     }

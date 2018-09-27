@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', function(){
     iniciar.LoadContent();
     iniciar.iniciarJuego();
     // ping
-    io.on('msPong', function(data) {
-        buclePrincipal.ping = Date.now() - data;
+    io.on('pong', ms => {
+        buclePrincipal.ping = ms;
     });
     // tecla
     document.body.addEventListener("keydown", function (e) {

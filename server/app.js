@@ -1,7 +1,9 @@
 var express = require('express'); // se llama la libreria express
 var app = express(); // se crea un objeto de la libreria
 var server = require('http').Server(app); // se llama la libreria http y se manda express
-var io = require('socket.io').listen(server); // se escucha del servidor con la libreria de sockets
+var io = require('socket.io').listen(server,{
+    pingInterval: 3000
+}); // se escucha del servidor con la libreria de sockets
 var path = require('path'); // Se llama la libreria Path para path's
 var fs = require('fs');
 var public = '/../public'; // Paths donde esta la parte publica
@@ -89,11 +91,25 @@ io.on('connection',function(socket){
     socket.on('delete', function(){
         delete socket.player;
     });
-    socket.on('disconnect', function(){
-        if(socket.player){
-            socket.player.morir = true;
-            socket.broadcast.emit('murio', socket.player.id);
-            delete socket.player;
+    socket.on('disconnect', function(reason){
+        if (reason === 'io server disconnect') 
+            socket.connect();
+        else
+            if(socket.player){
+                socket.player.morir = true;
+                socket.broadcast.emit('murio', socket.player.id);
+                delete socket.player;
+            }
+    });
+    socket.on('error', (error) => {
+        console.log('error: '+error);
+    });
+    socket.on('connect_error', (error) => {
+        console.log('error: '+error);
+        try {
+            socket.connect();
+        }catch(err){
+            console.log("Error de reconectar : " + err);
         }
     });
 });
