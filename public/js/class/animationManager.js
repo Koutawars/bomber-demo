@@ -51,13 +51,14 @@ animationManager.createImages = function(srcs, fn) {
             images[element].push(img);
             img.onload = function() {
                 --remaining;
-                if (remaining == 0 && n >= srcs[element].length) {
+                if (remaining == 0 && n == Object.keys(srcs).length-1) {
                     fn();
                 };
+                if(remaining == 0)
+                    ++n;
             };
             img.src = srcs[element][0][i];
         }
-        n++;
     });
     return(images);
 }
