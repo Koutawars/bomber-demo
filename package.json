@@ -22,7 +22,6 @@
   "license": "Ko",
   "dependencies": {
     "express": "^4.15.2",
-    "random-number": "0.0.9",
     "socket.io": "^2.1.1"
   }
 }
