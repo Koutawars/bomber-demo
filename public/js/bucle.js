@@ -49,3 +49,6 @@ buclePrincipal.loadScreen = function(screen){
     buclePrincipal.screen = screen;
     buclePrincipal.LoadContent();
 };
+io.on('pong', function(data){
+    console.log(data);
+});
