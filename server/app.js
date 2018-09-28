@@ -38,9 +38,13 @@ server.listen(process.env.PORT || 5000,function(){
 
 
 server.bombas = [];
+server.powers = [];
 io.on('connection',function(socket){
     socket.emit("nuevoID", server.lastPlayderID++);
     socket.emit('mapa', server.mapa);
+    socket.on('powers', function() {
+        socket.emit('powers', server.powers);
+    });
     socket.on("nuevoJugador", function(data){
         socket.player = data;
         socket.emit("allplayers", getAllPlayer(socket.id));
@@ -77,9 +81,24 @@ io.on('connection',function(socket){
     socket.on('sumBomb',function(){
         socket.player.numBomb += 1;
     });
+    socket.on('eliminatePower', function(index){
+        if(server.powers[index] != -1)
+            server.powers[index] = -1;
+    });
     socket.on('destroyBlock', function(data){
-        server.mapa['data'][data] = 0;
-        socket.broadcast.emit('destroyBlock', data);
+        if(server.mapa['data'][data] != 0){
+            server.mapa['data'][data] = 0;
+            if(getRndInteger(0,1)>= 1){
+                let typePower = getRndInteger(0,1);
+                io.emit('generatePosPower', {id:data, type: typePower});
+                server.powers[data] = typePower;
+            }
+            else{
+                io.emit('generatePosPower', {id:data, type: -1});
+                server.powers[data] = -1;
+            }
+            socket.broadcast.emit('destroyBlock', data);
+        }
     });
     socket.on('murio', function(id){
         var player = getPlayerID(id);
@@ -131,4 +150,8 @@ function getPlayerID(id){
         } 
     });
     return returnPlayer;
+}
+
+function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
 }

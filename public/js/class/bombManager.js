@@ -252,6 +252,15 @@ bombManager.tocarBomb = function(hit){
             }
         });
     }
+    if(!retornar.toco){
+        powerManager.powers.forEach(power => {
+            if(hit.chocarCon(power)){
+                retornar.toco = true;
+                let index = powerManager.powers.indexOf(power);
+                delete powerManager.powers[index];
+            }
+        });
+    }
     return retornar;
 };
 bombManager.SobreBomb = function(hit){

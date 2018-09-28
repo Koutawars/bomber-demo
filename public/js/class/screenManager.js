@@ -6,7 +6,8 @@ var screenManager = {
     },
     check:{
         img: false,
-        block: false
+        block: false,
+        power: false
     }
 };
 
@@ -20,6 +21,7 @@ screenManager.LoadContent = function(screen){
                 function(){
                     screenManager.check.img = true;
                 });
+            powerManager.LoadContent();
             break;
     }
 };
@@ -31,6 +33,7 @@ screenManager.Draw = function(ctx, screen){
             ctx.save();
             ctx.transform(1,0,0,1,-camera.x,-camera.y);
             blockManager.Draw(ctx);
+            powerManager.Draw(ctx);
             bombManager.Draw(ctx);
             playerManager.Draw(ctx);
             ctx.restore();
@@ -49,11 +52,12 @@ screenManager.Update = function(screen, callback){
             break;
         case this.screen.GAME:
             blockManager.Update();
+            powerManager.Update();
             playerManager.Update();
             bombManager.Update();
             break;
     }
 };
 screenManager.cheking = function(){
-    return this.check.img && this.check.block;
+    return this.check.img && this.check.block && this.check.power;
 }

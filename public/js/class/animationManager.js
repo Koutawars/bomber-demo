@@ -29,6 +29,12 @@ animationManager.LoadContent = function(callback){
     for(let n = 0;n <= 27;n++){
         ruta["explo"].push("img/explo_"+ n + ".png");
     }
+    // cargar poder 
+    this.imagenes["poder"] = [];
+    ruta["poder"] = [];
+    for(let n = 0;n <= 5;n++){
+        ruta["poder"].push("img/poder_"+ n + ".png");
+    }
     // cargar pared
     this.imagenes["pared"] = [];
     ruta["pared"] = [];

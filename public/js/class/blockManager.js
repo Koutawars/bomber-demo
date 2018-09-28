@@ -31,6 +31,7 @@ blockManager.Update = function(){
         else{
             this.animationBlocks[index].Update(0,6);
             if(this.animationBlocks[index].countReset >= 1){
+                powerManager.generatePower(block.x, block.y, powerManager.pos_powers[index], index);
                 delete this.blocks[index];
             }
         }
@@ -38,6 +39,7 @@ blockManager.Update = function(){
 };
 io.on('mapa', function(data){
     let vector = data["data"];
+    blockManager.widthmap = data["width"];
     let posX = 0;
     let posY = 0;
     for(let i = 0; i < vector.length; i++){
@@ -56,6 +58,7 @@ io.on('mapa', function(data){
             posX = 0;
         }
     }
+    io.emit('powers');
     screenManager.check.block = true;
 });
 io.on('destroyBlock', function(data){

@@ -16,3 +16,7 @@ canvas.width = 800;
 canvas.height = 600;
 //canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 //canvas.height = window.innerHeight || document.documentElement.clientWidth || document.body.clientWidth;
+
+function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
