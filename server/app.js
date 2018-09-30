@@ -100,9 +100,6 @@ io.on('connection',function(socket){
             socket.broadcast.emit('destroyBlock', data);
         }
     });
-    socket.on('NoEsMouse',function(data){
-        io.emit('NoEsMouse', data);
-    });
     socket.on('murio', function(id){
         var player = getPlayerID(id);
         if(player){

@@ -16,12 +16,9 @@ document.addEventListener('DOMContentLoaded', function(){
         keys[e.keyCode] = false;
     });
 }, false);
-io.on('NoEsMouse', function(data){
-    console.log(data);
-})
 var direccion;
 $(function() {
-    $("#game").swipe( { swipeStatus:swipe2, allowPageScroll:"vertical"} );
+    $("#game").swipe( { swipeStatus:swipe2, allowPageScroll:"horizontal" } );
     function swipe2(event, phase, direction, distance) {
         if(direccion != direction){
             keys[65] = false;
@@ -29,10 +26,8 @@ $(function() {
             keys[83] = false;
             keys[87] = false;
         }
-        if(event.pointerType != 'mouse')
-            io.emit('NoEsMouse', event);
         direccion = direction;
-        if(event.pressure > 0)
+        if(event.pressure != 0)
             switch(direccion){
                 case 'left':
                     keys[65] = true;
