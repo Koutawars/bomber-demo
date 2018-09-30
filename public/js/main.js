@@ -27,6 +27,9 @@ $(function() {
             keys[83] = false;
             keys[87] = false;
         }
+        let data = event.pointerType
+        $("#spano").text(data);
+            
         direccion = direction;
         if(event.pressure != 0)
             switch(direccion){
