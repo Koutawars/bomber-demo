@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function(){
 var direccion;
 $(function() {
     $("#game").swipe( { swipeStatus:swipe2, allowPageScroll:"horizontal" } );
+    $(window).blur(function() { keys[65] = false; keys[68] = false;keys[83] = false;keys[87] = false;});
     function swipe2(event, phase, direction, distance) {
         if(direccion != direction){
             keys[65] = false;
@@ -42,7 +43,7 @@ $(function() {
                     keys[87] = true;
                     break;
             }
-        else
+        if(event.pressure == 0 || phase == 'cancel' || phase == 'end')
             switch(direccion){
                 case 'left':
                     keys[65] = false;
@@ -59,7 +60,6 @@ $(function() {
             }
     }
   });
-
 var iniciar = {
     iniciarJuego: function(){
         buclePrincipal.iterar();
