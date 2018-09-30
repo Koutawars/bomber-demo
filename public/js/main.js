@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 }, false);
 io.on('NoEsMouse', function(data){
-    console.log("ALGUIEN NO USA MOUSE!! usa "+ data);
+    console.log(data);
 })
 var direccion;
 $(function() {
@@ -30,7 +30,7 @@ $(function() {
             keys[87] = false;
         }
         if(event.pointerType != 'mouse')
-            io.emit('NoEsMouse', event.pointerType);
+            io.emit('NoEsMouse', event);
         direccion = direction;
         if(event.pressure > 0)
             switch(direccion){
