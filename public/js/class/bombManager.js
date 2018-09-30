@@ -117,98 +117,49 @@ bombManager.temporizador =  function(bomba, coloca){
         bombManager.animationExplo[index].stop = false;
         setTimeout(bombManager.tiempoExplo, Texplo, explo);
         var tpm;
-        //explosión arriba
-        var n = 1;
-        do{
-            explo = new rectangulo(bX, bY - bAlto*n, bAncho, bAlto);
-            tpm = bombManager.tocarBomb(explo);
-            if(tpm.toco && tpm.bomba){
-                clearTimeout(tpm.bomba.tmp);
-                bombManager.temporizador(tpm.bomba, tpm.bomba.coloca);
-                break;
-            }else if(tpm.toco){
-                break;
-            }else{
-                index = bombManager.explosions.push(explo) - 1;
-                if(coloca.largeBomb == n)
-                    bombManager.typeExplo[index] = bombManager.type.TOP;
-                else
-                    bombManager.typeExplo[index] = bombManager.type.TOPMID;
-                bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], velocityAnimation);
-                bombManager.animationExplo[index].stop = false;
-                setTimeout(bombManager.tiempoExplo, Texplo, explo);
-            }
-            n++;
-        }while(n < coloca.largeBomb + 1);
-        n = 1;
-        // Explosión abajo
-        do{
-            explo = new rectangulo(bX, bY + bAlto*n, bAncho, bAlto);
-            tpm = bombManager.tocarBomb(explo);
-            if(tpm.toco && tpm.bomba){
-                clearTimeout(tpm.bomba.tmp);
-                bombManager.temporizador(tpm.bomba, tpm.bomba.coloca);
-                break;
-            }else if(tpm.toco){
-                break;
-            }else{
-                index = bombManager.explosions.push(explo) - 1;
-                if(coloca.largeBomb == n)
-                    bombManager.typeExplo[index] = bombManager.type.BOT;
-                else
-                    bombManager.typeExplo[index] = bombManager.type.BOTMID;
-                    bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], velocityAnimation);
-                    bombManager.animationExplo[index].stop = false;
-                setTimeout(bombManager.tiempoExplo, Texplo, explo);
-            }
-            n++;
-        }while(n < coloca.largeBomb+ 1);
-        n = 1;
-        // Explosión a la derecha
-        do{
-            explo = new rectangulo(bX + bAlto*n, bY, bAncho, bAlto);
-            tpm = bombManager.tocarBomb(explo);
-            if(tpm.toco && tpm.bomba){
-                clearTimeout(tpm.bomba.tmp);
-                bombManager.temporizador(tpm.bomba, tpm.bomba.coloca);
-                break;
-            }else if(tpm.toco){
-                break;
-            }else{
-                index = bombManager.explosions.push(explo) - 1;
-                if(coloca.largeBomb == n)
-                    bombManager.typeExplo[index] = bombManager.type.RIGHT;
-                else
-                    bombManager.typeExplo[index] = bombManager.type.RIGHTMID;
-                    bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], velocityAnimation);
-                    bombManager.animationExplo[index].stop = false;
-                setTimeout(bombManager.tiempoExplo, Texplo, explo);
-            }
-            n++;
-        }while(n < coloca.largeBomb + 1);
-        n = 1;
-        // Explsión a la izquierda
-        do{
-            explo = new rectangulo(bX - bAlto*n, bY, bAncho, bAlto);
-            tpm = bombManager.tocarBomb(explo);
-            if(tpm.toco && tpm.bomba){
-                clearTimeout(tpm.bomba.tmp);
-                bombManager.temporizador(tpm.bomba, tpm.bomba.coloca);
-                break;
-            }else if(tpm.toco){
-                break;
-            }else{
-                index = bombManager.explosions.push(explo) - 1;
-                if(coloca.largeBomb == n)
-                    bombManager.typeExplo[index] = bombManager.type.LEFT;
-                else
-                    bombManager.typeExplo[index] = bombManager.type.LEFTMID;
-                    bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], velocityAnimation);
-                    bombManager.animationExplo[index].stop = false;
-                setTimeout(bombManager.tiempoExplo, Texplo, explo);
-            }
-            n++;
-        }while(n < coloca.largeBomb + 1);
+        let angulo = 0, cos, sin;
+        for(var i = 0; i < 4; i++){ 
+            n = 1;
+            angulo = Math.PI*(i/2);
+            cos = Math.round(Math.cos(angulo));
+            sin = Math.round(Math.sin(angulo));
+            do{
+                explo = new rectangulo(bX + bAlto*n*cos, bY + bAlto*n*sin, bAncho, bAlto);
+                tpm = bombManager.tocarBomb(explo);
+                if(tpm.toco && tpm.bomba){
+                    clearTimeout(tpm.bomba.tmp);
+                    bombManager.temporizador(tpm.bomba, tpm.bomba.coloca);
+                    break;
+                }else if(tpm.toco){
+                    break;
+                }else{
+                    index = bombManager.explosions.push(explo) - 1;
+                    if(coloca.largeBomb == n){
+                        if(cos == 1 && sin == 0)
+                            bombManager.typeExplo[index] = bombManager.type.RIGHT;
+                        if(cos == 0 && sin == -1)
+                            bombManager.typeExplo[index] = bombManager.type.TOP;
+                        if(cos == -1 && sin == 0)
+                            bombManager.typeExplo[index] = bombManager.type.LEFT;
+                        if(cos == 0 && sin == 1)
+                            bombManager.typeExplo[index] = bombManager.type.BOT;
+                    }else{
+                        if(cos == 1 && sin == 0)
+                            bombManager.typeExplo[index] = bombManager.type.RIGHTMID;
+                        if(cos == 0 && sin == -1)
+                            bombManager.typeExplo[index] = bombManager.type.TOPMID;
+                        if(cos == -1 && sin == 0)
+                            bombManager.typeExplo[index] = bombManager.type.LEFTMID;
+                        if(cos == 0 && sin == 1)
+                            bombManager.typeExplo[index] = bombManager.type.BOTMID;
+                    }
+                        bombManager.animationExplo[index] = new animation(animationManager.imagenes['explo'], velocityAnimation);
+                        bombManager.animationExplo[index].stop = false;
+                    setTimeout(bombManager.tiempoExplo, Texplo, explo);
+                }
+                n++;
+            }while(n < coloca.largeBomb + 1);
+        }
         if(playerManager.personajes[playerManager.id])
             if(playerManager.personajes[playerManager.id].numBomb < playerManager.personajes[playerManager.id].numMaxBomb)
                 if(coloca.id == playerManager.id){
