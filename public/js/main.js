@@ -29,7 +29,7 @@ $(function() {
             var div = $(window);
             let x = event.screenX;
             let y = event.screenY;
-            buclePrincipal.dibujarFps = " y: " + y +  " x: " + x + " xDiv: " + div.width() + " yDiv: "+ div.height() +" ";
+            buclePrincipal.dibujarFps = event + " y: " + y +  " x: " + x + " xDiv: " + div.width() + " yDiv: "+ div.height() +" ";
             if(direccion != direction){
                 keys[65] = false;
                 keys[68] = false;
