@@ -9,6 +9,12 @@ camera.follow = function(player){
     this.player = player;
 }
 camera.Update = function (){
+    if(this.w != canvas.width){
+        this.w = canvas.width;
+    }
+    if(this.h != canvas.height){
+        this.h = canvas.height;
+    }
     if(this.player){
         this.x = this.player.hitbox.x - (this.w / 2);
         this.y = this.player.hitbox.y - (this.h / 2);

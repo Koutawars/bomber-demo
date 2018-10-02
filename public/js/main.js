@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function(){
     console.log("Se inicia el juego");
     buclePrincipal.ctx = canvas.getContext("2d");
-    buclePrincipal.ctx.font = `15px 'Oswald', sans-serif`;
+    buclePrincipal.ctx.font = `1.1em 'Oswald', sans-serif`;
     iniciar.LoadContent();
     iniciar.iniciarJuego();
     // ping
@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 }, false);
 var direccion;
+window.addEventListener('resize', resizeCanvas, false);
+window.addEventListener('orientationchange', resizeCanvas, false);
+
 $(function() {
     $("#game").swipe( { swipeStatus:swipe2, allowPageScroll:"horizontal" } );
     $(window).blur(function() { keys[65] = false; keys[68] = false;keys[83] = false;keys[87] = false;});

@@ -2,14 +2,12 @@ canvas {
     margin: auto;
     display: block;
     overflow:hidden; 
+    overflow-x: hidden;
+    margin: 0px; 
+    padding: 0px; 
 }
 body {
     margin: 0px;
     overflow:hidden; 
-}
-@media screen and (max-width:640px) {
-    canvas {
-        width: 100%;
-    }
 }
 @import url('https://fonts.googleapis.com/css?family=Oswald');

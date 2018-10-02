@@ -32,7 +32,7 @@ var buclePrincipal = {
         if(debug.info){
             buclePrincipal.ctx.fillStyle = '#FFFFFF';
              if(playerManager.personajes[playerManager.id] != null) buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps + " | X: "+ playerManager.personajes[playerManager.id].hitbox.x + " | Y: "+ playerManager.personajes[playerManager.id].hitbox.y, 0, 20); 
-             else buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps , 0, 20); 
+             else buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps , 0, canvas.height*0.06); 
         }
         buclePrincipal.fps++;
     },

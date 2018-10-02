@@ -12,11 +12,13 @@ var dir = {
     DERECHA: "derecha",
     IZQUIERDA: "izquierda"
 };
-canvas.width = 360;
-canvas.height = 640;
-//canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-//canvas.height = window.innerHeight || document.documentElement.clientWidth || document.body.clientWidth;
-
+canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+canvas.height = window.innerHeight || document.documentElement.clientWidth || document.body.clientWidth;
+function resizeCanvas() {
+    canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    canvas.height = window.innerHeight || document.documentElement.clientWidth || document.body.clientWidth;
+    buclePrincipal.ctx.font = `1.1em 'Oswald', sans-serif`;
+}
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
 }

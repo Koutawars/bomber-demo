@@ -33,15 +33,19 @@ playerManager.solido = function(x, y, player){
         else if(!bomba.hitbox.chocarCon(temporal))
             bomba.recienColocada = false;
     });
-    blockManager.blocks.forEach(block => {
-        if(block.chocarCon(temporal))
-            esSolido = true;
-    });
-    blockManager.paredes.forEach(block => {
-        if(block.chocarCon(temporal)){
-            esSolido = true;
-        }
-    });
+    if(!esSolido){
+        blockManager.blocks.forEach(block => {
+            if(block.chocarCon(temporal))
+                esSolido = true;
+        });
+    }
+    if(!esSolido){
+        blockManager.paredes.forEach(block => {
+            if(block.chocarCon(temporal)){
+                esSolido = true;
+            }
+        });
+    }
     if(esSolido){
         esSolido = playerManager.fixCorner(x,y);
         fix = true;
