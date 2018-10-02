@@ -28,10 +28,8 @@ $(function() {
             keys[87] = false;
         }
         let data = event.pointerType
-        $("#spano").text(data);
-            
         direccion = direction;
-        if(event.pressure != 0)
+        if(event.pressure != 0){
             switch(direccion){
                 case 'left':
                     keys[65] = true;
@@ -46,7 +44,8 @@ $(function() {
                     keys[87] = true;
                     break;
             }
-        if(event.pressure == 0 || phase == 'cancel' || phase == 'end')
+        }
+        if(event.pressure == 0 || phase == 'cancel' || phase == 'end'){
             switch(direccion){
                 case 'left':
                     keys[65] = false;
@@ -61,6 +60,7 @@ $(function() {
                     keys[87] = false;
                     break;
             }
+        }
     }
   });
 var iniciar = {

@@ -22,6 +22,7 @@ playerManager.Update = function(){
 }
 playerManager.solido = function(x, y, player){
     let esSolido = false, temporal;
+    var fix = false;
     temporal = player.hitbox.copiar();
     temporal.x += x;
     temporal.y += y;
@@ -37,21 +38,91 @@ playerManager.solido = function(x, y, player){
             esSolido = true;
     });
     blockManager.paredes.forEach(block => {
-        if(block.chocarCon(temporal))
+        if(block.chocarCon(temporal)){
             esSolido = true;
+        }
     });
-    return esSolido;
+    if(esSolido){
+        esSolido = playerManager.fixCorner(x,y);
+        fix = true;
+    }
+    return {f:fix, s: esSolido};
 };
+playerManager.fixCorner = function(dirX, dirY){
+    let x = Math.round(this.personajes[this.id].hitbox.x/ 32);
+    let y = Math.round(this.personajes[this.id].hitbox.y/ 32);
+    if(dirX != 0)dirX = dirX > 0?1:-1;
+    if(dirY != 0)dirY = dirY > 0?1:-1;
+    var edgeSize = 30;
+    var pos = {x: x, y:y};
+    var position;
+    var pos1 = { x: x + dirY, y: y + dirX };
+    var bmp1 = this.multi(pos1);
+    var pos2 = { x: x - dirY, y: y - dirX };
+    var bmp2 = this.multi(pos2);
+    if(this.estaVacio((pos.x + dirX)*32, (pos.y + dirY)*32)){
+        position = pos;
+    }
+    else if(this.estaVacio(bmp1.x, bmp1.y) && this.estaVacio(bmp1.x + dirX*32, bmp1.y + dirY*32)
+        && Math.abs(this.personajes[this.id].hitbox.y - bmp1.y) < edgeSize
+        && Math.abs(this.personajes[this.id].hitbox.x - bmp1.x) < edgeSize){
+        position = pos1;
+    }
+    else if(this.estaVacio(bmp2.x, bmp2.y) && this.estaVacio(bmp1.x + dirX*32, bmp1.y + dirY*32)
+        && Math.abs(this.personajes[this.id].hitbox.y - bmp2.y) < edgeSize
+        && Math.abs(this.personajes[this.id].hitbox.x - bmp2.x) < edgeSize){
+            position = pos2;
+    }
+    if(position != null){
+        position = this.multi(position);
+        if(this.estaVacio(position.x, position.y)){
+            var fixX = 0;
+            var fixY = 0;
+            if (dirX) {
+                fixY = (position.y - this.personajes[this.id].hitbox.y) > 0 ? 1 : -1;
+            } else {
+                fixX = (position.x - this.personajes[this.id].hitbox.x) > 0 ? 1 : -1;
+            }
+            fixX = fixX* this.personajes[this.id].vel;
+            fixY = fixY* this.personajes[this.id].vel;
+            this.personajes[this.id].mov(fixX,fixY );
+            return false;
+        }
+    }
+    return true;
+}
+playerManager.estaVacio = function( x, y){
+    var retorna = true;
+    var caja = new rectangulo( x, y, 1, 1);
+    bombManager.bombs.forEach(bomba => {
+        if(!bomba.recienColocada){
+            retorna = !bomba.hitbox.chocarCon(caja);
+        }
+    });
+    blockManager.blocks.forEach(block => {
+        if(block.chocarCon(caja))
+            retorna = false;
+    });
+    blockManager.paredes.forEach(block => {
+        if(block.chocarCon(caja))
+            retorna = false;
+    });
+    return retorna;
+}
+playerManager.multi = function(_){
+    return {x:_.x*32, y:_.y*32}
+}
 playerManager.mover = function(){
     if(animationManager.imagenes != null && this.personajes[this.id]!= null){
-        let solido = false;
+        
+        let solido;
         if(keys[68] && this.personajes[this.id].mov){
-            solido = !playerManager.solido(this.personajes[this.id].vel , 0, this.personajes[this.id]);
-            if(solido)
+            solido = playerManager.solido(this.personajes[this.id].vel , 0, this.personajes[this.id]);
+            if(!solido.s)
             {
                 this.personajes[this.id].dir = dir.DERECHA;
                 this.personajes[this.id].animaciones.stop = false;
-                this.personajes[this.id].mov(this.personajes[this.id].vel , 0);
+                if(!solido.f)this.personajes[this.id].mov(this.personajes[this.id].vel , 0);
                 this.pack = {
                     x: this.personajes[this.id].x,
                     y: this.personajes[this.id].y,
@@ -63,12 +134,12 @@ playerManager.mover = function(){
             }
         }
         else if(keys[65] && this.personajes[this.id].mov){
-            solido = !playerManager.solido(-this.personajes[this.id].vel , 0, this.personajes[this.id]);
-            if(solido)
+            solido = playerManager.solido(-this.personajes[this.id].vel , 0, this.personajes[this.id]);
+            if(!solido.s)
             {
                 this.personajes[this.id].dir = dir.IZQUIERDA;
                 this.personajes[this.id].animaciones.stop = false;
-                this.personajes[this.id].mov(-this.personajes[this.id].vel , 0);
+                if(!solido.f)this.personajes[this.id].mov(-this.personajes[this.id].vel , 0);
                 this.pack = {
                     x: this.personajes[this.id].x,
                     y: this.personajes[this.id].y,
@@ -80,12 +151,12 @@ playerManager.mover = function(){
             }
         }
         else if(keys[87] && this.personajes[this.id].mov){
-            solido = !playerManager.solido(0 , -this.personajes[this.id].vel, this.personajes[this.id]);
-            if(solido)
+            solido = playerManager.solido(0 , -this.personajes[this.id].vel, this.personajes[this.id]);
+            if(!solido.s)
             {
                 this.personajes[this.id].dir = dir.ARRIBA;
                 this.personajes[this.id].animaciones.stop = false;
-                this.personajes[this.id].mov(0 , -this.personajes[this.id].vel);
+                if(!solido.f)this.personajes[this.id].mov(0 , -this.personajes[this.id].vel);
                 this.pack = {
                     x: this.personajes[this.id].x,
                     y: this.personajes[this.id].y,
@@ -97,12 +168,12 @@ playerManager.mover = function(){
             }
         }
         else if(keys[83] && this.personajes[this.id].mov){
-            solido = !playerManager.solido(0 , this.personajes[this.id].vel, this.personajes[this.id]);
-            if(solido)
+            solido = playerManager.solido(0 , this.personajes[this.id].vel, this.personajes[this.id]);
+            if(!solido.s)
             {
                 this.personajes[this.id].dir = dir.ABAJO;
                 this.personajes[this.id].animaciones.stop = false;
-                this.personajes[this.id].mov(0 , this.personajes[this.id].vel);
+                if(!solido.f)this.personajes[this.id].mov(0 , this.personajes[this.id].vel);
                 this.pack = {
                     x: this.personajes[this.id].x,
                     y: this.personajes[this.id].y,
