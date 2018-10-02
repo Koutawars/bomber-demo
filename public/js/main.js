@@ -23,12 +23,13 @@ window.addEventListener('orientationchange', resizeCanvas, false);
 $(function() {
     $("#game").swipe( { swipeStatus:swipe2, allowPageScroll:"horizontal" } );
     $(window).blur(function() { keys[65] = false; keys[68] = false;keys[83] = false;keys[87] = false;});
-    function swipe2(event, phase, direction, distance) {
-        //if(jQuery.browser.mobile){
-        if(true){
+    function swipe2(e, phase, direction, distance) {
+        if(jQuery.browser.mobile){
+        //if(true){
             var div = $(window);
-            let x = event.screenX;
-            let y = event.screenY;
+            var event = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+            let x = event.pageX;
+            let y = event.pageY;
             buclePrincipal.dibujarFps = event + " y: " + y +  " x: " + x + " xDiv: " + div.width() + " yDiv: "+ div.height() +" ";
             if(direccion != direction){
                 keys[65] = false;
