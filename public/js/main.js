@@ -25,6 +25,8 @@ $(function() {
     $(window).blur(function() { keys[65] = false; keys[68] = false;keys[83] = false;keys[87] = false;});
     function swipe2(event, phase, direction, distance) {
         if(jQuery.browser.mobile){
+        //if(true){
+            var div = $("#game");
             if(direccion != direction){
                 keys[65] = false;
                 keys[68] = false;
@@ -34,7 +36,7 @@ $(function() {
             let data = event.pointerType
             direccion = direction;
             if(event.pressure != 0){
-                if(event.x >= canvas.width/2 && event.y >= canvas.height/2){
+                if(event.x >= div.width()/2 && event.y >= div.height()/2){
                     keys[87] = false;
                     keys[83] = false;
                     keys[68] = false;
@@ -45,24 +47,20 @@ $(function() {
                     switch(direccion){
                         case 'left':
                             keys[65] = true;
-                            keys[32] = false;
                             break;
                         case 'right':
                             keys[68] = true;
-                            keys[32] = false;
                             break;
                         case 'down':
                             keys[83] = true;
-                            keys[32] = false;
                             break;
                         case 'up':
                             keys[87] = true;
-                            keys[32] = false;
                             break;
                     }
             }
             if(event.pressure == 0 || phase == 'cancel' || phase == 'end'){
-                if(event.x >= canvas.width/2 && event.y >= canvas.height/2){
+                if(event.x >= div.width()/2 && event.y >= div.height()/2){
                     keys[87] = false;
                     keys[83] = false;
                     keys[68] = false;
