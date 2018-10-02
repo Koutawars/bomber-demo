@@ -27,9 +27,8 @@ $(function() {
         //if(jQuery.browser.mobile){
         if(true){
             var div = $(window);
-            console.log(event);
-            let x = event.clientX || client.offsetX || event.x;
-            let y = event.clientY || client.offsetY || event.y;
+            let x = event.pageX;
+            let y = event.pageY;
             buclePrincipal.dibujarFps = " y: " + y +  " x: " + x + " xDiv: " + div.width() + " yDiv: "+ div.height() +" ";
             if(direccion != direction){
                 keys[65] = false;
