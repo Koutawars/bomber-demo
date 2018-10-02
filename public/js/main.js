@@ -30,6 +30,7 @@ $(function() {
             console.log(event);
             let x = event.clientX || client.offsetX || event.x;
             let y = event.clientY || client.offsetY || event.y;
+            buclePrincipal.dibujarFps = " y: " + y +  " x: " + x + " xDiv: " + div.width() + " yDiv: "+ div.height() +" ";
             if(direccion != direction){
                 keys[65] = false;
                 keys[68] = false;
