@@ -27,7 +27,9 @@ $(function() {
         //if(jQuery.browser.mobile){
         if(true){
             var div = $(window);
-            buclePrincipal.dibujarFps = " y: " + event.y +  " x: " + event.x + " xDiv: " + div.width() + " yDiv: "+ div.height() +" ";
+            console.log(event);
+            let x = event.clientX || client.offsetX || event.x;
+            let y = event.clientY || client.offsetY || event.y;
             if(direccion != direction){
                 keys[65] = false;
                 keys[68] = false;
@@ -37,7 +39,7 @@ $(function() {
             let data = event.pointerType
             direccion = direction;
             if(event.pressure != 0){
-                if(event.x >= div.width()/2 && event.y >= div.height()/2){
+                if(x >= div.width()/2 && y >= div.height()/2){
                     keys[87] = false;
                     keys[83] = false;
                     keys[68] = false;
@@ -61,7 +63,7 @@ $(function() {
                     }
             }
             if(event.pressure == 0 || phase == 'cancel' || phase == 'end'){
-                if(event.x >= div.width()/2 && event.y >= div.height()/2){
+                if(x >= div.width()/2 && y >= div.height()/2){
                     keys[87] = false;
                     keys[83] = false;
                     keys[68] = false;
