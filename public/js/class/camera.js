@@ -1,8 +1,8 @@
 var camera = {
     x: 0, 
     y: 0, 
-    w: 800, 
-    h: 600,
+    w: canvas.width, 
+    h: canvas.height,
     player: null
 };
 camera.follow = function(player){

@@ -12,8 +12,8 @@ var dir = {
     DERECHA: "derecha",
     IZQUIERDA: "izquierda"
 };
-canvas.width = 800;
-canvas.height = 600;
+canvas.width = 360;
+canvas.height = 640;
 //canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 //canvas.height = window.innerHeight || document.documentElement.clientWidth || document.body.clientWidth;
 
