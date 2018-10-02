@@ -25,9 +25,9 @@ $(function() {
     $(window).blur(function() { keys[65] = false; keys[68] = false;keys[83] = false;keys[87] = false;});
     function swipe2(e, phase, direction, distance) {
         if(jQuery.browser.mobile){
-        //if(true){
+        //  if(true){
             var div = $(window);
-            var event = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+            var event = e.touches[0] || e.changedTouches[0];
             let x = event.pageX;
             let y = event.pageY;
             buclePrincipal.dibujarFps = event + " y: " + y +  " x: " + x + " xDiv: " + div.width() + " yDiv: "+ div.height() +" ";
