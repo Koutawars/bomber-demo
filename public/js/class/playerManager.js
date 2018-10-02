@@ -68,7 +68,7 @@ playerManager.fixCorner = function(dirX, dirY){
         && Math.abs(this.personajes[this.id].hitbox.x - bmp1.x) < edgeSize){
         position = pos1;
     }
-    else if(this.estaVacio(bmp2.x, bmp2.y) && this.estaVacio(bmp1.x + dirX*32, bmp1.y + dirY*32)
+    else if(this.estaVacio(bmp2.x, bmp2.y) && this.estaVacio(bmp2.x + dirX*32, bmp2.y + dirY*32)
         && Math.abs(this.personajes[this.id].hitbox.y - bmp2.y) < edgeSize
         && Math.abs(this.personajes[this.id].hitbox.x - bmp2.x) < edgeSize){
             position = pos2;
@@ -85,7 +85,7 @@ playerManager.fixCorner = function(dirX, dirY){
             }
             fixX = fixX* this.personajes[this.id].vel;
             fixY = fixY* this.personajes[this.id].vel;
-            this.personajes[this.id].mov(fixX,fixY );
+            this.personajes[this.id].mov( fixX, fixY);
             return false;
         }
     }
@@ -97,16 +97,18 @@ playerManager.estaVacio = function( x, y){
     bombManager.bombs.forEach(bomba => {
         if(!bomba.recienColocada){
             retorna = !bomba.hitbox.chocarCon(caja);
-        }
+        }   
     });
     blockManager.blocks.forEach(block => {
         if(block.chocarCon(caja))
             retorna = false;
     });
-    blockManager.paredes.forEach(block => {
-        if(block.chocarCon(caja))
-            retorna = false;
-    });
+    if(retorna){
+        blockManager.paredes.forEach(block => {
+            if(block.chocarCon(caja))
+                retorna = false;
+        });
+    }
     return retorna;
 }
 playerManager.multi = function(_){
@@ -116,7 +118,7 @@ playerManager.mover = function(){
     if(animationManager.imagenes != null && this.personajes[this.id]!= null){
         
         let solido;
-        if(keys[68] && this.personajes[this.id].mov){
+        if((keys[68] || keys[39] ) && this.personajes[this.id].mov){
             solido = playerManager.solido(this.personajes[this.id].vel , 0, this.personajes[this.id]);
             if(!solido.s)
             {
@@ -133,7 +135,7 @@ playerManager.mover = function(){
                 this.emitStop = true;
             }
         }
-        else if(keys[65] && this.personajes[this.id].mov){
+        else if((keys[65] || keys[37] )  && this.personajes[this.id].mov){
             solido = playerManager.solido(-this.personajes[this.id].vel , 0, this.personajes[this.id]);
             if(!solido.s)
             {
@@ -150,7 +152,7 @@ playerManager.mover = function(){
                 this.emitStop = true;
             }
         }
-        else if(keys[87] && this.personajes[this.id].mov){
+        else if((keys[87] || keys[38] ) && this.personajes[this.id].mov){
             solido = playerManager.solido(0 , -this.personajes[this.id].vel, this.personajes[this.id]);
             if(!solido.s)
             {
@@ -167,7 +169,7 @@ playerManager.mover = function(){
                 this.emitStop = true;
             }
         }
-        else if(keys[83] && this.personajes[this.id].mov){
+        else if((keys[83] || keys[40] ) && this.personajes[this.id].mov){
             solido = playerManager.solido(0 , this.personajes[this.id].vel, this.personajes[this.id]);
             if(!solido.s)
             {
