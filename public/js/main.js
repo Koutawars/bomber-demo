@@ -26,7 +26,7 @@ $(function() {
     function swipe2(event, phase, direction, distance) {
         if(jQuery.browser.mobile){
         //if(true){
-            var div = $("#game");
+            var div = $(window);
             if(direccion != direction){
                 keys[65] = false;
                 keys[68] = false;
