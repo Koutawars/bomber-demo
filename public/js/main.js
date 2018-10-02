@@ -24,9 +24,10 @@ $(function() {
     $("#game").swipe( { swipeStatus:swipe2, allowPageScroll:"horizontal" } );
     $(window).blur(function() { keys[65] = false; keys[68] = false;keys[83] = false;keys[87] = false;});
     function swipe2(event, phase, direction, distance) {
-        if(jQuery.browser.mobile){
-        //if(true){
+        //if(jQuery.browser.mobile){
+        if(true){
             var div = $(window);
+            buclePrincipal.dibujarFps = " y: " + event.y +  " x: " + event.x + " xDiv: " + div.width() + " yDiv: "+ div.height() +" ";
             if(direccion != direction){
                 keys[65] = false;
                 keys[68] = false;
