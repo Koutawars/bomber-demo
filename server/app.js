@@ -45,6 +45,10 @@ io.on('connection',function(socket){
     socket.on('powers', function() {
         socket.emit('powers', server.powers);
     });
+    socket.on('user', function(data, id){
+        socket.player.user = data;
+        io.emit('user', data, id);
+    });
     socket.on("nuevoJugador", function(data){
         socket.player = data;
         socket.emit("allplayers", getAllPlayer(socket.id));

@@ -22,3 +22,7 @@ function resizeCanvas() {
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
+io.on('connect_failed', function() {
+    console.log('Reconnection failed');
+    io.connect();
+});

@@ -20,11 +20,12 @@ var direccion;
 window.addEventListener('resize', resizeCanvas, false);
 window.addEventListener('orientationchange', resizeCanvas, false);
 
+// movimiento telefono
 $(function() {
     $("#game").swipe( { swipeStatus:swipe2, allowPageScroll:"horizontal" } );
     $(window).blur(function() { keys[65] = false; keys[68] = false;keys[83] = false;keys[87] = false;});
     function swipe2(e, phase, direction, distance) {
-        if(jQuery.browser.mobile){
+        if(jQuery.browser.mobile && buclePrincipal.screen == screenManager.screen.GAME){
             var div = $(window);
             var event = e.touches[0] || e.changedTouches[0];
             let x = event.pageX;

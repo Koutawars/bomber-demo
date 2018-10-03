@@ -19,6 +19,7 @@ class player{
         this.animaciones = new animation(this.imagenes, this.speedImage);
         this.dir = dir.QUIETO;
         this.morir = false;
+        this.user = "";
     }
     Update(){
         if(this.dir == dir.ABAJO){
@@ -37,14 +38,19 @@ class player{
         }
     }
     Draw(ctx){
-        if(camera.x - 32 < this.x && camera.x + camera.w > this.x &&
-            camera.y - 32 < this.y && camera.y + camera.h > this.y){
-            if(this.animaciones.img[0] != null){
-                this.animaciones.Draw(ctx, this.x, this.y);
-                if(debug.hit)this.hitbox.Draw(ctx);
-            }else{
-                console.log("Error, no se ha cargado las imagenes al objeto: ");
-                console.log(this);
+        if(this.user != ""){
+            if(camera.x - 32 < this.x && camera.x + camera.w > this.x &&
+                camera.y - 32 < this.y && camera.y + camera.h > this.y){
+                if(this.animaciones.img[0] != null){
+                    ctx.fillStyle = "white";
+                    ctx.font="30px";
+                    ctx.fillText( this.user, this.x, this.y);
+                    this.animaciones.Draw(ctx, this.x, this.y);
+                    if(debug.hit)this.hitbox.Draw(ctx);
+                }else{
+                    console.log("Error, no se ha cargado las imagenes al objeto: ");
+                    console.log(this);
+                }
             }
         }
     }

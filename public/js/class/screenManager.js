@@ -13,7 +13,8 @@ var screenManager = {
 
 screenManager.LoadContent = function(screen){
     switch(screen){
-        case screenManager.screen.GAME:
+        case screenManager.screen.MENU:
+            menuManager.LoadContent();
             break;
         case screenManager.screen.LOADING:
             blockManager.LoadContent();
@@ -44,7 +45,7 @@ screenManager.Update = function(screen, callback){
     switch(screen){
         case screenManager.screen.LOADING:
             if(screenManager.cheking()){
-                callback(screenManager.screen.GAME);
+                callback(screenManager.screen.MENU);
                 console.log("¡Cargado!");
             }
             break;

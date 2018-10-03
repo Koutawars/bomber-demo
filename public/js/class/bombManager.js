@@ -73,7 +73,7 @@ bombManager.Update = function(){
     });
     playerManager.personajes.forEach(player => {
         bombManager.explosions.forEach(explo => {
-            if(player.hitbox.chocarCon(explo)){
+            if(player.hitbox.chocarCon(explo) && this.user != ""){
                 io.emit("murio", player.id);
             }
         });

@@ -101,7 +101,7 @@ playerManager.estaVacio = function( x, y){
     bombManager.bombs.forEach(bomba => {
         if(!bomba.recienColocada){
             retorna = !bomba.hitbox.chocarCon(caja);
-        }   
+        }
     });
     blockManager.blocks.forEach(block => {
         if(block.chocarCon(caja))
@@ -207,6 +207,7 @@ playerManager.mover = function(){
     
 playerManager.copiar = function(data){
     let copia = new player(data.id, data.x, data.y, data.vel, data.personaje , data.posHitX, data.posHitY, data.anchoHit, data.altoHit, data.numBomb, data.timeBomb, data.largeBomb);
+    copia.user = data.user;
     return copia;
 }
 
@@ -261,4 +262,7 @@ io.on('murio', function(data){
         }
     }
     playerManager.personajes[data].mov = null;
+});
+io.on('user', function(user, id){
+    playerManager.personajes[id].user = user;
 });
