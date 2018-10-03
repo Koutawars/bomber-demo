@@ -1,7 +1,7 @@
 // variables globales
 var debug = {
     hit:false,
-    info:true
+    info:false
 };
 var io = io.connect(),
     canvas = document.getElementById("myCanvas"),

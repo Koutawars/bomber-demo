@@ -40,6 +40,8 @@ server.listen(process.env.PORT || 5000,function(){
 server.bombas = [];
 server.powers = [];
 io.on('connection',function(socket){
+    socket.lifes = 3;
+    socket.emit('lifes', socket.lifes);
     socket.emit('mapa', server.mapa);
     socket.on('powers', function() {
         socket.emit('powers', server.powers);
@@ -112,11 +114,21 @@ io.on('connection',function(socket){
         var player = getPlayerID(id);
         if(player){
             player.morir = true;
+            socket.lifes -= 1;
+            socket.emit('lifes', socket.lifes);
             io.emit('murio', player.id);
         }
     });
     socket.on('delete', function(){
-        delete socket.player;
+        if(socket.lifes < 0){
+            delete socket.player;
+        }else{
+            socket.player.morir = false;
+            setTimeout(
+                function(){
+                    io.emit('nuevoJugador', socket.player)
+                }, 3000);
+        }
     });
     socket.on('disconnect', function(reason){
         if (reason === 'io server disconnect') 

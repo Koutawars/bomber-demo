@@ -222,6 +222,7 @@ io.on('nuevoID', function(data, user){
 io.on('nuevoJugador', function(data){
     let copia = playerManager.copiar(data);
     playerManager.personajes[data.id] = copia;
+    if(data.id == playerManager.id) camera.follow(playerManager.personajes[data.id]);
 });
 
 // recibe todos los jugadores en la sala
@@ -259,10 +260,8 @@ io.on('murio', function(data){
             delete playerManager.personajes[data];
             if(camera.player.id == data){
                 delete camera.player;
-            } 
+            }
         }
     }
     playerManager.personajes[data].mov = null;
-});
-io.on('user', function(user, id){
 });

@@ -31,8 +31,11 @@ var buclePrincipal = {
         screenManager.Draw(buclePrincipal.ctx, this.screen);
         if(debug.info){
             buclePrincipal.ctx.fillStyle = '#FFFFFF';
-             if(playerManager.personajes[playerManager.id] != null) buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps + " | X: "+ playerManager.personajes[playerManager.id].hitbox.x + " | Y: "+ playerManager.personajes[playerManager.id].hitbox.y, 0, 20); 
-             else buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps , 0, canvas.height*0.06); 
+             if(playerManager.personajes[playerManager.id] != null) buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps + " | X: "+ playerManager.personajes[playerManager.id].hitbox.x + " | Y: "+ playerManager.personajes[playerManager.id].hitbox.y, 0, 17); 
+             else buclePrincipal.ctx.fillText( buclePrincipal.dibujarFps , 0, 17); 
+        }else{
+            buclePrincipal.ctx.fillStyle = '#FFFFFF';
+            buclePrincipal.ctx.fillText("MS: "+ buclePrincipal.ping, 0, 17);
         }
         buclePrincipal.fps++;
     },

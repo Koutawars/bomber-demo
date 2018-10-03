@@ -43,6 +43,7 @@ screenManager.Draw = function(ctx, screen){
             bombManager.Draw(ctx);
             playerManager.Draw(ctx);
             ctx.restore();
+            hudManager.Draw(ctx);
             break;
     }
 };
@@ -59,6 +60,7 @@ screenManager.Update = function(screen, callback){
             powerManager.Update();
             playerManager.Update();
             bombManager.Update();
+            hudManager.Update();
             break;
     }
 };
