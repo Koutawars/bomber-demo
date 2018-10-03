@@ -21,6 +21,12 @@ menuManager.LoadContent = function(){
     this.content.append(this.span);
     this.content.append(this.spanError);
     this.content.append(this.divo);
+    this.inputText.addEventListener("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            menuManager.button.click();
+        }
+    });
     this.button.addEventListener("click", function(){
         let str = menuManager.inputText.value;
         if(str == "")
