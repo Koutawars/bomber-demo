@@ -15,11 +15,16 @@ canvas {
 }
 div#content {
     position: absolute;
-    width: 20em;
+    width: 21em;
     top: 35%;
     left: 35%;
 }
+#game{
+    overflow:hidden;
+}
 div#contentform {
+    box-sizing: border-box;
+    position: absolute;
     width: 100%;
 }
 span#texto {
@@ -29,6 +34,12 @@ span#texto {
 span#spanError {
     color: red;
     font-size: 1.5em;
+}
+#element::-webkit-scrollbar { 
+    display: none; 
+}
+::-webkit-scrollbar { 
+    display: none; 
 }
 #boton {
     background-color: #f44336;
@@ -41,29 +52,31 @@ span#spanError {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    position: absolute;
     height: 39px;
-    left: 78%;
-    transform: translateY(-111%);
+    position: absolute;
+    top: -4px;
+    bottom: 0;
+    z-index: 1;
+    right: -10px;
+    -webkit-transition: opacity .3s;
+    transition: opacity .3s;
 }
 input#inputText {
-    margin: 0;
-    height: 36px;
-    border-width: 1px;
-    border-color: #c8ccd0;
-    border-radius: 3px;
     width: 100%;
-    font-size: 18px;
-    background-color: #FFF;
-    box-shadow: none;
-    color: #3b4045;
+    height: 29px;
+    border: 4px solid rgba(0, 0, 0, .06);
+    color: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 transparent;
+    -webkit-transition: border .2s;
+    transition: border .2s;
 }
 @media (max-width:800px) {
     div#content{
         width: 100%;
         left:0;
     }
-    #boton {
-        left: 89%;
-    }
+}
+[role=button], a, button, input, label, select, textarea {
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
 }
