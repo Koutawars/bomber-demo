@@ -19,6 +19,13 @@ div#content {
     top: 35%;
     left: 35%;
 }
+span#reconectar {
+    top: 35%;
+    left: 35%;
+    position: absolute;
+    color: white;
+    font-size: 4em;
+}
 #game{
     overflow:hidden;
 }
@@ -74,6 +81,9 @@ input#inputText {
     div#content{
         width: 100%;
         left:0;
+    }
+    span#reconectar {
+        left: 6%;
     }
 }
 [role=button], a, button, input, label, select, textarea {

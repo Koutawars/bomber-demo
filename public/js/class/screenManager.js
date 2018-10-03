@@ -2,7 +2,8 @@ var screenManager = {
     screen:{
         GAME: "inGame",
         LOADING: "loading",
-        MENU: "menu"
+        MENU: "menu",
+        DESCO: "desconectado"
     },
     check:{
         img: false,
@@ -13,6 +14,12 @@ var screenManager = {
 
 screenManager.LoadContent = function(screen){
     switch(screen){
+        case screenManager.screen.DESCO:
+            let span = document.createElement("span");
+            span.id = "reconectar";
+            span.append("Reconectando...");
+            $("body").append(span);
+            break;
         case screenManager.screen.MENU:
             menuManager.LoadContent();
             break;
@@ -28,8 +35,6 @@ screenManager.LoadContent = function(screen){
 };
 screenManager.Draw = function(ctx, screen){
     switch(screen){
-        case screenManager.screen.MENU:
-            break;
         case screenManager.screen.GAME:
             ctx.save();
             ctx.transform(1,0,0,1,-camera.x,-camera.y);
@@ -49,8 +54,6 @@ screenManager.Update = function(screen, callback){
                 console.log("¡Cargado!");
             }
             break;
-        case screenManager.screen.MENU:
-            break;
         case this.screen.GAME:
             blockManager.Update();
             powerManager.Update();
@@ -59,6 +62,13 @@ screenManager.Update = function(screen, callback){
             break;
     }
 };
+screenManager.UnLoadContent = function(screen){
+    switch(screen){
+        case screenManager.screen.MENU:
+            menuManager.UnLoadContent();
+            break;
+    }
+}
 screenManager.cheking = function(){
     return this.check.img && this.check.block && this.check.power;
 }

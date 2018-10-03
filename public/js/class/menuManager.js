@@ -16,13 +16,11 @@ menuManager.LoadContent = function(){
     this.spanError = document.createElement("span");
     this.spanError.id = "spanError";
     this.span.append("Username: ");
-    
     this.divo.append(this.inputText);
     this.divo.append(this.button);
     this.content.append(this.span);
     this.content.append(this.spanError);
     this.content.append(this.divo);
-
     this.button.addEventListener("click", function(){
         let str = menuManager.inputText.value;
         if(str == "")
@@ -32,12 +30,15 @@ menuManager.LoadContent = function(){
         else if(/\s/g.test(str))
             menuManager.spanError.innerHTML = "ERROR HAY ESPACIOS";
         else{
-            io.emit('user', str, playerManager.id);
+            io.emit('user', str);
             buclePrincipal.screen = screenManager.screen.GAME;
             menuManager.Destroy();
         }
     });
     $("body").append(this.content);
+}
+menuManager.UnLoadContent = function(){
+    this.Destroy();
 }
 menuManager.Destroy = function(){
     this.content.remove();

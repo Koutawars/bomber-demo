@@ -45,6 +45,7 @@ buclePrincipal.LoadContent = function(){
     screenManager.LoadContent(this.screen);
 };
 buclePrincipal.loadScreen = function(screen){
+    screenManager.UnLoadContent(buclePrincipal.screen);
     buclePrincipal.screen = screen;
     buclePrincipal.LoadContent();
 };

@@ -40,18 +40,16 @@ server.listen(process.env.PORT || 5000,function(){
 server.bombas = [];
 server.powers = [];
 io.on('connection',function(socket){
-    socket.emit("nuevoID", server.lastPlayderID++);
     socket.emit('mapa', server.mapa);
     socket.on('powers', function() {
         socket.emit('powers', server.powers);
     });
-    socket.on('user', function(data, id){
-        socket.player.user = data;
-        io.emit('user', data, id);
+    socket.on('user', function(data){
+        socket.emit("nuevoID", server.lastPlayderID++, data);
+        socket.emit("allplayers", getAllPlayer(socket.id));
     });
     socket.on("nuevoJugador", function(data){
         socket.player = data;
-        socket.emit("allplayers", getAllPlayer(socket.id));
         socket.broadcast.emit("nuevoJugador", data);
     });
     socket.on("mover", function(data){
@@ -86,14 +84,20 @@ io.on('connection',function(socket){
         socket.player.numBomb += 1;
     });
     socket.on('eliminatePower', function(index){
-        if(server.powers[index] != -1)
+        if(server.powers[index] != -1){
             server.powers[index] = -1;
+        }
     });
     socket.on('destroyBlock', function(data){
         if(server.mapa['data'][data] != 0){
             server.mapa['data'][data] = 0;
-            if(getRndInteger(0,1)>= 1){
-                let typePower = getRndInteger(0,1);
+            if(getRndInteger(0,2)>= 2){
+                let ran = getRndInteger(0,15);
+                let typePower;
+                if(ran <= 1) typePower = 0;
+                else if(ran <= 6)  typePower = 1;
+                else if(ran <= 11) typePower = 2;
+                else if(ran <= 14) typePower = 3;
                 io.emit('generatePosPower', {id:data, type: typePower});
                 server.powers[data] = typePower;
             }

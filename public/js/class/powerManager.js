@@ -2,8 +2,10 @@ var powerManager = {
     powers:[],
     pos_powers:[],
     type:{
-        speed: 0,
-        bomb: 1
+        atra: 0,
+        flame: 1,
+        bomb: 2,
+        speed: 3
     }
 };
 
@@ -16,11 +18,17 @@ powerManager.Draw = function(ctx){
         if(camera.x - 32 < power.x && camera.x + camera.w > power.x &&
             camera.y - 32 < power.y && camera.y + camera.h > power.y){
             switch(power.type){
-                case this.type.speed:
-                    ctx.drawImage(imgPower[0],power.x, power.y);
+                case this.type.atra:
+                    ctx.drawImage(imgPower[power.type],power.x, power.y);
+                break;
+                case this.type.flame:
+                    ctx.drawImage(imgPower[power.type],power.x, power.y);
                 break;
                 case this.type.bomb:
-                    ctx.drawImage(imgPower[2],power.x, power.y);
+                    ctx.drawImage(imgPower[power.type],power.x, power.y);
+                break;
+                case this.type.speed:
+                    ctx.drawImage(imgPower[power.type],power.x, power.y);
                 break;
             }
             if(debug.hit)power.Draw(ctx);
