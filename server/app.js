@@ -75,14 +75,17 @@ io.on('connection',function(socket){
         }
     });
     socket.on('newBomb',function(data){
-        socket.player.numBomb -= 1;
-        let pack = {id: socket.player.id, x: data.x, y:data.y}
-        io.emit('newBomb', pack);
+        if(socket.player){
+            socket.player.numBomb -= 1;
+            let pack = {id: socket.player.id, x: data.x, y:data.y}
+            io.emit('newBomb', pack);
+        }
     });
     socket.on('msPing', function(data) {
         socket.emit('msPong', data);
     });
     socket.on('sumBomb',function(){
+        if(socket.player.)
         socket.player.numBomb += 1;
     });
     socket.on('eliminatePower', function(index){
