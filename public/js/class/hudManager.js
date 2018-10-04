@@ -11,10 +11,13 @@ hudManager.Draw = function(ctx){
             ctx.drawImage(animationManager.imagenes["heart"][0], canvas.width-i*20 - 32 ,10);
         }
     }
-    ctx.fillStyle = '#FFFFFF';
     let text = "Kills: "+ hudManager.kills;
     let width = ctx.measureText(text).width;
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(canvas.width - (width + 45 + hudManager.lifes*20) , 10 ,width + 10 , 30);
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillText(text , canvas.width - (width + 40 + hudManager.lifes*20) , 33);
+    
 };  
 io.on('kill', kill => {
     hudManager.kills = kill;

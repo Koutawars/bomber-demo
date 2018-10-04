@@ -191,8 +191,8 @@ function getPlayerID(id){
     return returnPlayer;
 }
 function posicionRandom(){
-    var vectorX =[1,19,37,9,29,1,19,37,37,29,1,19,37];
-    var vectorY =[1,1,1,7,7,15,15,15,21,21,27,27,27];
+    var vectorX =[1,19,37,9,29,1 ,19,37,29,1 ,19,37];
+    var vectorY =[1,1 ,1 ,7,7 ,15,15,15,21,27,27,27];
     var j = getRndInteger(0, vectorX.length-1);
     var c= {
         x:vectorX[j]*32,
