@@ -126,8 +126,10 @@ io.on('connection',function(socket){
         var player = getPlayerID(id);
         if(player){
             player.morir = true;
-            socket.lifes -= 1;
-            socket.emit('lifes', socket.lifes);
+            if(id == socket.player.id){
+                socket.lifes -= 1;
+                socket.emit('lifes', socket.lifes);
+            }
             io.emit('murio', player.id);
         }
     });

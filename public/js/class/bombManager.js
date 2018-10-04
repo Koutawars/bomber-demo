@@ -175,60 +175,86 @@ bombManager.temporizador =  function(bomba, coloca){
 bombManager.tocarBomb = function(hit){
     var retornar = {toco:false, bomba:null};
     var encontro = true;
-    bombManager.bombs.forEach(element => {
+    // bomb
+    var llaves = Object.keys(bombManager.bombs);
+    var element; 
+    for(let i = 0 ;i < llaves.length; i++){ 
+        element = bombManager.bombs[llaves[i]];
         if(element.hitbox.chocarCon(hit)){
             retornar.toco = true;
             retornar.bomba = element;
-        };
-    });
-    if(!retornar.toco){
-        this.explosions.forEach(explo => {
-            if(explo.chocarCon(hit)){
-                retornar.toco = true;
-            };
-        });
+            break;
+        }
     }
     if(!retornar.toco){
-        blockManager.blocks.forEach(block => {
-            if(hit.chocarCon(block) && encontro){
+        llaves = Object.keys(this.explosions);
+        for(let i = 0 ;i < llaves.length; i++){ 
+            element = this.explosions[llaves[i]];
+            if(element.chocarCon(hit)){
                 retornar.toco = true;
-                let index = blockManager.blocks.indexOf(block);
+                break;
+            };
+        }
+    }
+    if(!retornar.toco){
+        llaves = Object.keys(blockManager.blocks);
+        for(let i = 0 ;i < llaves.length; i++){ 
+            element = blockManager.blocks[llaves[i]];
+            if(hit.chocarCon(element) && encontro){
+                retornar.toco = true;
+                let index = llaves[i];
                 io.emit('destroyBlock', index);
                 blockManager.blocks[index].dead = true;
                 blockManager.animationBlocks[index].stop = false;
                 encontro = false;
+                break;
             }
-        });
+        }
     }
     if(!retornar.toco){
-        blockManager.paredes.forEach(pared => {
-            if(hit.chocarCon(pared)){
+        llaves = Object.keys(blockManager.paredes);
+        for(let i = 0 ;i < llaves.length; i++){ 
+            element = blockManager.paredes[llaves[i]];
+            if(hit.chocarCon(element)){
                 retornar.toco = true;
+                break;
             }
-        });
+        }
     }
     if(!retornar.toco){
-        powerManager.powers.forEach(power => {
-            if(hit.chocarCon(power)){
+        llaves = Object.keys(powerManager.powers);
+        for(let i = 0 ;i < llaves.length; i++){ 
+            element = powerManager.powers[llaves[i]];
+            if(hit.chocarCon(element)){
                 retornar.toco = true;
-                let index = powerManager.powers.indexOf(power);
-                delete powerManager.powers[index];
+                delete powerManager.powers[llaves[i]];
+                break;
             }
-        });
+        }
     }
     return retornar;
 };
 bombManager.SobreBomb = function(hit){
     var retornar = false;
-    bombManager.bombs.forEach(element => {
+    var llaves = Object.keys(bombManager.bombs);
+    var element; 
+    for(let i = 0 ;i < llaves.length; i++){ 
+        element = bombManager.bombs[llaves[i]];
         if(hit.chocarCon(element.hitbox)){
             retornar = true;
+            break;
         };
-    });
-    blockManager.blocks.forEach(block => {
-        if(block.chocarCon(hit))
-            retornar = true;
-    });
+    }
+    if(!retornar){
+        llaves = Object.keys(blockManager.blocks);
+        for(let i = 0 ;i < llaves.length; i++){ 
+            element = blockManager.blocks[llaves[i]];
+            if(element.chocarCon(hit)){
+                retornar = true;
+                break;
+            }
+        }
+    }
     return retornar;
 }
 
