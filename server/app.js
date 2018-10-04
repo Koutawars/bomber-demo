@@ -87,6 +87,7 @@ io.on('connection',function(socket){
     });
     socket.on('eliminatePower', function(index){
         if(server.powers[index] != -1){
+            socket.emit('actualizar', server.powers[index]);
             server.powers[index] = -1;
         }
     });
@@ -94,12 +95,12 @@ io.on('connection',function(socket){
         if(server.mapa['data'][data] != 0){
             server.mapa['data'][data] = 0;
             if(getRndInteger(0,2)>= 2){
-                let ran = getRndInteger(0,15);
+                let ran = getRndInteger(0,17);
                 let typePower;
-                if(ran <= 1) typePower = 0;
-                else if(ran <= 6)  typePower = 1;
-                else if(ran <= 11) typePower = 2;
-                else if(ran <= 14) typePower = 3;
+                if(ran < 1) typePower = 0;
+                else if(ran <= 8)  typePower = 1;
+                else if(ran <= 13) typePower = 2;
+                else if(ran <= 17) typePower = 3;
                 io.emit('generatePosPower', {id:data, type: typePower});
                 server.powers[data] = typePower;
             }
@@ -120,14 +121,16 @@ io.on('connection',function(socket){
         }
     });
     socket.on('delete', function(){
-        if(socket.lifes < 0){
-            delete socket.player;
-        }else{
-            socket.player.morir = false;
-            setTimeout(
-                function(){
-                    io.emit('nuevoJugador', socket.player)
-                }, 3000);
+        if(socket.player){
+            if(socket.lifes < 0){
+                delete socket.player;
+            }else{
+                socket.player.morir = false;
+                setTimeout(
+                    function(){
+                        io.emit('nuevoJugador', socket.player)
+                    }, 3000);
+            }
         }
     });
     socket.on('disconnect', function(reason){

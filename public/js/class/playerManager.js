@@ -33,7 +33,7 @@ playerManager.solido = function(x, y, player){
         else if(!bomba.hitbox.chocarCon(temporal))
             bomba.recienColocada = false;
     });
-    if(!esSolido){
+    if(!esSolido && !player.atra){
         blockManager.blocks.forEach(block => {
             if(block.chocarCon(temporal))
                 esSolido = true;

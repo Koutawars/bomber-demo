@@ -2,7 +2,7 @@ var hudManager = {
     lifes:0
 };
 hudManager.Update = function(){
-
+    
 };
 hudManager.Draw = function(ctx){
     if(hudManager.lifes >= 0){

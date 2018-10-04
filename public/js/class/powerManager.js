@@ -40,16 +40,18 @@ powerManager.Update = function(){
     this.powers.forEach(power => {
         playerManager.personajes.forEach(player => {
             if(player.hitbox.chocarCon(power)){
-                if(player.power){
-                    player.power.push(power.type);
-                }else{
-                    player.power = [];
-                    player.power.push(power.type);
+                if(power.type != null){
+                    if(player.power){
+                        player.power.push(power.type);
+                    }else{
+                        player.power = [];
+                        player.power.push(power.type);
+                    }
+                    let index = this.powers.indexOf(power);
+                    delete this.powers[index];
+                    io.emit('eliminatePower', index);
+                    this.pos_powers[index] = -1;
                 }
-                let index = this.powers.indexOf(power);
-                delete this.powers[index];
-                io.emit('eliminatePower', index);
-                this.pos_powers[index] = -1;
             }
         });
     });
@@ -98,3 +100,21 @@ io.on('powers', data => {
     });
     screenManager.check.power = true;
 });
+io.on('actualizar', function(data){
+    let player = playerManager.personajes[playerManager.id];
+    switch(data){
+        case powerManager.type.atra:
+            player.atra = true;
+        break;
+        case powerManager.type.flame:
+            player.largeBomb+=1;
+        break;
+        case powerManager.type.bomb:
+            player.numMaxBomb +=1;
+            player.numBomb +=1;
+        break;
+        case powerManager.type.speed:
+            player.vel += 0.5;
+        break;
+    }
+})

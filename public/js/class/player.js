@@ -19,6 +19,7 @@ class player{
         this.animaciones = new animation(this.imagenes, this.speedImage);
         this.dir = dir.QUIETO;
         this.morir = false;
+        this.atra = false;
         this.user = "";
     }
     Update(){

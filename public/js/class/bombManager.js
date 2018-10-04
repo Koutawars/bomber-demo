@@ -57,7 +57,6 @@ bombManager.UpdateDrawExploAnimation = function(ctx, index){
         case this.type.BOT:
         bombManager.animationExplo[index].Update(16,19);
         break;
-
     }
     if(bombManager.animationExplo[index])bombManager.animationExplo[index].Draw(ctx, bombManager.explosions[index].x, bombManager.explosions[index].y);
     if(bombManager.animationExplo[index]){
@@ -162,7 +161,7 @@ bombManager.temporizador =  function(bomba, coloca){
             }while(n < coloca.largeBomb + 1);
         }
         if(playerManager.personajes[playerManager.id])
-            if(playerManager.personajes[playerManager.id].numBomb < playerManager.personajes[playerManager.id].numMaxBomb)
+            if(playerManager.personajes[playerManager.id].numBomb <= playerManager.personajes[playerManager.id].numMaxBomb)
                 if(coloca.id == playerManager.id){
                     io.emit("sumBomb");
                     playerManager.personajes[playerManager.id].numBomb +=1;
