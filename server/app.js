@@ -85,7 +85,7 @@ io.on('connection',function(socket){
         socket.emit('msPong', data);
     });
     socket.on('sumBomb',function(){
-        if(socket.player.)
+        if(socket.player)
         socket.player.numBomb += 1;
     });
     socket.on('eliminatePower', function(index){
