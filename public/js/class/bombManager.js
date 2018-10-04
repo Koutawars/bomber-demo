@@ -221,6 +221,10 @@ bombManager.SobreBomb = function(hit){
             retornar = true;
         };
     });
+    blockManager.blocks.forEach(block => {
+        if(block.chocarCon(hit))
+            retornar = true;
+    });
     return retornar;
 }
 

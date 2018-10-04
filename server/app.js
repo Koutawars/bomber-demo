@@ -8,10 +8,13 @@ var path = require('path'); // Se llama la libreria Path para path's
 var fs = require('fs');
 var public = '/../public'; // Paths donde esta la parte publica
 var map = '/mapJSON/';
+var favicon = require('serve-favicon');
+
 
 app.use('/css',express.static(path.resolve(__dirname + public + '/css'))); // direccion del css
 app.use('/js',express.static(path.resolve(__dirname + public + '/js'))); // direccion del javascript
 app.use('/img',express.static(path.resolve(__dirname + public + '/img'))); // direccion de las imagenes
+app.use(favicon(path.join(__dirname + public + '/favicon.ico')));
 
 app.get('/',function(req,res){
     res.sendFile(path.resolve(__dirname + public + '/index.html')); // si se pide / llama al index
@@ -97,7 +100,7 @@ io.on('connection',function(socket){
     socket.on('destroyBlock', function(data){
         if(server.mapa['data'][data] != 0){
             server.mapa['data'][data] = 0;
-            if(getRndInteger(0,2)>= 2){
+            if(getRndInteger(0,4)>= 4){
                 let ran = getRndInteger(0,17);
                 let typePower;
                 if(ran < 1) typePower = 0;
