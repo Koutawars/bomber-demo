@@ -184,3 +184,33 @@ function getPlayerID(id){
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
+function posicion(){
+    var vectorX =[1,19,37,9,29,1,19,37,37,29,1,19,37];
+    var vectorY =[1,1,1,7,7,15,15,15,21,21,27,27,27];
+    var bandera =false;
+    var lista =[
+        {
+            x:32,
+            y:32
+        },{
+            x:19*32,
+            y:32
+        }
+    ];
+    for (let j = 0; j < vectorX.length; j++) {
+        bandera=false;
+        for (let index = 0; index < lista.length; index++) {
+            if (lista[index].x  == vectorX[j]*32 && lista[index].y  == vectorY[j]*32){
+                bandera=true;
+            }
+        }
+        if(!bandera){
+            var c= {
+                x:vectorX[j]*32,
+                y:vectorY[j]*32
+            }
+            return c;
+        }
+    }
+    return false ;
+}

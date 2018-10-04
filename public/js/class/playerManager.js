@@ -213,7 +213,7 @@ playerManager.copiar = function(data){
 
 io.on('nuevoID', function(data, user){
     playerManager.id = data;
-    playerManager.personajes[playerManager.id] = new player(playerManager.id, 30, -7, 4, "lion", 15, 45, 20, 20, 3, 3000, 3);
+    playerManager.personajes[playerManager.id] = new player(playerManager.id, 30, -7, 2, "lion", 15, 45, 20, 20, 1, 3000, 1);
     playerManager.personajes[playerManager.id].user = user;
     camera.follow(playerManager.personajes[playerManager.id]);
     io.emit("nuevoJugador", playerManager.personajes[playerManager.id]);
