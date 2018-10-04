@@ -130,6 +130,7 @@ io.on('connection',function(socket){
         if(socket.player){
             if(socket.lifes < 0){
                 delete socket.player;
+                socket.emit('inicio');
             }else{
                 socket.player.morir = false;
                 setTimeout(

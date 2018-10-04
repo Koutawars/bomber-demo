@@ -265,3 +265,6 @@ io.on('murio', function(data){
     }
     playerManager.personajes[data].mov = null;
 });
+io.on('inicio', function(){
+
+});

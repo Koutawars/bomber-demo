@@ -43,6 +43,10 @@ animationManager.LoadContent = function(callback){
     this.imagenes["heart"] = [];
     ruta["heart"] = [];
     ruta["heart"].push("img/heart.png");
+    // cargar dead
+    this.imagenes["dead"] = [];
+    ruta["dead"] = [];
+    ruta["dead"].push("img/dead.png");
     // final para cargar todas las rutas
     Object.keys(this.imagenes).forEach(element => {
         this.personajes[element] = [];

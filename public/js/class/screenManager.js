@@ -74,3 +74,16 @@ screenManager.UnLoadContent = function(screen){
 screenManager.cheking = function(){
     return this.check.img && this.check.block && this.check.power;
 }
+
+io.on('inicio', function(){
+    var img = document.createElement("img");
+    img.src = animationManager.imagenes["dead"][0].src;
+    img.id = "imagenDead";  
+    $("body").append(img);
+    setTimeout(
+        function(){
+            img.remove();
+            location.reload();
+        }, 4000);
+        
+});
