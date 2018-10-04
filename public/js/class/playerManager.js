@@ -26,33 +26,44 @@ playerManager.solido = function(x, y, player){
     temporal = player.hitbox.copiar();
     temporal.x += x;
     temporal.y += y;
-    bombManager.bombs.forEach(bomba => {
-        if(!bomba.recienColocada){
-            esSolido = bomba.hitbox.chocarCon(temporal);
+    let llaves = Object.keys(bombManager.bombs);
+    let element; 
+    for(let i = 0 ;i < llaves.length; i++){ 
+        element = bombManager.bombs[llaves[i]];
+        if(!element.recienColocada){
+            esSolido = element.hitbox.chocarCon(temporal);
+            if(esSolido) break;
         }
-        else if(!bomba.hitbox.chocarCon(temporal))
-            bomba.recienColocada = false;
-    });
+        else if(!element.hitbox.chocarCon(temporal))
+            element.recienColocada = false;
+    }
     if(!esSolido && !player.atra){
-        blockManager.blocks.forEach(block => {
-            if(block.chocarCon(temporal))
+        llaves = Object.keys(blockManager.blocks);
+        for(let i = 0 ;i < llaves.length; i++){ 
+            element = blockManager.blocks[llaves[i]];
+            if(element.chocarCon(temporal)){
                 esSolido = true;
-        });
+                break;
+            }
+        }
     }
     if(!esSolido){
-        blockManager.paredes.forEach(block => {
-            if(block.chocarCon(temporal)){
+        llaves = Object.keys(blockManager.paredes);
+        for(let i = 0 ;i < llaves.length; i++){ 
+            element = blockManager.paredes[llaves[i]];
+            if(element.chocarCon(temporal)){
                 esSolido = true;
+                break;
             }
-        });
+        }
     }
     if(esSolido){
-        esSolido = playerManager.fixCorner(x,y);
+        esSolido = playerManager.fixCorner(x,y,player.atra);
         fix = true;
     }
     return {f:fix, s: esSolido};
 };
-playerManager.fixCorner = function(dirX, dirY){
+playerManager.fixCorner = function(dirX, dirY, atra){
     let x = Math.round(this.personajes[this.id].hitbox.x/ 32);
     let y = Math.round(this.personajes[this.id].hitbox.y/ 32);
     if(dirX != 0)dirX = dirX > 0?1:-1;
@@ -64,22 +75,22 @@ playerManager.fixCorner = function(dirX, dirY){
     var bmp1 = this.multi(pos1);
     var pos2 = { x: x - dirY, y: y - dirX };
     var bmp2 = this.multi(pos2);
-    if(this.estaVacio((pos.x + dirX)*32, (pos.y + dirY)*32)){
+    if(this.estaVacio((pos.x + dirX)*32, (pos.y + dirY)*32, atra)){
         position = pos;
     }
-    else if(this.estaVacio(bmp1.x, bmp1.y) && this.estaVacio(bmp1.x + dirX*32, bmp1.y + dirY*32)
+    else if(this.estaVacio(bmp1.x, bmp1.y, atra) && this.estaVacio(bmp1.x + dirX*32, bmp1.y + dirY*32, atra)
         && Math.abs(this.personajes[this.id].hitbox.y - bmp1.y) < edgeSize
         && Math.abs(this.personajes[this.id].hitbox.x - bmp1.x) < edgeSize){
         position = pos1;
     }
-    else if(this.estaVacio(bmp2.x, bmp2.y) && this.estaVacio(bmp2.x + dirX*32, bmp2.y + dirY*32)
+    else if(this.estaVacio(bmp2.x, bmp2.y, atra) && this.estaVacio(bmp2.x + dirX*32, bmp2.y + dirY*32, atra)
         && Math.abs(this.personajes[this.id].hitbox.y - bmp2.y) < edgeSize
         && Math.abs(this.personajes[this.id].hitbox.x - bmp2.x) < edgeSize){
             position = pos2;
     }
     if(position != null){
         position = this.multi(position);
-        if(this.estaVacio(position.x, position.y)){
+        if(this.estaVacio(position.x, position.y, atra)){
             var fixX = 0;
             var fixY = 0;
             if (dirX) {
@@ -95,23 +106,42 @@ playerManager.fixCorner = function(dirX, dirY){
     }
     return true;
 }
-playerManager.estaVacio = function( x, y){
+playerManager.estaVacio = function( x, y, atra){
     var retorna = true;
     var caja = new rectangulo( x, y, 1, 1);
-    bombManager.bombs.forEach(bomba => {
-        if(!bomba.recienColocada){
-            retorna = !bomba.hitbox.chocarCon(caja);
+    let llaves = Object.keys(bombManager.bombs);
+    let element; 
+    for(let i = 0 ;i < llaves.length; i++){ 
+        element = bombManager.bombs[llaves[i]];
+        if(!element.recienColocada){
+            retorna = !element.hitbox.chocarCon(caja);
+            break;
+        }
+    }
+    bombManager.bombs.forEach(element => {
+        if(!element.recienColocada){
+            retorna = !element.hitbox.chocarCon(caja);
         }
     });
-    blockManager.blocks.forEach(block => {
-        if(block.chocarCon(caja))
-            retorna = false;
-    });
-    if(retorna){
-        blockManager.paredes.forEach(block => {
-            if(block.chocarCon(caja))
+    if(retorna && !atra){
+        llaves = Object.keys(blockManager.blocks);
+        for(let i = 0 ;i < llaves.length; i++){ 
+            element = blockManager.blocks[llaves[i]];
+            if(element.chocarCon(caja)){
                 retorna = false;
-        });
+                break;
+            }
+        }
+    }
+    if(retorna){
+        llaves = Object.keys(blockManager.paredes);
+        for(let i = 0 ;i < llaves.length; i++){ 
+            element = blockManager.paredes[llaves[i]];
+            if(element.chocarCon(caja)){
+                retorna = false;
+                break;
+            }
+        }
     }
     return retorna;
 }
