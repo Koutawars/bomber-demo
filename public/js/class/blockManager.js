@@ -1,6 +1,7 @@
 var blockManager = {
     blocks:[],
     paredes:[],
+    grass:[],
     animationBlocks:[],
     w:32,
     h:32,
@@ -8,6 +9,12 @@ var blockManager = {
 };
 blockManager.LoadContent = function(){};
 blockManager.Draw = function(ctx){
+    this.grass.forEach(grass => {
+        if(camera.x - 32 < grass.x && camera.x + camera.w > grass.x &&
+            camera.y - 32 < grass.y && camera.y + camera.h > grass.y){
+            ctx.drawImage(animationManager.imagenes['grass'][0], grass.x, grass.y);
+        }
+    });
     this.blocks.forEach(block => {
         if(camera.x - 32 < block.x && camera.x + camera.w > block.x &&
             camera.y - 32 < block.y && camera.y + camera.h > block.y){
@@ -52,6 +59,8 @@ io.on('mapa', function(data){
         if(vector[i] == 1){
             blockManager.paredes[i] = new rectangulo( posX, posY, blockManager.w, blockManager.h);
         }
+        if(vector[i] == 0 || vector[i] == 2)
+            blockManager.grass[i] = {x:posX, y:posY};
         posX += 32;
         if((i+1)%data["width"] == 0){
             posY += 32;

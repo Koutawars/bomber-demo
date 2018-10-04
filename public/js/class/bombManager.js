@@ -58,7 +58,9 @@ bombManager.UpdateDrawExploAnimation = function(ctx, index){
         bombManager.animationExplo[index].Update(16,19);
         break;
     }
-    if(bombManager.animationExplo[index])bombManager.animationExplo[index].Draw(ctx, bombManager.explosions[index].x, bombManager.explosions[index].y);
+    if(bombManager.animationExplo[index]){
+        bombManager.animationExplo[index].Draw(ctx, bombManager.explosions[index].x, bombManager.explosions[index].y);
+    }
     if(bombManager.animationExplo[index]){
         if(bombManager.animationExplo[index].countReset > 1){
             bombManager.animationExplo[index].stop = true;

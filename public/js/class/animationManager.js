@@ -47,6 +47,10 @@ animationManager.LoadContent = function(callback){
     this.imagenes["dead"] = [];
     ruta["dead"] = [];
     ruta["dead"].push("img/dead.png");
+    // cargar grass
+    this.imagenes["grass"] = [];
+    ruta["grass"] = [];
+    ruta["grass"].push("img/grass.png");
     // final para cargar todas las rutas
     Object.keys(this.imagenes).forEach(element => {
         this.personajes[element] = [];
