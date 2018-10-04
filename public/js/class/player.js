@@ -55,6 +55,12 @@ class player{
             }
         }
     }
+    cambiarPos(x, y){
+        this.hitbox.x = x;
+        this.hitbox.y = y;
+        this.x = x - this.posHitX;
+        this.y = y - this.posHitY;
+    }
     mov(velX, velY)
     {
         this.x+= velX;

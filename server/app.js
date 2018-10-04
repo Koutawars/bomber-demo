@@ -44,6 +44,7 @@ server.bombas = [];
 server.powers = [];
 io.on('connection',function(socket){
     socket.lifes = 3;
+    socket.kills = 0;
     socket.emit('lifes', socket.lifes);
     socket.emit('mapa', server.mapa);
     socket.on('powers', function() {
@@ -87,6 +88,10 @@ io.on('connection',function(socket){
     socket.on('msPing', function(data) {
         socket.emit('msPong', data);
     });
+    socket.on('aumentarKill', function(){
+        socket.kills += 1;
+        socket.emit('kill', socket.kills);
+    });
     socket.on('sumBomb',function(){
         if(socket.player)
         socket.player.numBomb += 1;
@@ -101,12 +106,12 @@ io.on('connection',function(socket){
         if(server.mapa['data'][data] != 0){
             server.mapa['data'][data] = 0;
             if(getRndInteger(0,4)>= 4){
-                let ran = getRndInteger(0,17);
+                let ran = getRndInteger(0,19);
                 let typePower;
-                if(ran < 1) typePower = 0;
-                else if(ran <= 8)  typePower = 1;
-                else if(ran <= 13) typePower = 2;
-                else if(ran <= 17) typePower = 3;
+                if(ran <= 1) typePower = 0;
+                else if(ran <= 10)  typePower = 1;
+                else if(ran <= 15) typePower = 2;
+                else if(ran <= 19) typePower = 3;
                 io.emit('generatePosPower', {id:data, type: typePower});
                 server.powers[data] = typePower;
             }
@@ -133,6 +138,8 @@ io.on('connection',function(socket){
                 socket.emit('inicio');
             }else{
                 socket.player.morir = false;
+                let c =  posicionRandom();
+                cambiarPos(c.x, c.y, socket.player);
                 setTimeout(
                     function(){
                         io.emit('nuevoJugador', socket.player)
@@ -181,37 +188,22 @@ function getPlayerID(id){
     });
     return returnPlayer;
 }
-
+function posicionRandom(){
+    var vectorX =[1,19,37,9,29,1,19,37,37,29,1,19,37];
+    var vectorY =[1,1,1,7,7,15,15,15,21,21,27,27,27];
+    var j = getRndInteger(0, vectorX.length-1);
+    var c= {
+        x:vectorX[j]*32,
+        y:vectorY[j]*32
+    }
+    return c;
+}
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
 }
-function posicion(){
-    var vectorX =[1,19,37,9,29,1,19,37,37,29,1,19,37];
-    var vectorY =[1,1,1,7,7,15,15,15,21,21,27,27,27];
-    var bandera =false;
-    var lista =[
-        {
-            x:32,
-            y:32
-        },{
-            x:19*32,
-            y:32
-        }
-    ];
-    for (let j = 0; j < vectorX.length; j++) {
-        bandera=false;
-        for (let index = 0; index < lista.length; index++) {
-            if (lista[index].x  == vectorX[j]*32 && lista[index].y  == vectorY[j]*32){
-                bandera=true;
-            }
-        }
-        if(!bandera){
-            var c= {
-                x:vectorX[j]*32,
-                y:vectorY[j]*32
-            }
-            return c;
-        }
-    }
-    return false ;
+function cambiarPos(x, y, player){
+    player.hitbox.x = x;
+    player.hitbox.y = y;
+    player.x = x - player.posHitX;
+    player.y = y - player.posHitY;
 }

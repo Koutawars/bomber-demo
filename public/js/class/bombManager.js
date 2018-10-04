@@ -72,8 +72,10 @@ bombManager.Update = function(){
     });
     playerManager.personajes.forEach(player => {
         bombManager.explosions.forEach(explo => {
-            if(player.hitbox.chocarCon(explo) && this.user != "" && !player.morir){
+            if(player.hitbox.chocarCon(explo) && !player.morir){
                 player.morir = true;
+                if(explo.colocaid == playerManager.id && explo.colocaid != player.id)
+                    io.emit('aumentarKill');
                 io.emit("murio", player.id);
             }
         });
@@ -109,6 +111,7 @@ bombManager.temporizador =  function(bomba, coloca){
         var bX = bomba.x,  bY = bomba.y, bAncho = bomba.hitbox.ancho, bAlto = bomba.hitbox.alto;
         var Texplo = 550; // tiempo que dura las explosiones
         var explo = new rectangulo(bX, bY, bAncho, bAlto); // se crea una explosión
+        explo.colocaid = coloca.id;
         var index;
         var velocityAnimation = 0.14;
         index = bombManager.explosions.push(explo) - 1;
@@ -125,6 +128,7 @@ bombManager.temporizador =  function(bomba, coloca){
             sin = Math.round(Math.sin(angulo));
             do{
                 explo = new rectangulo(bX + bAlto*n*cos, bY + bAlto*n*sin, bAncho, bAlto);
+                explo.colocaid = coloca.id;
                 tpm = bombManager.tocarBomb(explo);
                 if(tpm.toco && tpm.bomba){
                     clearTimeout(tpm.bomba.tmp);

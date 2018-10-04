@@ -213,8 +213,10 @@ playerManager.copiar = function(data){
 
 io.on('nuevoID', function(data, user){
     playerManager.id = data;
+    let c = playerManager.posicionRandom();
     playerManager.personajes[playerManager.id] = new player(playerManager.id, 30, -7, 2, "lion", 15, 45, 20, 20, 1, 3000, 1);
     playerManager.personajes[playerManager.id].user = user;
+    playerManager.personajes[playerManager.id].cambiarPos(c.x, c.y);
     camera.follow(playerManager.personajes[playerManager.id]);
     io.emit("nuevoJugador", playerManager.personajes[playerManager.id]);
 });
@@ -265,6 +267,13 @@ io.on('murio', function(data){
     }
     playerManager.personajes[data].mov = null;
 });
-io.on('inicio', function(){
-
-});
+playerManager.posicionRandom = function(){
+    var vectorX =[1,19,37,9,29,1,19,37,37,29,1,19,37];
+    var vectorY =[1,1,1,7,7,15,15,15,21,21,27,27,27];
+    var j = getRndInteger(0, vectorX.length-1);
+    var c= {
+        x:vectorX[j]*32,
+        y:vectorY[j]*32
+    }
+    return c;
+}
