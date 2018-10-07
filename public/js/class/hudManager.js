@@ -1,6 +1,6 @@
 var hudManager = {
     lifes:0,
-    kills:0 
+    kills:0
 };
 hudManager.Update = function(){
     
