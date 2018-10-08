@@ -45,7 +45,13 @@ class player{
                 if(this.animaciones.img[0] != null){
                     ctx.fillStyle = "white";
                     ctx.font="30px";
-                    ctx.fillText( this.user, this.x, this.y);
+                    
+                    let text = ""+this.user;
+                    let width = ctx.measureText(text).width;
+                    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                    ctx.fillRect(this.x - 5 + 37 - width, this.y-17 , width + 10 , 21);
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillText(text, this.x + 37 - width , this.y);
                     this.animaciones.Draw(ctx, this.x, this.y);
                     if(debug.hit)this.hitbox.Draw(ctx);
                 }else{
