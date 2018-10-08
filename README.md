@@ -1,5 +1,8 @@
 # bomber-demo
-Game like bomberman make in node js with socket io
+Game like bomberman make in node js with socket io.
+
+DEMO ---> [link](https://bomber-demo.herokuapp.com/).
+
 # Requirements
 install [node](https://nodejs.org/es/download/). </br>
 install [git](https://git-scm.com/downloads).
