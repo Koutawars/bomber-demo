@@ -61,7 +61,12 @@ class player{
                     let width = ctx.measureText(text).width;
                     ctx.fillStyle = 'rgba(0,0,0,0.6)';
                     ctx.fillRect(this.x - 5 + 37 - width, this.y-17 , width + 10 , 21);
-                    ctx.fillStyle = '#FFFFFF';
+                    if(playerManager.id == this.id){
+                        ctx.fillStyle = '#3aafff';
+                    }
+                    else{
+                        ctx.fillStyle = '#FFFFFF';
+                    }
                     ctx.fillText(text, this.x + 37 - width , this.y);
                     this.animaciones.Draw(ctx, this.x, this.y);
                     if(debug.hit)this.hitbox.Draw(ctx);

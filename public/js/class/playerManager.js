@@ -245,7 +245,7 @@ playerManager.copiar = function(data){
 io.on('nuevoID', function(data, user, pj){
     playerManager.id = data;
     let c = playerManager.posicionRandom();
-    playerManager.personajes[playerManager.id] = new player(playerManager.id, 30, -7, 2, pj, 15, 45, 20, 20, 1, 3000, 1);
+    playerManager.personajes[playerManager.id] = new player(playerManager.id, 30, -7, 2, pj, 5, 45, 25, 17, 1, 3000, 1);
     playerManager.personajes[playerManager.id].user = user;
     playerManager.personajes[playerManager.id].cambiarPos(c.x, c.y);
     camera.follow(playerManager.personajes[playerManager.id]);
