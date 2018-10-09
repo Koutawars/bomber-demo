@@ -28,7 +28,7 @@ div#content {
     top: 15%;
     left: 35%;
 }
-span#reconectar {
+span#reconectar, span#conectando {
     top: 35%;
     left: 35%;
     position: absolute;

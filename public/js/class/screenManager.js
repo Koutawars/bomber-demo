@@ -24,6 +24,10 @@ screenManager.LoadContent = function(screen){
             menuManager.LoadContent();
             break;
         case screenManager.screen.LOADING:
+            let pan = document.createElement("span");
+            pan.id = "conectando";
+            pan.append("Cargando...");
+            $("body").append(pan);
             blockManager.LoadContent();
             animationManager.LoadContent(
                 function(){
@@ -51,6 +55,7 @@ screenManager.Update = function(screen, callback){
     switch(screen){
         case screenManager.screen.LOADING:
             if(screenManager.cheking()){
+                document.getElementById("conectando").remove();
                 callback(screenManager.screen.MENU);
                 console.log("¡Cargado!");
             }
