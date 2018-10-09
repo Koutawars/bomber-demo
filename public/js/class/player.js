@@ -18,9 +18,16 @@ class player{
         this.speedImage = (0.09*this.vel)/3;
         this.animaciones = new animation(this.imagenes, this.speedImage);
         this.dir = dir.QUIETO;
+        this.dirAnterior = dir.QUIETO;
         this.morir = false;
         this.atra = false;
         this.user = "";
+    }
+    cambiarPersonaje(personaje){
+        this.personaje = personaje;
+        delete(this.animaciones);
+        this.imagenes = animationManager.imagenes[personaje];
+        this.animaciones = new animation(this.imagenes, this.speedImage);
     }
     Update(){
         if(this.dir == dir.ABAJO){
@@ -37,6 +44,11 @@ class player{
         }else if(this.animaciones != null){
             this.animaciones.Update(0, 0);
         }
+        if(this.dirAnterior !=  this.dir){
+            this.animaciones.index++;
+            this.animaciones.frames = this.animaciones.index+0.5;
+        }
+        this.dirAnterior = this.dir;
     }
     Draw(ctx){
         if(this.user != ""){
@@ -45,7 +57,6 @@ class player{
                 if(this.animaciones.img[0] != null){
                     ctx.fillStyle = "white";
                     ctx.font="30px";
-                    
                     let text = ""+this.user;
                     let width = ctx.measureText(text).width;
                     ctx.fillStyle = 'rgba(0,0,0,0.6)';

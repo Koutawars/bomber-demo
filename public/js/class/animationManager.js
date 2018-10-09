@@ -5,12 +5,16 @@ var animationManager = {
 animationManager.LoadContent = function(callback){
     let ruta = [];
     console.log("Cargando...");
-    // Carga leon
-    this.imagenes["lion"] = [];
-    ruta["lion"] = [];
-    for(let n = 0;n <= 17;n++){
-        ruta["lion"].push("img/lion_"+ n + ".png");
-    }
+    let p = ["lion", "demon", "diver", "frog", "mouse", "princess", "pumpkin"];
+    p.forEach(el => {
+        this.imagenes[el] = [];
+        ruta[el] = [];
+        for(let n = 0;n <= 17;n++){
+            ruta[el].push("img/"+el+"_"+ n + ".png");
+        }
+        playerManager.pj.push({src: "img/"+el+"_0.png", pj: el});
+    });
+
     // cargar bomba
     this.imagenes["bomb"] = [];
     ruta["bomb"] = [];

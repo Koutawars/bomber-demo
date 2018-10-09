@@ -17,7 +17,6 @@ hudManager.Draw = function(ctx){
     ctx.fillRect(canvas.width - (width + 45 + hudManager.lifes*20) , 10 ,width + 10 , 30);
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText(text , canvas.width - (width + 40 + hudManager.lifes*20) , 33);
-    
 };  
 io.on('kill', kill => {
     hudManager.kills = kill;

@@ -55,6 +55,9 @@ screenManager.Update = function(screen, callback){
                 console.log("¡Cargado!");
             }
             break;
+        case screenManager.screen.MENU:
+            menuManager.Update();
+            break;
         case this.screen.GAME:
             blockManager.Update();
             powerManager.Update();
@@ -84,6 +87,8 @@ io.on('inicio', function(){
         function(){
             img.remove();
             location.reload();
+            window.location.href = window.location;
+            window.location.reload();
         }, 4000);
         
 });

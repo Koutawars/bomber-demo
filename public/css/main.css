@@ -13,6 +13,9 @@ canvas {
     margin: 0px; 
     padding: 0px; 
 }
+.clear{
+    clear: both;
+}
 img#imagenDead {
     position: absolute;
     top: 39%;
@@ -22,7 +25,7 @@ img#imagenDead {
 div#content {
     position: absolute;
     width: 21em;
-    top: 35%;
+    top: 15%;
     left: 35%;
 }
 span#reconectar {
@@ -49,9 +52,6 @@ span#spanError {
     font-size: 1.5em;
 }
 #element::-webkit-scrollbar { 
-    display: none; 
-}
-::-webkit-scrollbar { 
     display: none; 
 }
 #boton {
@@ -85,7 +85,8 @@ input#inputText {
 }
 @media (max-width:800px) {
     div#content{
-        width: 100%;
+        width: 97%;
+        margin: 2px;
         left:0;
     }
     span#reconectar {
@@ -98,4 +99,27 @@ input#inputText {
 [role=button], a, button, input, label, select, textarea {
     -ms-touch-action: manipulation;
     touch-action: manipulation;
+}
+#personajes {
+    overflow-y: hidden;
+    overflow-x: scroll;
+    display: flex;
+    margin: 5px;
+    height: 104px;
+}
+#personajes span {
+    display: block;
+    float: left;
+}
+#personajes span img {
+    padding: 5px;
+}
+.selected {
+    border: 3px solid rgba(255,255,255,0.5);
+    border-style: dashed;
+}
+
+h4#selectAplayer {
+    margin: 0 0 2px 0px;
+    color: white;
 }

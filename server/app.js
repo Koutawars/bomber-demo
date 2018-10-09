@@ -50,8 +50,8 @@ io.on('connection',function(socket){
     socket.on('powers', function() {
         socket.emit('powers', server.powers);
     });
-    socket.on('user', function(data){
-        socket.emit("nuevoID", server.lastPlayderID++, data);
+    socket.on('user', function(data, pj){
+        socket.emit("nuevoID", server.lastPlayderID++, data, pj);
         socket.emit("allplayers", getAllPlayer(socket.id));
     });
     socket.on("nuevoJugador", function(data){
@@ -106,12 +106,12 @@ io.on('connection',function(socket){
         if(server.mapa['data'][data] != 0){
             server.mapa['data'][data] = 0;
             if(getRndInteger(0,4)>= 4){
-                let ran = getRndInteger(0,19);
+                let ran = getRndInteger(0,24);
                 let typePower;
-                if(ran <= 1) typePower = 0;
-                else if(ran <= 10)  typePower = 1;
-                else if(ran <= 15) typePower = 2;
-                else if(ran <= 19) typePower = 3;
+                if(ran < 1) typePower = 0;
+                else if(ran <= 15)  typePower = 1;
+                else if(ran <= 20) typePower = 2;
+                else if(ran <= 24) typePower = 3;
                 io.emit('generatePosPower', {id:data, type: typePower});
                 server.powers[data] = typePower;
             }
