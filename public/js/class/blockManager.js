@@ -44,9 +44,8 @@ blockManager.Update = function(){
         }
     });
 };
-io.on('mapa', function(data){
-    let vector = data["data"];
-    blockManager.widthmap = data["width"];
+io.on('mapa', function(vector, wid){
+    blockManager.widthmap = wid;
     let posX = 0;
     let posY = 0;
     for(let i = 0; i < vector.length; i++){
@@ -62,7 +61,7 @@ io.on('mapa', function(data){
         if(vector[i] == 0 || vector[i] == 2)
             blockManager.grass[i] = {x:posX, y:posY};
         posX += 32;
-        if((i+1)%data["width"] == 0){
+        if((i+1)%wid == 0){
             posY += 32;
             posX = 0;
         }

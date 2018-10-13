@@ -7,9 +7,8 @@ var io = require('socket.io').listen(server,{
 var path = require('path'); // Se llama la libreria Path para path's
 var fs = require('fs');
 var public = '/../public'; // Paths donde esta la parte publica
-var map = '/mapJSON/';
+var mapPath = '/mapJSON/';
 var favicon = require('serve-favicon');
-
 
 app.use('/css',express.static(path.resolve(__dirname + public + '/css'))); // direccion del css
 app.use('/js',express.static(path.resolve(__dirname + public + '/js'))); // direccion del javascript
@@ -20,18 +19,20 @@ app.get('/',function(req,res){
     res.sendFile(path.resolve(__dirname + public + '/index.html')); // si se pide / llama al index
 });
 server.lastPlayderID = 0; // se inicializa las id de los personajes
-fs.readFile(path.resolve(__dirname + map + 'mapa.json'), 'utf8', function (err, data) {
+server.salas = [];
+
+fs.readFile(path.resolve(__dirname + mapPath + 'mapa.json'), 'utf8', function (err, data) {
   if (err) throw err;
-  server.mapa = JSON.parse(data)["layers"][0];
-  let n = 0;
-  server.mapa['data'].forEach(layer =>{
-      if(layer == 2){
-        if(Math.random()*8 > 6){
-            server.mapa['data'][n] = 0;
-        }
-      }
-      n+=1;
-  });
+  server.mapas = JSON.parse(data)["layers"];
+  server.idSalas = 0;
+  server.salas[server.idSalas] = {
+      map: mapRandom(server.mapas[0]),
+      mapWidth: server.mapas[0]["width"],
+      name: "Primera sala de prueba",
+      room: "sala"+server.idSalas,
+      players: [],
+      powers: []
+  };
 });
 
 // funcion para escuchar el servidor y abrirlo
@@ -40,22 +41,23 @@ server.listen(process.env.PORT || 5000,function(){
 });
 
 
-server.bombas = [];
-server.powers = [];
 io.on('connection',function(socket){
+    socket.salaID = 0;
     socket.lifes = 3;
     socket.kills = 0;
+    let miSala = server.salas[socket.salaID];
     socket.emit('lifes', socket.lifes);
-    socket.emit('mapa', server.mapa);
+    socket.emit('mapa', miSala["map"], miSala["mapWidth"]);
     socket.on('powers', function() {
-        socket.emit('powers', server.powers);
+        socket.emit('powers', miSala["powers"]);
     });
-    socket.on('user', function(data, pj){
-        socket.emit("nuevoID", server.lastPlayderID++, data, pj);
+    socket.on('user', function(name, pj){
+        socket.emit("nuevoID", server.lastPlayderID++, name, pj);
         socket.emit("allplayers", getAllPlayer(socket.id));
     });
     socket.on("nuevoJugador", function(data){
         socket.player = data;
+        server.salas[socket.salaID]["players"][data.id] = data;
         socket.broadcast.emit("nuevoJugador", data);
     });
     socket.on("mover", function(data){
@@ -97,14 +99,17 @@ io.on('connection',function(socket){
         socket.player.numBomb += 1;
     });
     socket.on('eliminatePower', function(index){
-        if(server.powers[index] != -1){
-            socket.emit('actualizar', server.powers[index]);
-            server.powers[index] = -1;
+        let powers = server.salas[socket.salaID]["powers"];
+        if(powers[index] != -1){
+            socket.emit('actualizar', powers[index]);
+            powers[index] = -1;
         }
     });
     socket.on('destroyBlock', function(data){
-        if(server.mapa['data'][data] != 0){
-            server.mapa['data'][data] = 0;
+        let mymap = server.salas[socket.salaID]["map"];
+        let powers = server.salas[socket.salaID]["powers"];
+        if(mymap[data] != 0){
+            mymap[data] = 0;
             if(getRndInteger(0,4)>= 4){
                 let ran = getRndInteger(0,24);
                 let typePower;
@@ -113,11 +118,11 @@ io.on('connection',function(socket){
                 else if(ran <= 20) typePower = 2;
                 else if(ran <= 24) typePower = 3;
                 io.emit('generatePosPower', {id:data, type: typePower});
-                server.powers[data] = typePower;
+                powers[data] = typePower;
             }
             else{
                 io.emit('generatePosPower', {id:data, type: -1});
-                server.powers[data] = -1;
+                powers[data] = -1;
             }
             socket.broadcast.emit('destroyBlock', data);
         }
@@ -136,6 +141,7 @@ io.on('connection',function(socket){
     socket.on('delete', function(){
         if(socket.player){
             if(socket.lifes < 0){
+                delete server.salas[socket.salaID]["players"][socket.player.id];
                 delete socket.player;
                 socket.emit('inicio');
             }else{
@@ -208,4 +214,18 @@ function cambiarPos(x, y, player){
     player.hitbox.y = y;
     player.x = x - player.posHitX;
     player.y = y - player.posHitY;
+}
+function mapRandom(mapa){
+    let n = 0;
+    let retornar = [];
+    mapa['data'].forEach(layer =>{
+        retornar[n] = mapa['data'][n];
+        if(layer == 2){
+            if(Math.random()*8 > 6){
+                retornar[n] = 0;
+            }
+        }
+        n+=1;
+    });
+    return retornar;
 }
