@@ -1,3 +1,4 @@
+
 var animationManager = {
     imagenes: [],
     personajes: []
