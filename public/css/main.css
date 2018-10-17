@@ -25,12 +25,14 @@ img#imagenDead {
 div#content {
     position: absolute;
     width: 21em;
-    top: 15%;
-    left: 35%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-100%);
 }
 span#reconectar, span#conectando {
-    top: 35%;
-    left: 35%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -90%);
     position: absolute;
     color: white;
     font-size: 4em;
@@ -84,10 +86,9 @@ input#inputText {
     transition: border .2s;
 }
 @media (max-width:800px) {
-    div#content{
-        width: 97%;
-        margin: 2px;
-        left:0;
+    div#content {
+        width: 95%;
+        transform: translate(-50%,-90%);
     }
     span#reconectar {
         left: 6%;
