@@ -47,11 +47,11 @@ menuManager.LoadContent = function(){
     this.divo.append(this.button);
     this.clear = document.createElement("div");
     this.clear.className = "clear";
-    this.content.append(this.divpj);
-    this.content.append(this.clear);
     this.content.append(this.span);
     this.content.append(this.spanError);
     this.content.append(this.divo);
+    this.content.append(this.clear);
+    this.content.append(this.divpj);
     this.inputText.addEventListener("keyup", function(event) {
         event.preventDefault();
         if (event.keyCode === 13) {

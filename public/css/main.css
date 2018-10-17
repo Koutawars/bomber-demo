@@ -27,7 +27,7 @@ div#content {
     width: 21em;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-100%);
+    transform: translate(-50%,-75%);
 }
 span#reconectar, span#conectando {
     top: 50%;
@@ -42,8 +42,8 @@ span#reconectar, span#conectando {
 }
 div#contentform {
     box-sizing: border-box;
-    position: absolute;
     width: 100%;
+    display: flex;
 }
 span#texto {
     color: white;
@@ -65,14 +65,8 @@ span#spanError {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
     height: 39px;
-    position: absolute;
-    top: -4px;
-    bottom: 0;
-    z-index: 1;
-    right: -10px;
     -webkit-transition: opacity .3s;
     transition: opacity .3s;
 }
