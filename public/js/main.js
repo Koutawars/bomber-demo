@@ -8,10 +8,11 @@ document.addEventListener('DOMContentLoaded', function(){
     io.on('pong', ms => {
         buclePrincipal.ping = ms;
     });
-    // tecla
+    // se oprime la tecla
     document.body.addEventListener("keydown", function (e) {
         keys[e.keyCode] = true;
     });
+    // se levanta
     document.body.addEventListener("keyup", function (e) {
         keys[e.keyCode] = false;
     });
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function(){
 var direccion;
 window.addEventListener('resize', resizeCanvas, false);
 window.addEventListener('orientationchange', resizeCanvas, false);
+
 
 // movimiento telefono
 $(function() {

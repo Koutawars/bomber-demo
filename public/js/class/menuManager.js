@@ -52,14 +52,19 @@ menuManager.LoadContent = function(){
     this.content.append(this.divo);
     this.content.append(this.clear);
     this.content.append(this.divpj);
-    this.inputText.addEventListener("keyup", function(event) {
+    document.body.addEventListener("keyup", function(event) {
         event.preventDefault();
+        // el boton enter 
         if (event.keyCode === 13) {
+            // simula el clic en el boton
             menuManager.button.click();
         }
     });
+
+    // evento del clic en el boton 
     this.button.addEventListener("click", function(){
         let str = menuManager.inputText.value;
+        str = str.trim();
         if(str == "")
             menuManager.spanError.innerHTML = "ERROR CAMPO VACIO";
         else if(/.{9}/g.test(str))
@@ -87,8 +92,11 @@ menuManager.LoadContent = function(){
             }
         }
     });
+    document.body.addEventListener("wheel", function (e) {
+        menuManager.pressDer = e.wheelDelta < 0;
+        menuManager.pressIzq = e.wheelDelta > 0;  
+    });
     $("body").append(this.content);
-    
     if(window.location.hash){
         let lel = window.location.hash.substring(1, window.location.hash.length);
         if(document.getElementById(lel)){
@@ -97,7 +105,7 @@ menuManager.LoadContent = function(){
     }
 }
 menuManager.Update = function(){
-    if(keys[39] && this.pressDer){
+    if(this.pressDer){
         let selecteds = document.getElementsByClassName("selected");
         if(selecteds[0]){
             let index = parseInt(selecteds[0].id.substr(3,selecteds[0].id.length));
@@ -114,13 +122,7 @@ menuManager.Update = function(){
         }
         this.pressDer = false;
     }
-    if(!keys[39]){
-        this.pressDer = true;
-    }
-    if(!keys[37]){
-        this.pressIzq = true;
-    }
-    if(keys[37] && this.pressIzq){
+    if(this.pressIzq){
         let selecteds = document.getElementsByClassName("selected");
         if(selecteds[0]){
             let index = parseInt(selecteds[0].id.substr(3,selecteds[0].id.length));
