@@ -19,7 +19,7 @@
     "socket.io"
   ],
   "author": "Kouta",
-  "license": "Ko",
+  "license": "MIT",
   "dependencies": {
     "express": "^4.15.2",
     "serve-favicon": "^2.5.0",
