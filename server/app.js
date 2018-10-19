@@ -42,11 +42,13 @@ server.listen(process.env.PORT || 5000,function(){
 
 server.bombas = [];
 server.powers = [];
+server.leaderboard = [];
 io.on('connection',function(socket){
     socket.lifes = 3;
-    socket.kills = 0;
+    socket.kills = getRndInteger(0,5);
     socket.emit('lifes', socket.lifes);
     socket.emit('mapa', server.mapa);
+    socket.emit('kill', socket.kills);
     socket.on('powers', function() {
         socket.emit('powers', server.powers);
     });
@@ -57,6 +59,13 @@ io.on('connection',function(socket){
     socket.on("nuevoJugador", function(data){
         socket.player = data;
         socket.broadcast.emit("nuevoJugador", data);
+        let leader = getLeaderBoard();
+        if(server.leaderboard != leader){
+            server.leaderboard = leader;
+            io.emit('leaderboard', leader);
+        }else{
+            socket.emit('leaderboard', server.leaderboard);
+        }
     });
     socket.on("mover", function(data){
         let p = socket.player;
@@ -91,6 +100,11 @@ io.on('connection',function(socket){
     socket.on('aumentarKill', function(){
         socket.kills += 1;
         socket.emit('kill', socket.kills);
+        let leader = getLeaderBoard();
+        if(server.leaderboard != leader){
+            server.leaderboard = leader;
+            io.emit('leaderboard', server.leaderboard);
+        }
     });
     socket.on('sumBomb',function(){
         if(socket.player)
@@ -137,6 +151,11 @@ io.on('connection',function(socket){
         if(socket.player){
             if(socket.lifes < 0){
                 delete socket.player;
+                let leader = getLeaderBoard();
+                if(server.leaderboard != leader){
+                    server.leaderboard = leader;
+                    io.emit('leaderboard', server.leaderboard);
+                }
                 socket.emit('inicio');
             }else{
                 socket.player.morir = false;
@@ -157,6 +176,11 @@ io.on('connection',function(socket){
                 socket.player.morir = true;
                 socket.broadcast.emit('murio', socket.player.id);
                 delete socket.player;
+                let leader = getLeaderBoard();
+                if(server.leaderboard != leader){
+                    server.leaderboard = leader;
+                    io.emit('leaderboard', server.leaderboard);
+                }
             }
     });
     socket.on('error', (error) => {
@@ -199,6 +223,30 @@ function posicionRandom(){
         y:vectorY[j]*32
     }
     return c;
+}
+function getLeaderBoard(){
+    let player, kills;
+    let players = [];
+    Object.keys(io.sockets.connected).forEach(function(socketID){
+        player = io.sockets.connected[socketID].player;
+        if(player){
+            kills = io.sockets.connected[socketID].kills;
+            players.push({kills, user:player.user});
+        }
+    });
+    players.sort(function (a, b) {
+        if (a.kills < b.kills) {
+          return 1;
+        }
+        if (a.kills > b.kills) {
+          return -1;
+        }
+        return 0;
+    });
+    if(players.length > 5){
+        players = players.slice(0,5);
+    }
+    return players;
 }
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
