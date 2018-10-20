@@ -45,7 +45,7 @@ server.powers = [];
 server.leaderboard = [];
 io.on('connection',function(socket){
     socket.lifes = 3;
-    socket.kills = getRndInteger(0,5);
+    socket.kills = 0;
     socket.emit('lifes', socket.lifes);
     socket.emit('mapa', server.mapa);
     socket.emit('kill', socket.kills);
