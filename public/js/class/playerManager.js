@@ -278,8 +278,6 @@ io.on('mover', function(data){
         playerManager.personajes[data.id].dir = data.dir;
         if(playerManager.personajes[data.id].morir)
             delete playerManager.personajes[data.id];
-    }else{
-        console.log("No existe el jugador que se mueve");
     }
 });
 io.on('murio', function(data){
