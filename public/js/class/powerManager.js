@@ -37,8 +37,9 @@ powerManager.Draw = function(ctx){
 };
 
 powerManager.Update = function(){
-    this.powers.forEach(power => {
-        playerManager.personajes.forEach(player => {
+    let player = playerManager.personajes[playerManager.id];
+    if(player){
+        this.powers.forEach(power => {
             if(player.hitbox.chocarCon(power)){
                 if(power.type != null){
                     if(player.power){
@@ -48,13 +49,14 @@ powerManager.Update = function(){
                         player.power.push(power.type);
                     }
                     let index = this.powers.indexOf(power);
+                    powerManager.setPower(index, player.id);
                     delete this.powers[index];
-                    io.emit('eliminatePower', index);
+                    io.emit('eliminatePower', index, player);
                     this.pos_powers[index] = -1;
                 }
             }
         });
-    });
+    }
 };
 powerManager.generatePower = function(x,y, type, index){
     if(type != -1){
@@ -69,7 +71,6 @@ powerManager.dropPower = function(id){
             let x, y;
             x = Math.floor(player.hitbox.x/32) * 32;
             y = Math.floor(player.hitbox.y/32) * 32;
-            // tira todos sus poderes en su posición x y y
         }
     }
 }
@@ -100,9 +101,9 @@ io.on('powers', data => {
     });
     screenManager.check.power = true;
 });
-io.on('actualizar', function(data){
-    let player = playerManager.personajes[playerManager.id];
-    switch(data){
+powerManager.setPower = (indexPower, indexPlayer) => {
+    let player = playerManager.personajes[indexPlayer];
+    switch(powerManager.powers[indexPower].type){
         case powerManager.type.atra:
             player.atra = true;
         break;
@@ -117,4 +118,9 @@ io.on('actualizar', function(data){
             player.vel += 0.5;
         break;
     }
-})
+};
+io.on('actualizarPower', function(data, index){
+    let player = playerManager.personajes[data.id];
+    powerManager.setPower(index, player.id);
+    delete powerManager.powers[index];
+});

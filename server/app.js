@@ -110,9 +110,10 @@ io.on('connection',function(socket){
         if(socket.player)
         socket.player.numBomb += 1;
     });
-    socket.on('eliminatePower', function(index){
+    socket.on('eliminatePower', function(index, player){
         if(server.powers[index] != -1){
-            socket.emit('actualizar', server.powers[index]);
+            socket.player = player;
+            socket.broadcast.emit('actualizarPower', player, index);
             server.powers[index] = -1;
         }
     });
