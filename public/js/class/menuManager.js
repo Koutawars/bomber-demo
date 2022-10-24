@@ -21,7 +21,7 @@ menuManager.LoadContent = function(){
         img.alt = playerManager.pj[i]["pj"];
         img.src = playerManager.pj[i]["src"];
         img.addEventListener("click", function(e){
-            let pt = e.toElement;
+            let pt = e.toElement || e.relatedTarget || e.target;
             let selecteds = document.getElementsByClassName("selected");
             for(let j = 0; j < selecteds.length; j++){
                 selecteds[j].className = "";
